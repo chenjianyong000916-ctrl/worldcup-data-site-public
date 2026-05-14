@@ -1,0 +1,3224 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>比赛数据详情 - 世界杯数据分析助手</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    .match-page {
+      padding: 46px 0 70px;
+    }
+
+    .match-hero,
+    .data-panel,
+    .warning-box {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .match-hero {
+      background: linear-gradient(135deg, #e7fbf3, #f6fbff);
+      padding: 34px;
+      margin-bottom: 24px;
+    }
+
+    .match-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 26px;
+    }
+
+    .match-title-row h2 {
+      margin: 8px 0;
+      font-size: clamp(36px, 4vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+    }
+
+    .match-title-row p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .match-status-pill,
+    .mini-label {
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: var(--green-soft);
+      color: #08724e;
+      white-space: nowrap;
+    }
+
+    .teams-versus {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 26px;
+    }
+
+    .versus-team {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .versus-team.right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .team-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #dff6ec, #e6f1ff);
+      border: 1px solid var(--border);
+      font-size: 24px;
+      font-weight: 1000;
+      color: #0c8f63;
+    }
+
+    .versus-team strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1.1;
+    }
+
+    .versus-team span {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .vs-mark {
+      color: var(--orange);
+      font-size: 24px;
+      font-weight: 1000;
+    }
+
+    .match-hook-box {
+      margin: 24px 0;
+      padding: 22px 24px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff8e7, #eef7ff);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .match-hook-box h3 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .match-hook-box p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
+    .hook-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 0 0 16px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .hook-list li {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      font-weight: 900;
+    }
+
+    .hook-link {
+      color: #0c8f63;
+      font-weight: 900;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .data-panel {
+      padding: 28px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .panel-head h3 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.03em;
+    }
+
+    .panel-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .mini-label {
+      background: var(--blue-soft);
+      color: #1d4ed8;
+      font-size: 12px;
+    }
+
+    .fact-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .fact-item {
+      background: #f8fcfb;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .fact-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .fact-item strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+    }
+
+    .compare-table th {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: left;
+      padding: 0 14px;
+    }
+
+    .compare-table td {
+      background: #f8fcfb;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 14px;
+      font-weight: 800;
+    }
+
+    .compare-table td:first-child {
+      border-left: 1px solid var(--border);
+      border-radius: 16px 0 0 16px;
+      color: var(--muted);
+      width: 24%;
+    }
+
+    .compare-table td:last-child {
+      border-right: 1px solid var(--border);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .signal-card {
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .signal-card.blue { background: var(--blue-soft); }
+    .signal-card.green { background: var(--green-soft); }
+    .signal-card.orange { background: var(--orange-soft); }
+    .signal-card.red { background: var(--red-soft); }
+
+    .signal-card span {
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .signal-card strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .signal-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .ai-box {
+      background: linear-gradient(135deg, #ffffff, #eef9f5);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+    }
+
+    .ai-box p,
+    .ai-box ul {
+      color: var(--muted);
+    }
+
+    .ai-box li {
+      margin: 8px 0;
+    }
+
+    .warning-box {
+      padding: 18px 20px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .match-title-row,
+      .panel-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .teams-versus,
+      .fact-list,
+      .signal-grid,
+      .hook-list {
+        grid-template-columns: 1fr;
+      }
+
+      .versus-team.right {
+        justify-content: flex-start;
+        text-align: left;
+      }
+    }
+  </style>
+<style id="match-professional-report-intro-v2-style">
+  #match-professional-report-intro-v2 {
+    max-width: 1180px;
+    margin: 22px auto 24px;
+    padding: 26px 28px;
+    border-radius: 24px;
+    border: 1px solid rgba(59,130,246,0.20);
+    background:
+      radial-gradient(circle at top left, rgba(59,130,246,0.18), transparent 34%),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(239,246,255,0.92));
+    box-shadow: 0 18px 50px rgba(30,64,175,0.08);
+    box-sizing: border-box;
+  }
+
+  #match-professional-report-intro-v2 .report-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
+    gap: 22px;
+    align-items: stretch;
+  }
+
+  #match-professional-report-intro-v2 .eyebrow {
+    margin: 0 0 10px;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #match-professional-report-intro-v2 h1 {
+    margin: 0;
+    color: #102a43;
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 950;
+  }
+
+  #match-professional-report-intro-v2 .lead {
+    margin: 15px 0 0;
+    max-width: 820px;
+    color: #334155;
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  #match-professional-report-intro-v2 .report-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  #match-professional-report-intro-v2 .report-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 850;
+  }
+
+  #match-professional-report-intro-v2 .primary-link {
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37,99,235,0.24);
+  }
+
+  #match-professional-report-intro-v2 .secondary-link {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid rgba(37,99,235,0.18);
+  }
+
+  #match-professional-report-intro-v2 .report-status-panel {
+    padding: 20px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid rgba(30,64,175,0.12);
+    box-shadow: 0 12px 28px rgba(30,64,175,0.06);
+  }
+
+  #match-professional-report-intro-v2 .report-status-title {
+    margin: 0 0 14px;
+    color: #102a43;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  #match-professional-report-intro-v2 .status-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  #match-professional-report-intro-v2 .status-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid rgba(15,23,42,0.06);
+    color: #334155;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  #match-professional-report-intro-v2 .status-item strong {
+    color: #1d4ed8;
+    white-space: nowrap;
+  }
+
+  #match-professional-report-intro-v2 .report-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  #match-professional-report-intro-v2 .report-card {
+    padding: 18px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid rgba(30,64,175,0.12);
+    box-shadow: 0 10px 24px rgba(30,64,175,0.05);
+  }
+
+  #match-professional-report-intro-v2 .report-card h3 {
+    margin: 0 0 8px;
+    color: #102a43;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  #match-professional-report-intro-v2 .report-card p {
+    margin: 0;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  #match-professional-report-intro-v2 .report-note {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(239,246,255,0.86);
+    border: 1px solid rgba(37,99,235,0.14);
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  #match-professional-report-intro-v2 .report-note strong {
+    color: #1d4ed8;
+  }
+
+  @media (max-width: 980px) {
+    #match-professional-report-intro-v2 {
+      margin: 18px 14px 22px;
+      padding: 22px;
+    }
+
+    #match-professional-report-intro-v2 .report-top {
+      grid-template-columns: 1fr;
+    }
+
+    #match-professional-report-intro-v2 .report-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #match-professional-report-intro-v2 h1 {
+      font-size: 27px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    #match-professional-report-intro-v2 .report-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+  <!-- match-module-title-v2-marker -->
+<style id="match-module-title-v2-style">
+  .module-explain-v2 {
+    margin: 8px 0 14px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(239, 246, 255, 0.72);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .module-explain-v2 strong {
+    color: #1d4ed8;
+  }
+</style>
+<style id="match-data-summary-v1-style">
+  #match-data-summary-v1 {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    padding: 24px 26px;
+    border-radius: 22px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    background:
+      radial-gradient(circle at top right, rgba(37, 99, 235, 0.14), transparent 34%),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(239,246,255,0.92));
+    box-shadow: 0 14px 36px rgba(30, 64, 175, 0.07);
+    box-sizing: border-box;
+  }
+
+  #match-data-summary-v1 .summary-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  #match-data-summary-v1 .summary-kicker {
+    margin: 0 0 8px;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #match-data-summary-v1 h2 {
+    margin: 0;
+    color: #102a43;
+    font-size: 24px;
+    line-height: 1.28;
+    font-weight: 950;
+  }
+
+  #match-data-summary-v1 .summary-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    padding: 8px 13px;
+    border-radius: 999px;
+    color: #1d4ed8;
+    background: #dbeafe;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  #match-data-summary-v1 .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  #match-data-summary-v1 .summary-card {
+    padding: 16px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(30, 64, 175, 0.11);
+    box-shadow: 0 8px 22px rgba(30, 64, 175, 0.05);
+  }
+
+  #match-data-summary-v1 .summary-card span {
+    display: block;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  #match-data-summary-v1 .summary-card strong {
+    display: block;
+    color: #0f172a;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  #match-data-summary-v1 .summary-card p {
+    margin: 8px 0 0;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  #match-data-summary-v1 .summary-main-note {
+    margin-top: 16px;
+    padding: 13px 15px;
+    border-radius: 16px;
+    background: rgba(239,246,255,0.9);
+    border: 1px solid rgba(37,99,235,0.13);
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  #match-data-summary-v1 .summary-main-note strong {
+    color: #1d4ed8;
+  }
+
+  @media (max-width: 980px) {
+    #match-data-summary-v1 {
+      margin: 0 14px 22px;
+      padding: 20px;
+    }
+
+    #match-data-summary-v1 .summary-head {
+      flex-direction: column;
+    }
+
+    #match-data-summary-v1 .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    #match-data-summary-v1 .summary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark">⚽</div>
+        <div>
+          <h1>世界杯数据分析助手</h1>
+          <p>World Cup Data Analysis Assistant</p>
+        </div>
+      </div>
+
+      <nav class="main-nav">
+        <a href="index.html">首页</a>
+        <a href="team.html?code=MEX">球队数据</a>
+        <a href="vip.html">VIP分析</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="match-page">
+
+<section id="match-data-summary-v1">
+  <div class="summary-head">
+    <div>
+      <p class="summary-kicker">DATA SUMMARY / 本场数据摘要</p>
+      <h2>基于当前赔率数据，快速看懂这场比赛的市场信号。</h2>
+    </div>
+    <span class="summary-badge">自动读取 odds.csv</span>
+  </div>
+
+  <div class="summary-grid">
+    
+  </div>
+
+  <div class="summary-main-note" id="summary-main-note">
+    <strong>说明：</strong>本摘要只基于当前 odds.csv 中的客观赔率数据生成，不代表最终赛果预测。
+  </div>
+</section>
+    <div class="container page-grid">
+
+      <section class="match-hero">
+        <div class="match-title-row">
+          <div>
+            <span class="eyebrow">MATCH DATA CENTER</span>
+            <h2>对阵双方</h2>
+            <p>先查看比赛事实，再查看双方客观数据对比，最后阅读数据辅助解读。</p>
+          </div>
+          <span class="match-status-pill">小组赛 · 数据待接入</span>
+        </div>
+
+        <div class="teams-versus">
+          <div class="versus-team">
+            <div class="team-avatar">A</div>
+            <div>
+              <strong>一方</strong>
+              <span>Team A</span>
+            </div>
+          </div>
+
+          <div class="vs-mark">VS</div>
+
+          <div class="versus-team right">
+            <div>
+              <strong>另一方</strong>
+              <span>Team B</span>
+            </div>
+            <div class="team-avatar">B</div>
+          </div>
+        </div>
+      </section>
+
+      
+
+
+      <section class="data-panel">
+        <div class="panel-head">
+          <div>
+            <h3>比赛事实</h3>
+            <p>只展示可验证的客观背景信息。</p>
+          </div>
+          <span class="mini-label">FACTS FIRST</span>
+        </div>
+
+        <div class="fact-list">
+          <div class="fact-item"><span>比赛时间</span><strong>暂无可靠数据</strong></div>
+          <div class="fact-item"><span>比赛阶段</span><strong>小组赛</strong></div>
+          <div class="fact-item"><span>比赛城市</span><strong>暂无可靠数据</strong></div>
+          <div class="fact-item"><span>比赛球场</span><strong>暂无可靠数据</strong></div>
+          <div class="fact-item" id="match-weather-fact"><span>天气 / 海拔</span><strong>正在读取天气数据...</strong></div>
+        </div>
+      </section>
+
+      <section id="compareSection" class="data-panel">
+        <div class="panel-head">
+          <div>
+            <h3>对阵双方客观数据对比</h3>
+            <p>以下为基础对比项，暂无可靠数据时不虚构。</p>
+          </div>
+          <span class="mini-label">TEAM COMPARISON</span>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>对比项目</th>
+              <th>Mexico</th>
+              <th>South Africa</th>
+              <th>观察点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>ELO评分</td><td>暂无可靠数据</td><td>暂无可靠数据</td><td>等待数据接入后显示差距</td></tr>
+            <tr><td>FIFA排名</td><td>暂无可靠数据</td><td>暂无可靠数据</td><td>用于判断整体实力背景</td></tr>
+            <tr><td>最近5场状态</td><td>暂无可靠数据</td><td>暂无可靠数据</td><td>观察近期表现是否稳定</td></tr>
+            <tr><td>场均进球</td><td>暂无可靠数据</td><td>暂无可靠数据</td><td>观察进攻效率</td></tr>
+            <tr><td>场均失球</td><td>暂无可靠数据</td><td>暂无可靠数据</td><td>观察防守稳定性</td></tr>
+            <tr><td>攻防能力</td><td>暂无可靠数据</td><td>暂无可靠数据</td><td>用于综合对比，不直接代表结果</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      
+      <section class="analysis-card" id="travel-pressure-card">
+        <div class="panel-head">
+          <div><h3>旅途压力</h3><p>结合旅行距离、休息时间与时差变化评估比赛恢复压力。</p></div>
+          <span class="mini-label">TRAVEL PRESSURE</span>
+        </div>
+        <div id="travel-pressure-content">
+          正在读取旅途压力数据...
+        </div>
+      </section>
+
+            <section class="analysis-card" id="lineups-card">
+        <div class="panel-head">
+          <div>
+            <h3>预计首发与阵型</h3>
+            <p>展示双方可能首发、阵型与关键球员，正式首发需以赛前官方数据为准。</p>
+          </div>
+          <span class="mini-label">LINEUPS</span>
+        </div>
+
+        <div id="lineups-content">
+          正在读取首发阵容数据...
+        </div>
+      </section>
+      <section class="analysis-card" id="injuries-card">
+        <div class="panel-head">
+          <div>
+            <h3>伤停与可用性</h3>
+            <p>关注关键球员是否可出场，以及对球队稳定性的影响。</p>
+          </div>
+          <span class="mini-label">INJURIES</span>
+        </div>
+
+        <div id="injuries-content">
+          正在读取伤停数据...
+        </div>
+      </section>
+
+      
+<section class="data-panel">
+        <div class="panel-head">
+          <div>
+            <h3>博彩公司赔率与数据解读</h3>
+            <p>先展示博彩公司给出的原始赔率，再把赔率换算成更容易理解的参考比例。AI 只负责解释这些客观数据。</p>
+          </div>
+          <span class="mini-label">MARKET VIEW</span>
+        </div>
+
+        <div class="signal-grid">
+          <div class="signal-card blue" id="odds-team-a"><span>一方赔率</span><strong>读取中...</strong><p>等待赔率数据...</p></div>
+
+          <div class="signal-card green" id="odds-draw"><span>平局赔率</span><strong>读取中...</strong><p>等待赔率数据...</p></div>
+
+          <div class="signal-card orange" id="odds-team-b"><span>另一方赔率</span><strong>读取中...</strong><p>等待赔率数据...</p></div>
+        </div>
+
+        <div id="bookmaker-compare-table" style="margin-top:18px; overflow:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">博彩公司</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">Mexico</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">平局</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">South Africa</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">数据来源</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" style="padding:10px; color:var(--muted);">等待多博彩公司赔率数据...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="module-explain-v2"><strong>阅读提示：</strong>这里用于判断不同博彩公司给出的赔率方向是否一致，重点观察 Sharp 与 Soft 盘口之间是否存在明显分歧。</div>
+        <div id="bookmaker-market-summary" class="ai-box" style="margin-top:14px;">
+          <p>等待多博彩公司数据汇总...</p>
+        </div>
+      </section>
+
+      
+      
+
+      
+      <section class="data-panel">
+        <div class="panel-head">
+          <div>
+            <h3>赔率变化趋势</h3>
+            <p>记录同一场比赛在不同时间点的赔率变化，用于观察市场方向是否发生明显移动。</p>
+          </div>
+          <span class="mini-label">VIP PREVIEW · STEAM MOVE</span>
+        </div>
+
+        <div class="signal-grid">
+          <div class="signal-card blue" id="odds-move-a">
+            <span>Mexico 赔率变化</span>
+            <strong>等待更多快照</strong>
+            <p>当前只有一次赔率记录，暂不生成趋势判断。</p>
+          </div>
+
+          <div class="signal-card green" id="odds-move-draw">
+            <span>平局赔率变化</span>
+            <strong>等待更多快照</strong>
+            <p>接入多时间点数据后，将显示平局方向变化。</p>
+          </div>
+
+          <div class="signal-card orange" id="odds-move-b">
+            <span>South Africa 赔率变化</span>
+            <strong>等待更多快照</strong>
+            <p>接入 API 后可观察是否出现临场资金或信息变化。</p>
+          </div>
+        </div>
+      </section>
+
+      
+      <section class="data-panel">
+        <div class="panel-head">
+          <div>
+            <h3>Sharp Consensus</h3>
+            <p>观察专业盘之间是否形成一致方向，并对比大众盘是否跟随同一市场倾向。</p>
+          </div>
+          <span class="mini-label">VIP PREVIEW · SHARP</span>
+        </div>
+
+        <div class="signal-grid">
+          <div class="signal-card blue" id="sharp-consensus-side">
+            <span>Sharp 倾向</span>
+            <strong>等待数据</strong>
+            <p>需要 Sharp Book 赔率数据。</p>
+          </div>
+
+          <div class="signal-card green" id="sharp-consensus-level">
+            <span>一致性等级</span>
+            <strong>等待数据</strong>
+            <p>等待专业盘对比。</p>
+          </div>
+
+          <div class="signal-card orange" id="sharp-soft-alignment">
+            <span>Sharp / Soft 方向</span>
+            <strong>等待数据</strong>
+            <p>等待分类赔率数据。</p>
+          </div>
+        </div>
+
+        <div id="sharp-consensus-summary" class="ai-box" style="margin-top:14px;">
+          <p>等待 Sharp Consensus 数据...</p>
+        </div>
+      </section>
+
+
+      
+      
+
+      
+<section class="data-panel">
+        <div class="panel-head">
+          <div>
+            <h3>数据来源与综合评估 / Data Source & Evaluation</h3>
+            <p>本区域只对已接入的客观数据进行整理、对比与辅助解释。</p>
+          </div>
+          <span class="mini-label">DATA EXPLAINER</span>
+        </div>
+
+        <div class="ai-box">
+          <p>
+            当前页面已重点验证赔率数据与球队近期状态样例；天气 API 已完成连通性测试，伤停、预计首发、旅途压力等数据仍属于后续接口预留。
+            后续还将继续接入 ELO、FIFA 排名、近期状态、攻防表现、多博彩公司赔率变化等数据，用于辅助观察：
+          </p>
+          <ul>
+            <li>双方客观实力与市场倾向是否一致。</li>
+            <li>赔率变化是否与近期状态一致。</li>
+            <li>市场赔率是否出现异常波动或明显分歧。</li>
+            <li>哪些客观数据值得用户进一步观察。</li>
+          </ul>
+        </div>
+      </section>
+
+      
+      
+<section class="warning-box">
+        <strong>仅供参考说明：</strong>
+        本页内容仅用于体育数据阅读、球队对比和赛事信息分析，不构成任何下注、投资或决策建议。
+      </section>
+
+    </div>
+              
+      
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 世界杯数据分析助手</p>
+      <p>Objective Data · Team Comparison · Market Difference · Data Explainer</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+
+<script>
+// ===== MATCH PAGE TEAM BIND + CLICK NAV =====
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+  const teamAId = params.get("teamA");
+  const teamBId = params.get("teamB");
+
+  if (!teamAId || !teamBId) return;
+
+  const text = await fetch("./data/teams.csv").then(r => r.text());
+  const lines = text.replace(/\r/g, "").trim().split("\n");
+  const headers = lines.shift().split(",");
+
+  const rows = lines.map(line => {
+    const cols = line.split(",");
+    const obj = {};
+    headers.forEach((h,i)=>obj[h]=cols[i]);
+    return obj;
+  });
+
+  const teamA = rows.find(t => t.code === teamAId);
+  const teamB = rows.find(t => t.code === teamBId);
+
+  if (!teamA || !teamB) return;
+
+  const strongs = document.querySelectorAll(".versus-team strong");
+
+  if (strongs[0]) strongs[0].textContent = teamA.name_en;
+  if (strongs[1]) strongs[1].textContent = teamB.name_en;
+
+  // 👉 点击跳转
+  strongs[0].style.cursor = "pointer";
+  strongs[1].style.cursor = "pointer";
+
+  strongs[0].onclick = () => {
+    window.location.href = "team.html?code=" + teamA.code;
+  };
+
+  strongs[1].onclick = () => {
+    window.location.href = "team.html?code=" + teamB.code;
+  };
+
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const panel = document.getElementById("simple-ai-probability");
+
+  if (panel) {
+    panel.innerHTML = `
+      <div class="signal-grid">
+
+        <div class="signal-card blue">
+          <span>客观概率参考 / 基础模型预留</span>
+          <strong>模块已成功运行</strong>
+          <p>基础模型占位模块已加载，当前仅用于展示客观概率参考结构，不代表最终赛果预测。</p>
+        </div>
+
+      </div>
+    `;
+  }
+
+});
+</script>
+
+<script>
+/* === MATCH_INLINE_WEATHER_RENDER_V1 === */
+(function () {
+  function parseWeatherCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.map(line => {
+      const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cells[i] || "").replace(/^"|"$/g, "");
+      });
+      return row;
+    });
+  }
+
+  function weatherText(condition) {
+    const map = {
+      clear: "晴朗",
+      sunny: "晴天",
+      partly_cloudy: "局部多云",
+      cloudy: "多云",
+      light_rain: "小雨",
+      humid: "湿热",
+      hot: "炎热"
+    };
+    return map[condition] || condition || "暂无可靠数据";
+  }
+
+  async function renderInlineMatchWeather() {
+    const box = document.getElementById("match-weather-fact");
+    if (!box) return;
+
+    box.innerHTML = '<span>天气 / 海拔</span><strong>正在读取天气数据...</strong>';
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const res = await fetch("data/venues_weather.csv");
+      const text = await res.text();
+      const rows = parseWeatherCSV(text);
+      const item = rows.find(r => r.match_id === matchId);
+
+      if (!item) {
+        box.innerHTML = '<span>天气 / 海拔</span><strong>暂无可靠数据</strong>';
+        return;
+      }
+
+      box.innerHTML = `
+        <span>天气 / 海拔</span>
+        <strong>${weatherText(item.weather_condition)} · ${item.temperature}°C · 海拔 ${item.altitude}m</strong>
+        <small style="display:block;margin-top:6px;color:#64748b;line-height:1.5;font-size:12px;">
+          ${item.city} · ${item.stadium}<br>
+          湿度 ${item.humidity}% · 风速 ${item.wind_speed} km/h · 降雨概率 ${item.rain_probability}%<br>
+          数据源：${item.source === "local_sample" ? "本地样例数据（非实时 API）" : item.source} · 更新时间：${item.last_updated}
+        </small>
+      `;
+    } catch (err) {
+      box.innerHTML = '<span>天气 / 海拔</span><strong>天气数据加载失败</strong>';
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderInlineMatchWeather);
+  } else {
+    renderInlineMatchWeather();
+  }
+})();
+</script>
+<script>
+/* === MATCH_INLINE_TRAVEL_PRESSURE_V1 === */
+(function () {
+  function parseTravelCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.map(line => {
+      const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cells[i] || "").replace(/^"|"$/g, "");
+      });
+      return row;
+    });
+  }
+
+  function levelText(level) {
+    if (level === "low") return "低压力";
+    if (level === "medium") return "中等压力";
+    if (level === "high") return "高压力";
+    return "暂无数据";
+  }
+
+  function levelColor(level) {
+    if (level === "low") return "#16a34a";
+    if (level === "medium") return "#d97706";
+    if (level === "high") return "#dc2626";
+    return "#64748b";
+  }
+
+  async function renderTravelPressure() {
+    const box = document.getElementById("travel-pressure-content");
+    if (!box) return;
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const res = await fetch("data/travel_fatigue.csv");
+      const text = await res.text();
+      const rows = parseTravelCSV(text).filter(r => r.match_id === matchId);
+
+      if (!rows.length) {
+        box.innerHTML = "暂无旅途压力数据";
+        return;
+      }
+
+      const sorted = rows.slice().sort((a, b) => {
+        const rank = { low: 1, medium: 2, high: 3 };
+        return (rank[b.fatigue_level] || 0) - (rank[a.fatigue_level] || 0);
+      });
+
+      const top = sorted[0];
+
+      box.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+          ${rows.map(r => `
+            <div style="padding:14px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;">
+              <div style="font-weight:900;font-size:16px;margin-bottom:8px;">${r.team}</div>
+              <div style="font-weight:900;color:${levelColor(r.fatigue_level)};margin-bottom:8px;">
+                ${levelText(r.fatigue_level)}
+              </div>
+              <div style="font-size:13px;color:#475569;line-height:1.7;">
+                飞行距离：${r.travel_distance_km} km<br>
+                休息天数：${r.rest_days} 天<br>
+                时差压力：${r.time_zone_shift} 小时<br>
+                ${r.summary}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div style="margin-top:14px;padding:12px;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.7;">
+          <strong>一句话解读：</strong>
+          ${top.team} 的旅途压力相对更高，比赛后半段体能稳定性需要重点关注。
+        </div>
+      `;
+    } catch (err) {
+      box.innerHTML = "旅途压力数据加载失败";
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderTravelPressure);
+  } else {
+    renderTravelPressure();
+  }
+})();
+</script>
+<script>
+/* === MATCH_INLINE_INJURIES_V1 === */
+(function () {
+  function parseInjuriesCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.map(line => {
+      const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cells[i] || "").replace(/^"|"$/g, "");
+      });
+      return row;
+    });
+  }
+
+  function statusText(status) {
+    if (status === "available") return "可出场";
+    if (status === "doubtful") return "出场存疑";
+    if (status === "out") return "缺阵";
+    return "暂无数据";
+  }
+
+  function statusColor(status) {
+    if (status === "available") return "#16a34a";
+    if (status === "doubtful") return "#d97706";
+    if (status === "out") return "#dc2626";
+    return "#64748b";
+  }
+
+  function impactText(level) {
+    if (level === "high") return "高影响";
+    if (level === "medium") return "中影响";
+    if (level === "low") return "低影响";
+    return "未知影响";
+  }
+
+  async function renderInjuries() {
+    const box = document.getElementById("injuries-content");
+    if (!box) return;
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const matchesRes = await fetch("data/matches.csv");
+      const matchesText = await matchesRes.text();
+      const matchLines = matchesText.trim().split(/\r?\n/);
+      const matchHeaders = matchLines.shift().split(",").map(h => h.replace(/^"|"$/g, "").trim());
+
+      const matchRows = matchLines.map(line => {
+        const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+        const row = {};
+
+        matchHeaders.forEach((h, i) => {
+          row[h] = (cells[i] || "").replace(/^"|"$/g, "").trim();
+        });
+
+        return row;
+      });
+
+      const currentMatch = matchRows.find(r =>
+        String(r.match_id || "").trim() === String(matchId).trim()
+      );
+
+      if (!currentMatch || !currentMatch.team_a_code || !currentMatch.team_b_code) {
+        box.innerHTML = "暂无伤停数据";
+        return;
+      }
+
+      const teamA = currentMatch.team_a_code;
+      const teamB = currentMatch.team_b_code;
+
+      const res = await fetch("data/injuries.csv");
+      const text = await res.text();
+      const rows = parseInjuriesCSV(text).filter(r =>
+        r.team_code === teamA || r.team_code === teamB
+      );
+      if (!rows.length) {
+        box.innerHTML = "暂无伤停数据";
+        return;
+      }
+
+      const byTeam = [teamA, teamB].map(code => ({
+        code,
+        rows: rows.filter(r => r.team_code === code)
+      }));
+
+      const risky = rows.filter(r => r.status === "out" || r.status === "doubtful");
+      const topRisk = risky.find(r => r.impact_level === "high") || risky[0];
+
+      box.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+          ${byTeam.map(group => `
+            <div style="padding:14px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;">
+              <div style="font-weight:900;font-size:16px;margin-bottom:10px;">${group.code}</div>
+              ${group.rows.length ? group.rows.map(r => `
+                <div style="padding:10px 0;border-top:1px solid #f1f5f9;">
+                  <div style="font-weight:800;">${r.player_name}</div>
+                  <div style="font-size:13px;color:#475569;line-height:1.7;">
+                    状态：
+                    <span style="font-weight:900;color:${statusColor(r.status)};">${statusText(r.status)}</span>
+                    · ${impactText(r.impact_level)}<br>
+                    类型：${r.injury_type} · 预计回归：${r.expected_return}
+                  </div>
+                </div>
+              `).join("") : `<div style="color:#64748b;">暂无关键伤停</div>`}
+            </div>
+          `).join("")}
+        </div>
+
+        <div style="margin-top:14px;padding:12px;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.7;">
+          <strong>一句话解读：</strong>
+          ${topRisk
+            ? `${topRisk.team_code} 的 ${topRisk.player_name} 当前${statusText(topRisk.status)}，需要关注其对阵容完整性的影响。`
+            : `双方主要球员可用性较稳定，暂未看到明显高风险伤停。`
+          }
+        </div>
+      `;
+    } catch (err) {
+      box.innerHTML = "伤停数据加载失败";
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderInjuries);
+  } else {
+    renderInjuries();
+  }
+})();
+</script>
+<script>
+/* === MATCH_INLINE_LINEUPS_V1 === */
+(function () {
+  function parseLineupsCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.map(line => {
+      const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cells[i] || "").replace(/^"|"$/g, "");
+      });
+      return row;
+    });
+  }
+
+  async function renderLineups() {
+    const box = document.getElementById("lineups-content");
+    if (!box) return;
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+      const teamA = params.get("teamA") || "MEX";
+      const teamB = params.get("teamB") || "RSA";
+
+      const res = await fetch("data/lineups.csv");
+      const text = await res.text();
+      const rows = parseLineupsCSV(text).filter(r =>
+        r.match_id === matchId &&
+        (r.team_code === teamA || r.team_code === teamB) &&
+        r.is_starter === "true"
+      );
+
+      if (!rows.length) {
+        box.innerHTML = "暂无首发阵容数据";
+        return;
+      }
+
+      const groups = [teamA, teamB].map(code => {
+        const teamRows = rows.filter(r => r.team_code === code);
+        return {
+          code,
+          formation: teamRows[0]?.formation || "暂无阵型",
+          rows: teamRows
+        };
+      });
+
+      box.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;">
+          ${groups.map(group => `
+            <div style="padding:14px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-weight:900;font-size:16px;">${group.code}</div>
+                <span style="padding:4px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:800;font-size:12px;">
+                  ${group.formation}
+                </span>
+              </div>
+
+              ${group.rows.map(r => `
+                <div style="display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #f1f5f9;">
+                  <div>
+                    <strong>${r.player_name}${r.is_captain === "true" ? " · 队长" : ""}</strong>
+                    <div style="font-size:12px;color:#64748b;">${r.position}</div>
+                  </div>
+                  <div style="font-weight:900;color:#475569;">#${r.shirt_number}</div>
+                </div>
+              `).join("")}
+            </div>
+          `).join("")}
+        </div>
+
+        <div style="margin-top:14px;padding:12px;border-radius:14px;background:#f8fafc;color:#334155;line-height:1.7;">
+          <strong>一句话解读：</strong>
+          当前为样例/预计首发数据。正式首发通常在开赛前约 1 小时确认，届时可用于判断主力是否出场、是否轮换以及阵型变化。
+        </div>
+      `;
+    } catch (err) {
+      box.innerHTML = "首发阵容数据加载失败";
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderLineups);
+  } else {
+    renderLineups();
+  }
+})();
+</script>
+<style id="match-visual-hierarchy-v1">
+  /* MATCH VISUAL HIERARCHY V1：比赛页视觉层级优化 */
+  .match-page {
+    background:
+      radial-gradient(circle at top left, rgba(16,185,129,.10), transparent 34%),
+      linear-gradient(180deg, #f4fffb 0%, #f8fbff 100%);
+  }
+
+  .match-page .container.page-grid {
+    display: grid;
+    gap: 22px;
+  }
+
+  .match-hero {
+    border-radius: 28px;
+    box-shadow: 0 18px 50px rgba(15, 118, 110, .10);
+  }
+
+  .data-panel,
+  .analysis-card {
+    background: rgba(255,255,255,.94);
+    border: 1px solid rgba(148, 163, 184, .22);
+    border-radius: 26px;
+    padding: 26px;
+    box-shadow: 0 14px 38px rgba(15, 23, 42, .06);
+  }
+
+  .panel-head,
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .panel-head h3,
+  .section-title h2,
+  .section-title h3 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: -0.04em;
+  }
+
+  .panel-head p,
+  .section-title p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .mini-label {
+    white-space: nowrap;
+    font-weight: 900;
+    letter-spacing: .06em;
+  }
+
+  #travel-pressure-card,
+  #injuries-card {
+    border-left: 6px solid rgba(16,185,129,.45);
+  }
+
+  #lineups-card {
+    border-left: 6px solid rgba(37,99,235,.45);
+  }
+
+  #lineups-card .panel-head h3::before {
+    content: "👥 ";
+  }
+
+  #injuries-card .panel-head h3::before {
+    content: "🏥 ";
+  }
+
+  #travel-pressure-card .panel-head h3::before {
+    content: "✈️ ";
+  }
+
+  #simple-ai-probability,
+  #lineups-content,
+  #injuries-content,
+  #travel-pressure-content {
+    margin-top: 8px;
+  }
+
+  .ai-box {
+    border-left: 6px solid rgba(99,102,241,.35);
+  }
+
+  @media (max-width: 768px) {
+    .data-panel,
+    .analysis-card,
+    .match-hero {
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    .panel-head,
+    .section-title {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .panel-head h3,
+    .section-title h2,
+    .section-title h3 {
+      font-size: 22px;
+    }
+  }
+</style>
+<script>
+/* === MATCH_INLINE_ODDS_V1_DISABLED === */
+(function () {
+  function parseOddsCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.map(line => {
+      const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cells[i] || "").replace(/^"|"$/g, "");
+      });
+      return row;
+    });
+  }
+
+  async function renderOdds() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const res = await fetch("data/odds.csv");
+      const text = await res.text();
+      const item = parseOddsCSV(text).find(r => r.match_id === matchId);
+
+      if (!item) return;
+
+      const marketCards = Array.from(document.querySelectorAll(".signal-card"));
+      const targetCards = marketCards.filter(card =>
+        card.textContent.includes("隐含概率") ||
+        card.textContent.includes("分歧程度") ||
+        card.textContent.includes("市场信号")
+      );
+
+      
+const topCards = {
+  a: document.getElementById("odds-team-a"),
+  d: document.getElementById("odds-draw"),
+  b: document.getElementById("odds-team-b")
+};
+
+if (topCards.a) {
+  topCards.a.innerHTML = `
+    <span>一方赔率</span>
+    <strong>${item.team_a_implied}%</strong>
+    <p>赔率 ${item.team_a_odds} · ${item.bookmaker}</p>
+  `;
+}
+
+if (topCards.d) {
+  topCards.d.innerHTML = `
+    <span>平局赔率</span>
+    <strong>${item.draw_implied}%</strong>
+    <p>赔率 ${item.draw_odds} · ${item.market}</p>
+  `;
+}
+
+if (topCards.b) {
+  topCards.b.innerHTML = `
+    <span>另一方赔率</span>
+    <strong>${item.team_b_implied}%</strong>
+    <p>赔率 ${item.team_b_odds} · ${item.source}</p>
+  `;
+}
+
+const values = [
+        ["一方赔率", `${item.team_a_implied}%`, `赔率 ${item.team_a_odds} · ${item.bookmaker}`],
+        ["平局赔率", `${item.draw_implied}%`, `赔率 ${item.draw_odds} · ${item.market}`],
+        ["球队 B 赔率", `${item.team_b_implied}%`, `赔率 ${item.team_b_odds} · ${item.source}`]
+      ];
+
+      values.forEach((v, i) => {
+        if (!targetCards[i]) return;
+        targetCards[i].innerHTML = `
+          <span>${v[0]}</span>
+          <strong>${v[1]}</strong>
+          <p>${v[2]}</p>
+        `;
+      });
+    } catch (err) {}
+  }
+
+  if (document.readyState === "loading") {
+    // V1 disabled: document.addEventListener("DOMContentLoaded", renderOdds);
+  } else {
+    // V1 disabled: renderOdds();
+  }
+})();
+</script>
+<script>
+/* === MATCH_INLINE_ODDS_RENDER_V3 === */
+(function () {
+  function parseOddsCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.map(line => {
+      const cells = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cells[i] || "").replace(/^"|"$/g, "");
+      });
+      return row;
+    });
+  }
+
+  function renderCard(id, title, odds, percent, source) {
+    const card = document.getElementById(id);
+    if (!card) return;
+
+    card.innerHTML = `
+      <span>${title}</span>
+      <strong>${odds}</strong>
+      <p>换算参考：${percent}% · ${source}</p>
+    `;
+  }
+
+  async function renderOddsV3() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const res = await fetch("data/odds.csv");
+      const text = await res.text();
+      const oddsRows = parseOddsCSV(text).filter(r => r.match_id === matchId);
+      const item = oddsRows[0];
+      if (!item) return;      /* TEAM_LABELS_FOR_ODDS_V3 */
+      let teamALabel = "球队 A";
+      let teamBLabel = "球队 B";
+
+      try {
+        const matchRes = await fetch("data/matches.csv");
+        const matchText = await matchRes.text();
+        const matchRows = parseOddsCSV(matchText);
+
+        const pick = (row, keys, fallback) => {
+          for (const k of keys) {
+            if (row && row[k] && String(row[k]).trim()) return String(row[k]).trim();
+          }
+          return fallback;
+        };
+
+        const currentMatch =
+          matchRows.find(r => String(r.id || "").trim() === String(matchId).trim()) ||
+          matchRows.find(r => String(r.match_id || "").trim() === String(matchId).trim()) ||
+          matchRows.find(r => String(r.matchId || "").trim() === String(matchId).trim()) ||
+          matchRows.find(r => String(r.no || "").trim() === String(matchId).trim()) ||
+          matchRows[0];
+
+        if (currentMatch) {
+          teamALabel = pick(currentMatch, [
+            "team_a","teamA","team_a_name","teamAName",
+            "home","home_team","homeTeam","home_name","homeName",
+            "team1","team_1","a","teamA_name"
+          ], teamALabel);
+
+          teamBLabel = pick(currentMatch, [
+            "team_b","teamB","team_b_name","teamBName",
+            "away","away_team","awayTeam","away_name","awayName",
+            "team2","team_2","b","teamB_name"
+          ], teamBLabel);
+        }
+
+        console.log("当前赔率模块球队名称：", teamALabel, teamBLabel, currentMatch);
+      } catch (e) {
+        console.warn("读取比赛双方名称失败，继续使用球队 A / 球队 B", e);
+      }
+
+      if (teamALabel === "球队 A" || teamBLabel === "球队 B") {
+        const pageText = document.body.innerText || "";
+        const m = pageText.match(/([A-Za-z][A-Za-z\s\.]+?)\s+与\s+([A-Za-z][A-Za-z\s\.]+?)\s+的比赛/);
+        if (m) {
+          teamALabel = m[1].trim();
+          teamBLabel = m[2].trim();
+        }
+      }
+
+      const replaceTeamLabelsInOddsSection = () => {
+        const marketSection = document.getElementById("bookmaker-compare-table")?.closest("section");
+        const moveSection = document.getElementById("odds-move-a")?.closest("section");
+        [marketSection, moveSection].filter(Boolean).forEach(section => {
+          section.innerHTML = section.innerHTML
+            .replaceAll("球队 A", teamALabel)
+            .replaceAll("球队 B", teamBLabel);
+        });
+      };
+
+      const compareBox = document.getElementById("bookmaker-compare-table");
+      if (compareBox && oddsRows.length) {
+        const typeCounts = oddsRows.reduce((acc, r) => {
+          const type = String(r.bookmaker_type || "unknown").toLowerCase() || "unknown";
+          acc[type] = (acc[type] || 0) + 1;
+          return acc;
+        }, {});
+
+        const uniqueBookmakerCount = new Set(
+          oddsRows
+            .map(r => String(r.bookmaker || "").trim())
+            .filter(Boolean)
+        ).size;
+
+        const sourceNames = Array.from(
+          new Set(
+            oddsRows
+              .map(r => String(r.source || "").trim())
+              .filter(Boolean)
+          )
+        );
+
+        const priorityNames = [
+          "Pinnacle", "Betfair", "Smarkets",
+          "Bet365", "DraftKings", "FanDuel", "BetMGM",
+          "Paddy Power", "Sky Bet", "William Hill", "Unibet"
+        ];
+
+        const scoreBookmaker = (row) => {
+          const name = String(row.bookmaker || "").toLowerCase();
+          const type = String(row.bookmaker_type || "").toLowerCase();
+
+          if (type === "sharp") return 0;
+
+          const priorityIndex = priorityNames.findIndex(item =>
+            name.includes(item.toLowerCase())
+          );
+
+          if (priorityIndex >= 0) return 10 + priorityIndex;
+          if (type === "soft") return 50;
+          return 80;
+        };
+
+        const coreRows = [...oddsRows]
+          .sort((a, b) => scoreBookmaker(a) - scoreBookmaker(b))
+          .slice(0, 10);
+
+        const renderRows = (rows) => rows.map(r => `
+          <tr>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">
+              ${r.bookmaker}
+              <div style="margin-top:4px;">
+                <span style="
+                  display:inline-block;
+                  padding:2px 6px;
+                  border-radius:999px;
+                  font-size:11px;
+                  background:${r.bookmaker_type === "sharp" ? "rgba(255,80,80,.18)" : r.bookmaker_type === "soft" ? "rgba(80,160,255,.18)" : "rgba(255,255,255,.08)"};
+                  color:${r.bookmaker_type === "sharp" ? "#ff8a8a" : r.bookmaker_type === "soft" ? "#8fc7ff" : "#cccccc"};
+                ">
+                  ${r.bookmaker_type ? r.bookmaker_type.toUpperCase() : "UNKNOWN"}
+                </span>
+              </div>
+            </td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${r.team_a_odds}（${r.team_a_implied}%）</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${r.draw_odds}（${r.draw_implied}%）</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${r.team_b_odds}（${r.team_b_implied}%）</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${r.source}</td>
+          </tr>
+        `).join("");
+
+        const renderTable = (rows) => `
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">博彩公司</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">Mexico</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">平局</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">South Africa</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">数据源</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderRows(rows)}
+            </tbody>
+          </table>
+        `;
+
+        compareBox.innerHTML = `
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            align-items:center;
+            flex-wrap:wrap;
+            margin-bottom:12px;
+            padding:12px 14px;
+            border:1px solid var(--border);
+            border-radius:16px;
+            background:rgba(255,255,255,.58);
+          ">
+            <div style="line-height:1.6;">
+              <strong>当前接入 ${oddsRows.length} 条赔率记录，去重覆盖 ${uniqueBookmakerCount} 家博彩公司</strong>
+              <div style="font-size:13px;color:var(--muted);">
+                数据来源：${sourceNames.join(" / ") || "odds.csv"}。Sharp ${typeCounts.sharp || 0} 条 / Soft ${typeCounts.soft || 0} 条 / Unknown ${typeCounts.unknown || 0} 条。
+                默认展示核心 ${coreRows.length} 家，完整数据继续用于市场一致性、异常盘口和 Sharp / Soft 分析；当前为本地 CSV 样例闭环验证，不是实时自动刷新。
+              </div>
+            </div>
+          </div>
+
+          ${renderTable(coreRows)}
+
+          <details style="
+            margin-top:14px;
+            border:1px solid var(--border);
+            border-radius:16px;
+            background:rgba(255,255,255,.5);
+            overflow:hidden;
+          ">
+            <summary style="
+              list-style:none;
+              cursor:pointer;
+              padding:12px 14px;
+              font-weight:900;
+              color:#0f766e;
+              background:rgba(20,184,166,.12);
+            ">
+              展开 / 收起全部 ${oddsRows.length} 家博彩公司赔率数据
+            </summary>
+            <div style="overflow:auto;">
+              ${renderTable(oddsRows)}
+            </div>
+          </details>
+        `;
+      }
+
+        const summaryBox = document.getElementById("bookmaker-market-summary");
+        if (summaryBox) {
+          const aValues = oddsRows.map(r => Number(r.team_a_odds)).filter(Boolean);
+          const bValues = oddsRows.map(r => Number(r.team_b_odds)).filter(Boolean);
+          const avgA = aValues.reduce((sum, v) => sum + v, 0) / aValues.length;
+          const avgB = bValues.reduce((sum, v) => sum + v, 0) / bValues.length;
+          const minA = Math.min(...aValues);
+          const maxA = Math.max(...aValues);
+          const spreadA = maxA - minA;
+          const marketLean = avgA < avgB ? teamALabel : teamBLabel;
+          const consistency = spreadA <= 0.08 ? "较高" : spreadA <= 0.18 ? "中等" : "较低";
+
+          const avgByType = (type, field) => {
+            const values = oddsRows
+              .filter(r => r.bookmaker_type === type)
+              .map(r => Number(r[field]))
+              .filter(Boolean);
+            if (!values.length) return null;
+            return values.reduce((sum, v) => sum + v, 0) / values.length;
+          };
+
+          const sharpAvgA = avgByType("sharp", "team_a_odds");
+          const softAvgA = avgByType("soft", "team_a_odds");
+          const sharpSoftGap = sharpAvgA && softAvgA ? Math.abs(sharpAvgA - softAvgA) : 0;
+
+          let sharpSoftText = "暂无足够分类数据";
+          if (sharpAvgA && softAvgA) {
+            sharpSoftText = sharpSoftGap <= 0.05
+              ? "Sharp 与 Soft 对球队 A 的定价接近，市场分歧较小。"
+              : "Sharp 与 Soft 对球队 A 的定价存在差异，后续应继续观察是否扩大。";
+          }
+
+          let abnormalLevel = "正常";
+          let abnormalNote = "Sharp 与 Soft 当前差距未达到异常阈值。";
+          if (sharpAvgA && softAvgA) {
+            if (sharpSoftGap >= 0.12) {
+              abnormalLevel = "高风险";
+              abnormalNote = "Sharp 与 Soft 对球队 A 的定价差距较大，可能存在市场分歧或信息差。";
+            } else if (sharpSoftGap >= 0.06) {
+              abnormalLevel = "关注";
+              abnormalNote = "Sharp 与 Soft 对球队 A 的定价出现轻微差异，建议继续观察赔率变化。";
+            }
+          }
+
+          summaryBox.innerHTML = `
+            <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; margin-bottom:12px;">
+              <div style="padding:10px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.62);">
+                <div style="font-size:12px; color:var(--muted);">市场倾向</div>
+                <strong>${marketLean}</strong>
+              </div>
+              <div style="padding:10px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.62);">
+                <div style="font-size:12px; color:var(--muted);">市场一致性</div>
+                <strong>${consistency}</strong>
+              </div>
+              <div style="padding:10px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.62);">
+                <div style="font-size:12px; color:var(--muted);">去重博彩公司</div>
+                <strong>${uniqueBookmakerCount} 家</strong>
+              </div>
+              <div style="padding:10px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.62);">
+                <div style="font-size:12px; color:var(--muted);">Sharp 均值</div>
+                <strong>${sharpAvgA ? sharpAvgA.toFixed(2) : "暂无"}</strong>
+              </div>
+              <div style="padding:10px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.62);">
+                <div style="font-size:12px; color:var(--muted);">Soft 均值</div>
+                <strong>${softAvgA ? softAvgA.toFixed(2) : "暂无"}</strong>
+              </div>
+                  <div style="padding:10px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.62);">
+                    <div style="font-size:12px; color:var(--muted);">异常等级</div>
+                    <strong>${abnormalLevel}</strong>
+                  </div>
+            </div>
+            <p><strong>多博彩公司市场摘要：</strong>Mexico 赔率区间：${minA.toFixed(2)} - ${maxA.toFixed(2)}。该结果来自 odds.csv 中同一 match_id 的多家公司赔率记录。</p>
+            <p><strong>Sharp / Soft 对比：</strong>${sharpSoftText}</p><p><strong>异常盘口检测：</strong>${abnormalNote}</p>
+          `;
+        }
+
+      renderCard("odds-team-a", `Mexico 赔率`, item.team_a_odds, item.team_a_implied, item.bookmaker);
+      renderCard("odds-draw", "平局赔率", item.draw_odds, item.draw_implied, item.market);
+      renderCard("odds-team-b", `球队 B 赔率`, item.team_b_odds, item.team_b_implied, item.source);
+
+      replaceTeamLabelsInOddsSection();
+
+      const marketA = Number(item.team_a_implied || 0);
+      const marketB = Number(item.team_b_implied || 0);
+      const marketDraw = Number(item.draw_implied || 0);
+
+      const diffLevelCard = document.getElementById("market-diff-level");
+      const modelLeanCard = document.getElementById("market-model-lean");
+      const riskNoteCard = document.getElementById("market-risk-note");
+
+      const marketLeader =
+        marketA >= marketB && marketA >= marketDraw ? "球队 A" :
+        marketB >= marketA && marketB >= marketDraw ? "球队 B" :
+        "平局";
+
+      const leadGap = Math.abs(marketA - marketB);
+
+      let diffText = "低分歧";
+      let diffNote = "根据双方赔率隐含概率差值计算，当前市场方向较集中。";
+      let riskText = "常规观察";
+      let riskNote = "风险提示根据赔率差距大小生成，仅用于辅助观察比赛不确定性。";
+
+      if (leadGap < 5) {
+        diffText = "高分歧";
+        diffNote = "双方市场隐含概率接近，说明市场方向并不集中。";
+        riskText = "谨慎观察";
+        riskNote = "双方赔率接近，比赛不确定性较高，应继续结合伤停、首发、天气和旅途压力。";
+      } else if (leadGap < 12) {
+        diffText = "中等分歧";
+        diffNote = "市场存在一定倾向，但优势并不极端。";
+        riskText = "继续交叉验证";
+        riskNote = "建议继续观察阵容、伤停与临场赔率变化。";
+      }
+
+      if (diffLevelCard) {
+        diffLevelCard.innerHTML = `
+          <span>分歧程度</span>
+          <strong>${diffText}</strong>
+          <p>${diffNote}</p>
+        `;
+      }
+
+      if (modelLeanCard) {
+        modelLeanCard.innerHTML = `
+          <span>市场倾向</span>
+          <strong>${marketLeader === "球队 A" ? teamALabel : marketLeader === "球队 B" ? teamBLabel : marketLeader}</strong>
+          <p>按当前赔率换算参考比例：球队 A ${marketA}% / 平局 ${marketDraw}% / 球队 B ${marketB}%。</p>
+        `;
+      }
+
+      if (riskNoteCard) {
+        riskNoteCard.innerHTML = `
+          <span>风险提示</span>
+          <strong>${riskText}</strong>
+          <p>${riskNote}</p>
+        `;
+      }
+
+      const snapshotRes = await fetch("data/odds_snapshots.csv");
+      const snapshotText = await snapshotRes.text();
+      const snapshots = parseOddsCSV(snapshotText)
+        .filter(r => r.match_id === matchId)
+        .sort((a, b) => new Date(a.snapshot_time) - new Date(b.snapshot_time));
+
+      if (snapshots.length >= 2) {
+        const first = snapshots[0];
+        const last = snapshots[snapshots.length - 1];
+
+        const moveA = document.getElementById("odds-move-a");
+        const moveDraw = document.getElementById("odds-move-draw");
+        const moveB = document.getElementById("odds-move-b");
+
+        const formatMove = (start, end) => {
+          const s = Number(start);
+          const e = Number(end);
+          if (!s || !e) return `${start} → ${end}`;
+          const arrow = e < s ? " ↓" : e > s ? " ↑" : " →";
+          return `${start} → ${end}${arrow}`;
+        };
+
+        const detectSteamMove = (start, end) => {
+          const s = Number(start);
+          const e = Number(end);
+          if (!s || !e) return "等待更多有效快照。";
+          const gap = Math.abs(e - s);
+          if (gap >= 0.18) return "Steam Move：强烈异动";
+          if (gap >= 0.08) return "Steam Move：轻微异动";
+          return "Steam Move：暂无明显异动";
+        };
+        const explainMove = (start, end, label) => {
+          const s = Number(start);
+          const e = Number(end);
+          if (!s || !e) return "等待更多有效快照。";
+          if (e < s) return `${label} 赔率下降，通常表示市场支持增强。`;
+          if (e > s) return `${label} 赔率上升，通常表示市场支持减弱。`;
+          return `${label} 赔率暂未发生明显变化。`;
+        };
+
+        if (moveA) {
+          moveA.innerHTML = `
+            <span>Mexico 赔率变化</span>
+            <strong>${formatMove(first.team_a_value, last.team_a_value)}</strong>
+            <p>${explainMove(first.team_a_value, last.team_a_value, teamALabel)} · ${detectSteamMove(first.team_a_value, last.team_a_value)}</p>
+          `;
+        }
+
+        if (moveDraw) {
+          moveDraw.innerHTML = `
+            <span>平局赔率变化</span>
+            <strong>${formatMove(first.draw_value, last.draw_value)}</strong>
+            <p>${explainMove(first.draw_value, last.draw_value, "平局")} · ${detectSteamMove(first.draw_value, last.draw_value)}</p>
+          `;
+        }
+
+        if (moveB) {
+          moveB.innerHTML = `
+            <span>South Africa 赔率变化</span>
+            <strong>${formatMove(first.team_b_value, last.team_b_value)}</strong>
+            <p>${explainMove(first.team_b_value, last.team_b_value, teamBLabel)} · ${detectSteamMove(first.team_b_value, last.team_b_value)}</p>
+          `;
+        }
+      }
+    } catch (err) {}
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderOddsV3);
+  } else {
+    renderOddsV3();
+  }
+})();
+</script>
+
+<script>
+/* === CLV_STANDALONE_RENDER_V1 === */
+(function () {
+  function parseSimpleCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",").map(h => h.trim().replace(/^"|"$/g, ""));
+    return lines.map(line => {
+      const cols = line.split(",").map(v => v.trim().replace(/^"|"$/g, ""));
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = cols[i] || "");
+      return obj;
+    });
+  }
+
+  function getTeamLabelsFromPage() {
+    const text = document.body.innerText || "";
+    const m = text.match(/([A-Za-z][A-Za-z\s\.]+?)\s+与\s+([A-Za-z][A-Za-z\s\.]+?)\s+的比赛/);
+    if (m) {
+      return {
+        a: m[1].trim(),
+        b: m[2].trim()
+      };
+    }
+
+    const text2 = document.body.innerText || "";
+    const mexico = text2.includes("Mexico") ? "Mexico" : "球队 A";
+    const southAfrica = text2.includes("South Africa") ? "South Africa" : "球队 B";
+
+    return {
+      a: mexico,
+      b: southAfrica
+    };
+  }
+
+  function clvText(start, end, label) {
+    const s = Number(start);
+    const e = Number(end);
+    if (!s || !e) return `${label}：等待有效快照`;
+    if (e < s) return `${label} 当前赔率低于开盘参考，通常表示市场支持增强。`;
+    if (e > s) return `${label} 当前赔率高于开盘参考，通常表示市场支持减弱。`;
+    return `${label} 当前赔率与开盘参考基本一致。`;
+  }
+
+  function clvLevel(start, end) {
+    const s = Number(start);
+    const e = Number(end);
+    if (!s || !e) return "等待数据";
+    const gap = Math.abs(e - s);
+    if (gap >= 0.18) return "明显变化";
+    if (gap >= 0.08) return "轻微变化";
+    return "基本稳定";
+  }
+
+  async function renderCLVStandalone() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+      const teams = getTeamLabelsFromPage();
+
+      const res = await fetch("data/odds_snapshots.csv");
+      const text = await res.text();
+      const rows = parseSimpleCSV(text)
+        .filter(r => String(r.match_id || r.id || "").trim() === String(matchId).trim())
+        .sort((a, b) => new Date(a.snapshot_time || a.recorded_at || 0) - new Date(b.snapshot_time || b.recorded_at || 0));
+
+      if (rows.length < 2) return;
+
+      const first = rows[0];
+      const last = rows[rows.length - 1];
+
+      const clvA = document.getElementById("clv-team-a");
+      const clvDraw = document.getElementById("clv-draw");
+      const clvB = document.getElementById("clv-team-b");
+      const clvSummary = document.getElementById("clv-summary");
+
+      if (clvA) {
+        clvA.innerHTML = `
+          <span>${teams.a} Closing Line</span>
+          <strong>${first.team_a_value} → ${last.team_a_value}</strong>
+          <p>${clvText(first.team_a_value, last.team_a_value, teams.a)}</p>
+        `;
+      }
+
+      if (clvDraw) {
+        clvDraw.innerHTML = `
+          <span>平局 Closing Line</span>
+          <strong>${first.draw_value} → ${last.draw_value}</strong>
+          <p>${clvText(first.draw_value, last.draw_value, "平局")}</p>
+        `;
+      }
+
+      if (clvB) {
+        clvB.innerHTML = `
+          <span>${teams.b} Closing Line</span>
+          <strong>${first.team_b_value} → ${last.team_b_value}</strong>
+          <p>${clvText(first.team_b_value, last.team_b_value, teams.b)}</p>
+        `;
+      }
+
+      if (clvSummary) {
+        clvSummary.innerHTML = `
+          <p><strong>Closing Line 观察：</strong>当前基于 odds_snapshots.csv 中同一 match_id 的首条与末条赔率快照进行对比。</p>
+          <p>${teams.a}：<strong>${clvLevel(first.team_a_value, last.team_a_value)}</strong>；平局：<strong>${clvLevel(first.draw_value, last.draw_value)}</strong>；${teams.b}：<strong>${clvLevel(first.team_b_value, last.team_b_value)}</strong>。</p>
+          <p>该模块后续可升级为 VIP 功能，用于分析 Closing Line Value、临场资金方向与专业盘变化。</p>
+        `;
+      }
+    } catch (err) {
+      console.warn("CLV 渲染失败：", err);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderCLVStandalone);
+  } else {
+    renderCLVStandalone();
+  }
+})();
+</script>
+
+
+<script>
+/* === CLV_LABEL_PATCH_V1 === */
+(function () {
+  function patchCLVLabels() {
+    const bodyText = document.body.innerText || "";
+
+    let teamA = "球队 A";
+    let teamB = "球队 B";
+
+    const m = bodyText.match(/([A-Za-z][A-Za-z\s\.]+?)\s+与\s+([A-Za-z][A-Za-z\s\.]+?)\s+的比赛/);
+    if (m) {
+      teamA = m[1].trim();
+      teamB = m[2].trim();
+    } else {
+      if (bodyText.includes("Mexico")) teamA = "Mexico";
+      if (bodyText.includes("South Africa")) teamB = "South Africa";
+    }
+
+    const clvTitle = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("Closing Line"));
+    const clvSection = clvTitle ? clvTitle.closest("section") : null;
+    if (!clvSection) return;
+
+    clvSection.innerHTML = clvSection.innerHTML
+      .replaceAll("球队 A", teamA)
+      .replaceAll("球队 B", teamB);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => setTimeout(patchCLVLabels, 300));
+  } else {
+    setTimeout(patchCLVLabels, 300);
+  }
+})();
+</script>
+
+
+<script>
+/* === SHARP_CONSENSUS_RENDER_V1 === */
+(function () {
+  function parseSimpleCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",").map(h => h.trim().replace(/^"|"$/g, ""));
+    return lines.map(line => {
+      const cols = line.split(",").map(v => v.trim().replace(/^"|"$/g, ""));
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = cols[i] || "");
+      return obj;
+    });
+  }
+
+  function getTeamLabelsFromPage() {
+    const text = document.body.innerText || "";
+    const m = text.match(/([A-Za-z][A-Za-z\s\.]+?)\s+与\s+([A-Za-z][A-Za-z\s\.]+?)\s+的比赛/);
+
+    if (m) {
+      return {
+        a: m[1].trim(),
+        b: m[2].trim()
+      };
+    }
+
+    return {
+      a: text.includes("Mexico") ? "Mexico" : "球队 A",
+      b: text.includes("South Africa") ? "South Africa" : "球队 B"
+    };
+  }
+
+  function avg(values) {
+    if (!values.length) return null;
+    return values.reduce((sum, v) => sum + v, 0) / values.length;
+  }
+
+  function marketSide(avgA, avgB, teamA, teamB) {
+    if (!avgA || !avgB) return "等待数据";
+    if (Math.abs(avgA - avgB) <= 0.03) return "方向接近";
+    return avgA < avgB ? teamA : teamB;
+  }
+
+  async function renderSharpConsensus() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+      const teams = getTeamLabelsFromPage();
+
+      const res = await fetch("data/odds.csv");
+      const text = await res.text();
+      const rows = parseSimpleCSV(text).filter(r => String(r.match_id || r.id || "").trim() === String(matchId).trim());
+
+      const sharpRows = rows.filter(r => String(r.bookmaker_type || "").toLowerCase() === "sharp");
+      const softRows = rows.filter(r => String(r.bookmaker_type || "").toLowerCase() === "soft");
+
+      const sharpAValues = sharpRows.map(r => Number(r.team_a_odds)).filter(Boolean);
+      const sharpBValues = sharpRows.map(r => Number(r.team_b_odds)).filter(Boolean);
+      const softAValues = softRows.map(r => Number(r.team_a_odds)).filter(Boolean);
+      const softBValues = softRows.map(r => Number(r.team_b_odds)).filter(Boolean);
+
+      const sharpAvgA = avg(sharpAValues);
+      const sharpAvgB = avg(sharpBValues);
+      const softAvgA = avg(softAValues);
+      const softAvgB = avg(softBValues);
+
+      const sharpSide = marketSide(sharpAvgA, sharpAvgB, teams.a, teams.b);
+      const softSide = marketSide(softAvgA, softAvgB, teams.a, teams.b);
+
+      const sharpSpreadA = sharpAValues.length ? Math.max(...sharpAValues) - Math.min(...sharpAValues) : null;
+      const sharpSpreadB = sharpBValues.length ? Math.max(...sharpBValues) - Math.min(...sharpBValues) : null;
+      const maxSharpSpread = Math.max(sharpSpreadA || 0, sharpSpreadB || 0);
+
+      let consensusLevel = "等待数据";
+      if (sharpRows.length >= 2) {
+        consensusLevel = maxSharpSpread <= 0.08 ? "较高" : maxSharpSpread <= 0.18 ? "中等" : "较低";
+      }
+
+      let alignment = "等待数据";
+      let alignmentNote = "需要同时具备 Sharp 与 Soft 分类赔率。";
+      if (sharpRows.length && softRows.length) {
+        if (sharpSide === "方向接近" || softSide === "方向接近") {
+          alignment = "方向接近";
+          alignmentNote = "Sharp 或 Soft 的双方赔率接近，暂不形成明确方向。";
+        } else if (sharpSide === softSide) {
+          alignment = "方向一致";
+          alignmentNote = `Sharp 与 Soft 当前都更倾向 ${sharpSide}。`;
+        } else {
+          alignment = "方向分歧";
+          alignmentNote = `Sharp 更倾向 ${sharpSide}，Soft 更倾向 ${softSide}，需要重点观察后续赔率变化。`;
+        }
+      }
+
+      const sideBox = document.getElementById("sharp-consensus-side");
+      const levelBox = document.getElementById("sharp-consensus-level");
+      const alignBox = document.getElementById("sharp-soft-alignment");
+      const summaryBox = document.getElementById("sharp-consensus-summary");
+
+      if (sideBox) {
+        sideBox.innerHTML = `
+          <span>Sharp 倾向</span>
+          <strong>${sharpSide}</strong>
+          <p>基于 ${sharpRows.length} 家 Sharp Book 的球队 A / 球队 B 平均赔率对比。</p>
+        `;
+      }
+
+      if (levelBox) {
+        levelBox.innerHTML = `
+          <span>一致性等级</span>
+          <strong>${consensusLevel}</strong>
+          <p>Sharp Book 内部赔率离散度越低，一致性越高。</p>
+        `;
+      }
+
+      if (alignBox) {
+        alignBox.innerHTML = `
+          <span>Sharp / Soft 方向</span>
+          <strong>${alignment}</strong>
+          <p>${alignmentNote}</p>
+        `;
+      }
+
+      if (summaryBox) {
+        summaryBox.innerHTML = `
+          <p><strong>Sharp Consensus 观察：</strong>当前基于 odds.csv 中 bookmaker_type=sharp 的博彩公司进行专业盘一致性观察。</p>
+          <p>Sharp 平均赔率：${teams.a} ${sharpAvgA ? sharpAvgA.toFixed(2) : "暂无"} / ${teams.b} ${sharpAvgB ? sharpAvgB.toFixed(2) : "暂无"}；Soft 平均赔率：${teams.a} ${softAvgA ? softAvgA.toFixed(2) : "暂无"} / ${teams.b} ${softAvgB ? softAvgB.toFixed(2) : "暂无"}。</p>
+          <p>该模块后续可升级为 VIP 功能，用于识别专业盘共识、专业盘与大众盘分歧，以及临场盘口方向变化。</p>
+        `;
+      }
+
+      const sharpSectionTitle = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("Sharp Consensus"));
+      const sharpSection = sharpSectionTitle ? sharpSectionTitle.closest("section") : null;
+      if (sharpSection) {
+        sharpSection.innerHTML = sharpSection.innerHTML
+          .replaceAll("球队 A", teams.a)
+          .replaceAll("球队 B", teams.b);
+      }
+    } catch (err) {
+      console.warn("Sharp Consensus 渲染失败：", err);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderSharpConsensus);
+  } else {
+    renderSharpConsensus();
+  }
+})();
+</script>
+
+
+<script>
+/* === SHARP_CONSENSUS_LABEL_PATCH_V1 === */
+(function () {
+  function patchSharpConsensusLabels() {
+    const bodyText = document.body.innerText || "";
+
+    let teamA = "球队 A";
+    let teamB = "球队 B";
+
+    const m = bodyText.match(/([A-Za-z][A-Za-z\s\.]+?)\s+与\s+([A-Za-z][A-Za-z\s\.]+?)\s+的比赛/);
+    if (m) {
+      teamA = m[1].trim();
+      teamB = m[2].trim();
+    } else {
+      if (bodyText.includes("Mexico")) teamA = "Mexico";
+      if (bodyText.includes("South Africa")) teamB = "South Africa";
+    }
+
+    const title = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("Sharp Consensus"));
+    const section = title ? title.closest("section") : null;
+    if (!section) return;
+
+    section.innerHTML = section.innerHTML
+      .replaceAll("球队 A", teamA)
+      .replaceAll("球队 B", teamB);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => setTimeout(patchSharpConsensusLabels, 300));
+  } else {
+    setTimeout(patchSharpConsensusLabels, 300);
+  }
+})();
+</script>
+
+<script id="match-data-summary-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const next = text[i + 1];
+
+      if (char === '"' && insideQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === "," && !insideQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+        if (char === "\r" && next === "\n") i++;
+        row.push(cell);
+        if (row.some(v => String(v).trim() !== "")) rows.push(row);
+        row = [];
+        cell = "";
+      } else {
+        cell += char;
+      }
+    }
+
+    if (cell.length || row.length) {
+      row.push(cell);
+      if (row.some(v => String(v).trim() !== "")) rows.push(row);
+    }
+
+    if (!rows.length) return [];
+
+    const headers = rows[0].map(h => String(h).replace(/^\uFEFF/, "").replace(/^"|"$/g, "").trim());
+    return rows.slice(1).map(values => {
+      const obj = {};
+      headers.forEach((h, index) => {
+        obj[h] = values[index] !== undefined ? String(values[index]).replace(/^"|"$/g, "").trim() : "";
+      });
+      return obj;
+    });
+  }
+
+  function numberValue(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function average(values) {
+    const valid = values.filter(v => Number.isFinite(v));
+    if (!valid.length) return null;
+    return valid.reduce((sum, v) => sum + v, 0) / valid.length;
+  }
+
+  function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  async function loadCSV(path) {
+    const res = await fetch(path, { cache: "no-store" });
+    if (!res.ok) throw new Error("无法读取 " + path);
+    return parseCSV(await res.text());
+  }
+
+  async function renderMatchDataSummaryV1() {
+    const box = document.getElementById("match-data-summary-v1");
+    if (!box) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const matchId = params.get("id") || "1";
+
+    try {
+      const oddsRows = await loadCSV("data/odds.csv");
+      const matchOdds = oddsRows.filter(row => String(row.match_id) === String(matchId));
+
+      if (!matchOdds.length) {
+        setText("summary-market-lean", "暂无赔率数据");
+        setText("summary-sharp-soft", "暂无可比数据");
+        setText("summary-outlier", "暂无异常判断");
+        setText("summary-source", "无数据");
+        setText("summary-main-note", "说明：当前比赛没有在 odds.csv 中找到对应赔率记录。");
+        return;
+      }
+
+      const avgA = average(matchOdds.map(row => numberValue(row.team_a_implied) ?? (100 / numberValue(row.team_a_odds))));
+      const avgDraw = average(matchOdds.map(row => numberValue(row.draw_implied) ?? (100 / numberValue(row.draw_odds))));
+      const avgB = average(matchOdds.map(row => numberValue(row.team_b_implied) ?? (100 / numberValue(row.team_b_odds))));
+
+      const labels = [
+        { key: "teamA", label: "Mexico", value: avgA },
+        { key: "draw", label: "平局", value: avgDraw },
+        { key: "teamB", label: "South Africa", value: avgB }
+      ].filter(item => Number.isFinite(item.value));
+
+      labels.sort((a, b) => b.value - a.value);
+      const top = labels[0];
+
+      if (top) {
+        setText("summary-market-lean", top.label + " 方向更高");
+        setText("summary-market-lean-note", "多家公司隐含概率均值最高约为 " + top.value.toFixed(1) + "%。");
+      }
+
+      const sharpRows = matchOdds.filter(row => String(row.bookmaker_type).toLowerCase() === "sharp");
+      const softRows = matchOdds.filter(row => String(row.bookmaker_type).toLowerCase() === "soft");
+
+      const sharpA = average(sharpRows.map(row => numberValue(row.team_a_implied) ?? (100 / numberValue(row.team_a_odds))));
+      const softA = average(softRows.map(row => numberValue(row.team_a_implied) ?? (100 / numberValue(row.team_a_odds))));
+
+      if (Number.isFinite(sharpA) && Number.isFinite(softA)) {
+        const gap = Math.abs(sharpA - softA);
+        if (gap >= 3) {
+          setText("summary-sharp-soft", "存在明显分歧");
+          setText("summary-sharp-soft-note", "Sharp 与 Soft 在 Mexico 方向隐含概率差约 " + gap.toFixed(1) + " 个百分点。");
+        } else {
+          setText("summary-sharp-soft", "分歧较小");
+          setText("summary-sharp-soft-note", "Sharp 与 Soft 在 Mexico 方向差异约 " + gap.toFixed(1) + " 个百分点。");
+        }
+      } else {
+        setText("summary-sharp-soft", "样本不足");
+        setText("summary-sharp-soft-note", "需要同时存在 sharp 与 soft 类型的博彩公司。");
+      }
+
+      const aOdds = matchOdds.map(row => numberValue(row.team_a_odds)).filter(v => Number.isFinite(v));
+      const bOdds = matchOdds.map(row => numberValue(row.team_b_odds)).filter(v => Number.isFinite(v));
+      const spreadA = aOdds.length ? Math.max.apply(null, aOdds) - Math.min.apply(null, aOdds) : 0;
+      const spreadB = bOdds.length ? Math.max.apply(null, bOdds) - Math.min.apply(null, bOdds) : 0;
+      const maxSpread = Math.max(spreadA, spreadB);
+
+      if (maxSpread >= 0.25) {
+        setText("summary-outlier", "需要重点观察");
+        setText("summary-outlier-note", "不同公司赔率差距较明显，最大差约 " + maxSpread.toFixed(2) + "。");
+      } else {
+        setText("summary-outlier", "暂无明显异常");
+        setText("summary-outlier-note", "当前不同公司赔率离散程度较低，最大差约 " + maxSpread.toFixed(2) + "。");
+      }
+
+      const sources = Array.from(new Set(matchOdds.map(row => row.source).filter(Boolean)));
+      const bookmakerCount = Array.from(new Set(matchOdds.map(row => row.bookmaker).filter(Boolean))).length;
+
+      setText("summary-source", sources.join(" / ") || "local_sample");
+      setText("summary-source-note", "当前样本包含 " + matchOdds.length + " 条赔率记录，去重覆盖 " + bookmakerCount + " 家博彩公司。");
+
+      const updatedTimes = matchOdds.map(row => row.recorded_at).filter(Boolean).sort();
+      const latest = updatedTimes[updatedTimes.length - 1] || "暂无";
+      setText("summary-main-note", "说明：本摘要基于 odds.csv 中 match_id=" + matchId + " 的赔率样例自动生成；当前最新记录时间：" + latest + "。当前为本地 CSV 样例闭环验证，不是实时自动刷新；这不是赛果预测，只是市场信号整理。");
+    } catch (err) {
+      console.warn("本场数据摘要读取失败：", err);
+      setText("summary-market-lean", "读取失败");
+      setText("summary-sharp-soft", "读取失败");
+      setText("summary-outlier", "读取失败");
+      setText("summary-source", "读取失败");
+      setText("summary-main-note", "说明：本场数据摘要读取失败，请检查 data/odds.csv 是否存在，并使用 Live Server 打开页面。");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderMatchDataSummaryV1);
+})();
+</script>
+
+<script id="match-recent-form-summary-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    const lines = text.trim().split(/\r?\n/);
+    if (!lines.length) return rows;
+
+    const headers = lines.shift().split(",").map(h => h.replace(/^"|"$/g, "").trim());
+
+    for (const line of lines) {
+      const values = line.match(/("([^"]|"")*"|[^,]+)/g) || [];
+      const row = {};
+      headers.forEach((header, index) => {
+        row[header] = (values[index] || "").replace(/^"|"$/g, "").replace(/""/g, '"').trim();
+      });
+      rows.push(row);
+    }
+
+    return rows;
+  }
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function getMatchId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id") || "1";
+  }
+
+  function buildRecentFormSummary(team) {
+    if (!team || !team.last5) return null;
+
+    const form = String(team.last5 || "");
+    const wins = (form.match(/W/g) || []).length;
+    const draws = (form.match(/D/g) || []).length;
+    const losses = (form.match(/L/g) || []).length;
+    const gf = Number(team.goals_for || 0);
+    const ga = Number(team.goals_against || 0);
+    const gd = gf - ga;
+
+    let status = "近期状态波动较大";
+    if (wins >= 3 && gd > 0) {
+      status = "近期状态偏强";
+    } else if (losses >= 3 && gd < 0) {
+      status = "近期状态偏弱";
+    } else if (wins >= 2 && losses <= 2) {
+      status = "近期状态中等偏稳";
+    }
+
+    return {
+      name: team.name || team.name_en || team.code || "球队",
+      code: team.code || "",
+      form,
+      wins,
+      draws,
+      losses,
+      gf,
+      ga,
+      gd,
+      status,
+      source: team.source || "未标注"
+    };
+  }
+
+  async function renderRecentFormSummary() {
+    try {
+      const matchId = getMatchId();
+
+      const matchesText = await fetch("data/matches.csv").then(res => res.text());
+      const teamsText = await fetch("data/teams.csv").then(res => res.text());
+
+      const matchesRows = parseCSV(matchesText);
+      const teamsRows = parseCSV(teamsText);
+
+      const currentMatch = matchesRows.find(row => String(row.match_id) === String(matchId));
+      if (!currentMatch) {
+        setText("summary-recent-form", "暂无比赛数据");
+        setText("summary-recent-form-note", "未能从 matches.csv 中找到当前 match_id 对应比赛。");
+        return;
+      }
+
+      const teamA = teamsRows.find(row => row.code === currentMatch.team_a_code);
+      const teamB = teamsRows.find(row => row.code === currentMatch.team_b_code);
+
+      const formA = buildRecentFormSummary(teamA);
+      const formB = buildRecentFormSummary(teamB);
+
+      if (!formA || !formB) {
+        setText("summary-recent-form", "暂无近期状态");
+        setText("summary-recent-form-note", "未能从 teams.csv 中读取双方 last5 / goals_for / goals_against。");
+        return;
+      }
+
+      setText(
+        "summary-recent-form",
+        formA.name + " " + formA.wins + "胜" + formA.draws + "平" + formA.losses + "负 / " +
+        formB.name + " " + formB.wins + "胜" + formB.draws + "平" + formB.losses + "负"
+      );
+
+      setText(
+        "summary-recent-form-note",
+        formA.name + "近5场 " + formA.form + "，进" + formA.gf + "失" + formA.ga + "，" + formA.status + "；" +
+        formB.name + "近5场 " + formB.form + "，进" + formB.gf + "失" + formB.ga + "，" + formB.status + "。当前来源：" +
+        formA.source + " / " + formB.source + "，属于项目基础样例状态，后续可对接真实赛果 API 更新。"
+      );
+    } catch (err) {
+      console.warn("双方近期状态摘要读取失败：", err);
+      setText("summary-recent-form", "读取失败");
+      setText("summary-recent-form-note", "请检查 data/matches.csv 和 data/teams.csv 是否存在，并使用 Live Server 打开页面。");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderRecentFormSummary);
+})();
+</script>
+
+<script>
+/* === FORCE_OPEN_METEO_WEATHER_TITLE_V1 === */
+(function () {
+  function parseCsv(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines[0].split(",").map(h => h.trim());
+    return lines.slice(1).map(line => {
+      const values = line.split(",");
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = values[i] !== undefined ? values[i].trim() : "";
+      });
+      return row;
+    });
+  }
+
+  function weatherLabel(condition) {
+    const map = {
+      clear: "晴",
+      sunny: "晴",
+      partly_cloudy: "少云",
+      cloudy: "多云",
+      light_rain: "小雨",
+      humid: "湿热",
+      hot: "炎热"
+    };
+    return map[condition] || condition || "天气已接入";
+  }
+
+  async function forceWeatherTitle() {
+    const box = document.getElementById("match-weather-fact");
+    if (!box) return;
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const res = await fetch("data/venues_weather.csv?t=" + Date.now());
+      const text = await res.text();
+      const rows = parseCsv(text);
+      const item = rows.find(r => String(r.match_id).trim() === String(matchId).trim());
+
+      if (!item) return;
+
+      const strong = box.querySelector("strong");
+      if (!strong) return;
+
+      const label = weatherLabel(item.weather_condition);
+      const temp = item.temperature ? `${item.temperature}°C` : "温度待补充";
+      const altitude = item.altitude ? `海拔 ${item.altitude}m` : "海拔待补充";
+
+      strong.textContent = `${label} · ${temp} · ${altitude}`;
+    } catch (err) {
+      console.warn("FORCE_OPEN_METEO_WEATHER_TITLE_V1 failed", err);
+    }
+  }
+
+  setTimeout(forceWeatherTitle, 500);
+  setTimeout(forceWeatherTitle, 1200);
+  setTimeout(forceWeatherTitle, 2500);
+})();
+</script>
+<!-- VISIBLE_TEAM_AB_FIX_V1_START -->
+<script>
+(function () {
+  function detectTeamsFromPage() {
+    const text = document.body ? document.body.innerText : "";
+
+    // 优先从“当前比赛为 Mexico vs South Africa”这类句子识别
+    let m = text.match(/当前比赛为\s+([A-Za-z][A-Za-z\s.&'-]+?)\s+vs\s+([A-Za-z][A-Za-z\s.&'-]+?)[，,。]/);
+    if (m) {
+      return { a: m[1].trim(), b: m[2].trim() };
+    }
+
+    // 兜底：本页 match_id=1 当前明确为 Mexico vs South Africa
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("id") === "1" && text.includes("Mexico") && text.includes("South Africa")) {
+      return { a: "Mexico", b: "South Africa" };
+    }
+
+    return null;
+  }
+
+  function replaceVisibleTeamPlaceholders() {
+    const teams = detectTeamsFromPage();
+    if (!teams || !teams.a || !teams.b) return;
+
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_REJECT;
+          const tag = parent.tagName;
+          if (tag === "SCRIPT" || tag === "STYLE" || tag === "NOSCRIPT") {
+            return NodeFilter.FILTER_REJECT;
+          }
+          if (!node.nodeValue.includes("球队 A") && !node.nodeValue.includes("球队 B")) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      node.nodeValue = node.nodeValue
+        .replaceAll("球队 A", teams.a)
+        .replaceAll("球队 B", teams.b);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    replaceVisibleTeamPlaceholders();
+    setTimeout(replaceVisibleTeamPlaceholders, 300);
+    setTimeout(replaceVisibleTeamPlaceholders, 1000);
+    setTimeout(replaceVisibleTeamPlaceholders, 2000);
+  });
+})();
+</script>
+<!-- VISIBLE_TEAM_AB_FIX_V1_END -->
+
+<script id="match-no-odds-guard-v1">
+(function () {
+  function parseCSV(text) {
+    const lines = text.replace(/\r/g, "").split("\n").filter(Boolean);
+    if (!lines.length) return [];
+    const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, "").trim());
+    return lines.slice(1).map(line => {
+      const cols = line.split(",");
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cols[i] || "").replace(/^"|"$/g, "").trim();
+      });
+      return row;
+    });
+  }
+
+  function setCard(id, title, text) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = `
+      <span>${title}</span>
+      <strong>暂无本场数据</strong>
+      <p>${text}</p>
+    `;
+  }
+
+  async function guardNoOddsForCurrentMatch() {
+    const params = new URLSearchParams(window.location.search);
+    const matchId = params.get("id") || "1";
+
+    try {
+      const res = await fetch("data/odds.csv?v=" + Date.now());
+      if (!res.ok) return;
+
+      const rows = parseCSV(await res.text()).filter(row => String(row.match_id || "").trim() === String(matchId).trim());
+
+      if (rows.length) return;
+
+      setCard("odds-team-a", "一方赔率", "odds.csv 中没有当前 match_id 的赔率记录。");
+      setCard("odds-draw", "平局赔率", "odds.csv 中没有当前 match_id 的赔率记录。");
+      setCard("odds-team-b", "另一方赔率", "odds.csv 中没有当前 match_id 的赔率记录。");
+
+      const compareBox = document.getElementById("bookmaker-compare-table");
+      if (compareBox) {
+        compareBox.innerHTML = `
+          <div style="padding:16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.72);color:var(--muted);line-height:1.8;">
+            <strong style="color:#0f172a;">暂无本场多博彩公司赔率数据</strong><br>
+            当前 match_id=${matchId} 还没有写入 odds.csv。为避免样例数据混淆，本页不展示 Mexico vs South Africa 的赔率表。
+          </div>
+        `;
+      }
+
+      const summaryBox = document.getElementById("bookmaker-market-summary");
+      if (summaryBox) {
+        summaryBox.innerHTML = `
+          <p><strong>市场摘要：</strong>当前比赛暂无对应赔率记录。</p>
+          <p>本页只展示赛程事实和专业占位表达；赔率、Sharp / Soft、异常盘口等模块等待后续真实数据接入。</p>
+        `;
+      }
+
+      const moveA = document.getElementById("odds-move-a");
+      const moveDraw = document.getElementById("odds-move-draw");
+      const moveB = document.getElementById("odds-move-b");
+
+      if (moveA) moveA.innerHTML = `<span>一方赔率变化</span><strong>暂无快照</strong><p>当前比赛暂无赔率快照。</p>`;
+      if (moveDraw) moveDraw.innerHTML = `<span>平局赔率变化</span><strong>暂无快照</strong><p>当前比赛暂无赔率快照。</p>`;
+      if (moveB) moveB.innerHTML = `<span>另一方赔率变化</span><strong>暂无快照</strong><p>当前比赛暂无赔率快照。</p>`;
+
+    } catch (err) {
+      console.warn("无赔率比赛保护逻辑执行失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(guardNoOddsForCurrentMatch, 500);
+    setTimeout(guardNoOddsForCurrentMatch, 1400);
+    setTimeout(guardNoOddsForCurrentMatch, 2600);
+  });
+})();
+</script>
+
+<script id="match-data-ownership-guard-v2">
+(function () {
+  function parseCSV(text) {
+    const lines = text.replace(/\r/g, "").split("\n").filter(Boolean);
+    if (!lines.length) return [];
+    const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, "").trim());
+    return lines.slice(1).map(line => {
+      const cols = line.split(",");
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = (cols[i] || "").replace(/^"|"$/g, "").trim();
+      });
+      return row;
+    });
+  }
+
+  function pick(row, keys, fallback) {
+    for (const key of keys) {
+      if (row && row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== "") {
+        return String(row[key]).trim();
+      }
+    }
+    return fallback || "";
+  }
+
+  function isTbd(value) {
+    const v = String(value || "").trim();
+    return !v || v === "TBD" || v === "待定";
+  }
+
+  function resolveSide(match, side) {
+    const raw = side === "a"
+      ? pick(match, ["team_a", "teamA", "home", "home_team"], "")
+      : pick(match, ["team_b", "teamB", "away", "away_team"], "");
+
+    const code = side === "a"
+      ? pick(match, ["team_a_code", "home_code", "teamACode"], "")
+      : pick(match, ["team_b_code", "away_code", "teamBCode"], "");
+
+    const placeholder = side === "a"
+      ? pick(match, ["team_a_placeholder", "teamAPlaceholder", "home_placeholder"], "")
+      : pick(match, ["team_b_placeholder", "teamBPlaceholder", "away_placeholder"], "");
+
+    if (!isTbd(raw)) return raw;
+    if (code) return code;
+    if (placeholder) return placeholder;
+
+    const group = pick(match, ["group"], "");
+    if (group) return group + " fixture TBD";
+
+    return side === "a" ? "一方" : "另一方";
+  }
+
+  function setBox(id, label, strong, note) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = `
+      <span>${label}</span>
+      <strong>${strong}</strong>
+      <p>${note}</p>
+    `;
+  }
+
+  function setHtml(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  }
+
+  function replaceStaticMarketText(teamA, teamB) {
+    const marketArea = document.querySelector("#bookmaker-compare-table")?.closest("section");
+    if (!marketArea) return;
+
+    marketArea.querySelectorAll("th, span, p, strong, div").forEach(node => {
+      if (!node.childNodes || node.childNodes.length !== 1 || node.childNodes[0].nodeType !== 3) return;
+      node.textContent = node.textContent
+        .replaceAll("Mexico", teamA)
+        .replaceAll("South Africa", teamB)
+        .replaceAll("球队 A", teamA)
+        .replaceAll("球队 B", teamB);
+    });
+  }
+
+  async function applyDataOwnershipGuard() {
+    const params = new URLSearchParams(window.location.search);
+    const matchId = params.get("id") || "1";
+
+    try {
+      const [matchesText, oddsText] = await Promise.all([
+        fetch("data/matches.csv?v=" + Date.now()).then(res => res.text()),
+        fetch("data/odds.csv?v=" + Date.now()).then(res => res.text())
+      ]);
+
+      const matches = parseCSV(matchesText);
+      const odds = parseCSV(oddsText);
+
+      const currentMatch =
+        matches.find(row => String(row.match_id || row.id || "").trim() === String(matchId).trim()) ||
+        {};
+
+      const currentOdds = odds.filter(row => String(row.match_id || "").trim() === String(matchId).trim());
+
+      const teamA = resolveSide(currentMatch, "a");
+      const teamB = resolveSide(currentMatch, "b");
+
+      if (currentOdds.length > 0) {
+        replaceStaticMarketText(teamA, teamB);
+        return;
+      }
+
+      setBox("odds-team-a", teamA + " 赔率", "暂无本场数据", "odds.csv 中没有当前 match_id=" + matchId + " 的赔率记录。");
+      setBox("odds-draw", "平局赔率", "暂无本场数据", "当前比赛暂无 1X2 市场赔率。");
+      setBox("odds-team-b", teamB + " 赔率", "暂无本场数据", "odds.csv 中没有当前 match_id=" + matchId + " 的赔率记录。");
+
+      setHtml("bookmaker-compare-table", `
+        <div style="padding:16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.74);color:var(--muted);line-height:1.8;">
+          <strong style="color:#0f172a;">暂无本场多博彩公司赔率数据</strong><br>
+          当前比赛：${teamA} vs ${teamB}<br>
+          当前 match_id=${matchId} 还没有写入 odds.csv。为避免样例数据混淆，本页不展示其他比赛的赔率表。
+        </div>
+      `);
+
+      setHtml("bookmaker-market-summary", `
+        <p><strong>市场摘要：</strong>当前比赛暂无对应赔率记录。</p>
+        <p>本页只展示赛程事实和官方占位表达；赔率、Sharp / Soft、异常盘口等模块等待后续真实数据接入。</p>
+      `);
+
+      setBox("odds-move-a", teamA + " 赔率变化", "暂无快照", "当前比赛暂无赔率快照。");
+      setBox("odds-move-draw", "平局赔率变化", "暂无快照", "当前比赛暂无赔率快照。");
+      setBox("odds-move-b", teamB + " 赔率变化", "暂无快照", "当前比赛暂无赔率快照。");
+
+      setBox("sharp-soft-alignment", "Sharp / Soft 方向", "暂无本场数据", "当前比赛暂无可用于 Sharp / Soft 对比的赔率记录。");
+      setBox("clv-team-a", teamA + " Closing Line", "暂无快照", "当前比赛暂无 Closing Line 快照。");
+      setBox("clv-team-b", teamB + " Closing Line", "暂无快照", "当前比赛暂无 Closing Line 快照。");
+
+      const summaryLean = document.getElementById("summary-market-lean");
+      const summarySharp = document.getElementById("summary-sharp-soft");
+      const summaryOutlier = document.getElementById("summary-outlier");
+      const summarySource = document.getElementById("summary-source");
+      const summaryNote = document.getElementById("summary-main-note");
+
+      if (summaryLean) summaryLean.textContent = "暂无本场赔率数据";
+      if (summarySharp) summarySharp.textContent = "暂无可比数据";
+      if (summaryOutlier) summaryOutlier.textContent = "暂无异常判断";
+      if (summarySource) summarySource.textContent = "无本场赔率";
+      if (summaryNote) {
+        summaryNote.textContent =
+          "说明：当前 match_id=" + matchId + " 没有在 odds.csv 中找到对应赔率记录。为避免样例数据混淆，本页不展示其他比赛的市场数据。";
+      }
+
+    } catch (err) {
+      console.warn("比赛页数据归属保护执行失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(applyDataOwnershipGuard, 400);
+    setTimeout(applyDataOwnershipGuard, 1200);
+    setTimeout(applyDataOwnershipGuard, 2600);
+  });
+})();
+</script>
+<!-- FIX_TOP_ODDS_CARDS_151 -->
+<script>
+(function () {
+  function parseCSV151(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let quote = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && quote && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        quote = !quote;
+      } else if (ch === "," && !quote) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !quote) {
+        if (ch === "\r" && next === "\n") i++;
+        row.push(cell);
+        if (row.some(v => String(v).trim() !== "")) rows.push(row);
+        row = [];
+        cell = "";
+      } else {
+        cell += ch;
+      }
+    }
+
+    row.push(cell);
+    if (row.some(v => String(v).trim() !== "")) rows.push(row);
+
+    if (!rows.length) return [];
+    const headers = rows.shift().map(h => String(h || "").replace(/^\uFEFF/, "").trim());
+
+    return rows.map(r => {
+      const obj = {};
+      headers.forEach((h, idx) => {
+        obj[h] = String(r[idx] ?? "").trim();
+      });
+      return obj;
+    });
+  }
+
+  function num151(v) {
+    const n = Number(String(v || "").replace("%", "").trim());
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function fmt151(v) {
+    const n = num151(v);
+    return n === null ? "暂无" : n.toFixed(2).replace(/\.00$/, "");
+  }
+
+  function implied151(odds, fallback) {
+    const f = num151(fallback);
+    if (f !== null) return f.toFixed(1) + "%";
+
+    const o = num151(odds);
+    if (!o) return "暂无比例";
+    return (100 / o).toFixed(1) + "%";
+  }
+
+  function setOddsCard151(id, title, odds, implied, source) {
+    const box = document.getElementById(id);
+    if (!box) return;
+
+    box.innerHTML = `
+      <span>${title}</span>
+      <strong>${fmt151(odds)}</strong>
+      <p>隐含概率约 ${implied} · 数据源：${source || "odds.csv"}</p>
+    `;
+  }
+
+  async function renderTopOddsCards151() {
+    const matchId = new URLSearchParams(location.search).get("id") || "1";
+
+    try {
+      const res = await fetch("data/odds.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("odds.csv " + res.status);
+
+      const rows = parseCSV151(await res.text()).filter(r => {
+        return String(r.match_id || r.id || "").trim() === String(matchId).trim();
+      });
+
+      if (!rows.length) return;
+
+      const first = rows[0];
+      const source = first.source || first.bookmaker || "odds.csv";
+
+      const teamA = matchId === "1" ? "Mexico" : "一方";
+      const teamB = matchId === "1" ? "South Africa" : "另一方";
+
+      setOddsCard151(
+        "odds-team-a",
+        teamA + " 赔率",
+        first.team_a_odds,
+        implied151(first.team_a_odds, first.team_a_implied),
+        source
+      );
+
+      setOddsCard151(
+        "odds-draw",
+        "平局赔率",
+        first.draw_odds,
+        implied151(first.draw_odds, first.draw_implied),
+        source
+      );
+
+      setOddsCard151(
+        "odds-team-b",
+        teamB + " 赔率",
+        first.team_b_odds,
+        implied151(first.team_b_odds, first.team_b_implied),
+        source
+      );
+    } catch (err) {
+      console.warn("顶部赔率卡修复失败：", err);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderTopOddsCards151);
+  } else {
+    renderTopOddsCards151();
+  }
+
+  setTimeout(renderTopOddsCards151, 600);
+})();
+</script>
+<!-- /FIX_TOP_ODDS_CARDS_151 -->
+</body>
+</html>
+<style id="match-product-cleanup-v1">
+  /* PRODUCT CLEANUP V1：比赛页先保留新事实模块，隐藏旧AI/旧数据面板 */
+  #compareSection,
+  .warning-box {
+    display: none !important;
+  }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

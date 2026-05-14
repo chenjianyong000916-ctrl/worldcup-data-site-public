@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>世界杯数据分析助手</title>
+  <link rel="stylesheet" href="styles.css" />
+<style id="home-platform-positioning-v2-style">
+  #home-platform-positioning-v2 {
+    max-width: 1180px;
+    margin: 26px auto;
+    padding: 28px;
+    border-radius: 24px;
+    border: 1px solid rgba(16,185,129,0.18);
+    background:
+      radial-gradient(circle at top left, rgba(16,185,129,0.16), transparent 32%),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(240,253,250,0.92));
+    box-shadow: 0 18px 50px rgba(15,118,110,0.08);
+    box-sizing: border-box;
+  }
+
+  #home-platform-positioning-v2 .home-positioning-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  #home-platform-positioning-v2 .eyebrow {
+    margin: 0 0 10px;
+    color: #059669;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #home-platform-positioning-v2 h1 {
+    margin: 0;
+    color: #0f2f2f;
+    font-size: 34px;
+    line-height: 1.18;
+    font-weight: 950;
+  }
+
+  #home-platform-positioning-v2 .lead {
+    margin: 16px 0 0;
+    max-width: 820px;
+    color: #334155;
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  #home-platform-positioning-v2 .home-positioning-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  #home-platform-positioning-v2 .home-positioning-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 850;
+  }
+
+  #home-platform-positioning-v2 .primary-link {
+    background: #059669;
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(5,150,105,0.24);
+  }
+
+  #home-platform-positioning-v2 .secondary-link {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid rgba(5,150,105,0.18);
+  }
+
+  #home-platform-positioning-v2 .signal-panel {
+    padding: 20px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid rgba(15,118,110,0.12);
+    box-shadow: 0 12px 28px rgba(15,118,110,0.06);
+  }
+
+  #home-platform-positioning-v2 .signal-panel-title {
+    margin: 0 0 14px;
+    color: #0f2f2f;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  #home-platform-positioning-v2 .signal-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  #home-platform-positioning-v2 .signal-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid rgba(15,23,42,0.06);
+    color: #334155;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  #home-platform-positioning-v2 .signal-item strong {
+    color: #0f766e;
+    white-space: nowrap;
+  }
+
+  #home-platform-positioning-v2 .home-positioning-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  #home-platform-positioning-v2 .positioning-card {
+    padding: 18px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid rgba(15,118,110,0.12);
+    box-shadow: 0 10px 24px rgba(15,118,110,0.05);
+  }
+
+  #home-platform-positioning-v2 .positioning-card h3 {
+    margin: 0 0 8px;
+    color: #102a2a;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  #home-platform-positioning-v2 .positioning-card p {
+    margin: 0;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 980px) {
+    #home-platform-positioning-v2 {
+      margin: 20px 14px;
+      padding: 22px;
+    }
+
+    #home-platform-positioning-v2 .home-positioning-top {
+      grid-template-columns: 1fr;
+    }
+
+    #home-platform-positioning-v2 .home-positioning-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #home-platform-positioning-v2 h1 {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    #home-platform-positioning-v2 .home-positioning-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<style id="home-signal-proof-note-style">
+  .signal-proof-note{
+    margin-top:16px;
+    padding:14px 16px;
+    border-radius:18px;
+    background:rgba(5,150,105,.08);
+    border:1px solid rgba(5,150,105,.18);
+    color:#0f2a2e;
+    line-height:1.7;
+    font-weight:800;
+  }
+</style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark">⚽</div>
+        <div>
+          <h1>世界杯数据分析助手</h1>
+          <p>World Cup Data Analysis Assistant</p>
+        </div>
+      </div>
+
+      <nav class="main-nav">
+        <a href="index.html" class="active">首页</a>
+        <a href="team.html?code=MEX">球队数据</a>
+        <a href="vip.html">VIP分析</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="product-home-v2-root" class="product-home-v2">
+<section id="home-platform-positioning-v2">
+  <div class="home-positioning-top">
+    <div>
+      <p class="eyebrow">DATA PLATFORM / 世界杯专业数据分析平台</p>
+      <h1>世界杯数据分析助手：从揭幕战开始，看懂每一场比赛背后的客观数据。</h1>
+      <p class="lead">
+        从揭幕战开始，把球迷最关心的赔率、球队、赛程和球场信息，整理成一张看得懂的赛前数据看板。
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 22px;">
+        <div style="padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,118,110,.12);">
+          <strong style="display:block;color:#0f766e;font-size:15px;margin-bottom:6px;">看懂市场</strong>
+          <span style="color:#475569;font-weight:700;line-height:1.6;">40 条赔率记录，覆盖 39 家博彩公司。</span>
+        </div>
+        <div style="padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,118,110,.12);">
+          <strong style="display:block;color:#0f766e;font-size:15px;margin-bottom:6px;">看懂比赛</strong>
+          <span style="color:#475569;font-weight:700;line-height:1.6;">赛程、球队、城市、球场集中查看。</span>
+        </div>
+        <div style="padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,118,110,.12);">
+          <strong style="display:block;color:#0f766e;font-size:15px;margin-bottom:6px;">看懂分歧</strong>
+          <span style="color:#475569;font-weight:700;line-height:1.6;">专业盘 / 大众盘、胜率换算和市场摘要。</span>
+        </div>
+        <div style="padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,118,110,.12);">
+          <strong style="display:block;color:#0f766e;font-size:15px;margin-bottom:6px;">看得清楚</strong>
+          <span style="color:#475569;font-weight:700;line-height:1.6;">只展示真实数据，不拿别的比赛来凑。</span>
+        </div>
+      </div>
+
+      <div class="home-positioning-actions">
+        <a class="primary-link" href="match.html?id=1">查看揭幕战数据看板</a>
+        <a class="secondary-link" href="vip.html">进入 VIP 数据模块</a>
+      </div>
+    </div>
+
+    <aside class="signal-panel">
+      <p class="signal-panel-title">揭幕战数据引擎已启动</p>
+      <div class="signal-list">
+        <div class="signal-item"><span>赔率记录</span><strong>40 条</strong></div>
+        <div class="signal-item"><span>博彩公司覆盖</span><strong>39 家</strong></div>
+        <div class="signal-item"><span>专业盘 / 大众盘</span><strong>看分歧</strong></div>
+        <div class="signal-item"><span>赔率换算胜率</span><strong>更直观</strong></div>
+        <div class="signal-item"><span>单场独立看板</span><strong>不混用数据</strong></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="home-positioning-grid">
+    <div class="positioning-card">
+      <h3>赔率市场信号</h3>
+      <p>从多家公司赔率、胜率换算和盘口方向中提取市场变化，而不是只看单一胜负观点。</p>
+    </div>
+
+    <div class="positioning-card">
+      <h3>球队与赛程背景</h3>
+      <p>后续结合球队近期状态、赛程密度、历史交锋、旅行压力等因素解释赔率变化。</p>
+    </div>
+
+    <div class="positioning-card">
+      <h3>环境与临场因素</h3>
+      <p>预留天气、城市、球场、温度、湿度、海拔等 API 数据，为比赛节奏判断提供背景。</p>
+    </div>
+
+    <div class="positioning-card">
+      <h3>可追溯分析结论</h3>
+      <p>每个结论都尽量对应数据来源、计算逻辑和展示路径，减少主观臆断和虚构分析。</p>
+    </div>
+  </div>
+</section>
+  <section class="home-hero hero-v2">
+  <div class="hero-copy">
+    <p class="eyebrow">WORLD CUP 2026 DATA HUB</p>
+    <h1>2026 世界杯大幕即将拉开</h1>
+    <p class="hero-subtitle">
+      揭幕战将在 Mexico City Stadium 点燃 2026 世界杯。这里不是主观预测，而是从第一场比赛开始，把赔率市场、赛程事实、球场城市与球队数据放到同一个可解释的数据看板里。
+    </p>
+    <div class="hero-actions">
+      <a href="match.html?id=1" class="hero-btn primary">查看揭幕战</a>
+      <a href="#home-schedule-preview" class="hero-btn ghost">浏览全部比赛</a>
+    </div>
+  </div>
+
+  <div class="hero-visual-card">
+    <div class="stadium-glow"></div>
+    <div class="hero-match-label">OPENING MATCH</div>
+    <div class="hero-match-title">Mexico <span>VS</span> South Africa</div>
+    <div class="hero-match-meta">2026-06-11 · 3:00 PM ET · Mexico City Stadium</div>
+  </div>
+</section>
+
+  <section id="home-schedule-preview" class="home-section">
+    <div class="section-head">
+      <p class="eyebrow">SCHEDULE</p>
+      <h2>世界杯赛程预告</h2>
+      <p>当前只展示事实字段：日期、开球时间、阶段、小组、城市、国家、球场、对阵双方。</p>
+    </div>
+    <div id="home-schedule-list" class="home-grid"></div>
+  </section>
+
+  <section id="home-groups-entry" class="home-section">
+    <div class="section-head">
+      <p class="eyebrow">GROUP STAGE</p>
+      <h2>小组赛结构</h2>
+      <p>按小组查看球队、国旗和当前落位状态，后续可扩展积分榜与晋级概率。</p>
+    </div>
+    <div id="home-groups-grid" class="groups-grid"></div>
+  </section>
+  <section id="home-teams-entry" class="home-section">
+    <div class="section-head">
+      <p class="eyebrow">TEAMS</p>
+      <h2>48 支球队入口</h2>
+      <p>点击球队进入球队页，查看球队相关信息与比赛安排。</p>
+    </div>
+    <div id="home-teams-grid" class="home-grid"></div>
+  </section>
+
+  <section id="home-cities-entry" class="home-section">
+    <div class="section-head">
+      <p class="eyebrow">HOST CITIES</p>
+      <h2>16 城市 / 球场入口</h2>
+      <p>从举办城市和球场角度查看世界杯赛程分布。</p>
+    </div>
+    <div id="home-cities-grid" class="home-grid"></div>
+  </section>
+
+  <section id="home-data-note" class="home-section data-note">
+    <div class="section-head">
+      <p class="eyebrow">DATA NOTE</p>
+      <h2>数据说明</h2>
+      <p>
+        PRODUCT HOME V2 阶段：首页暂不展示 AI 胜率、爆冷、ELO 对比等预测模块，只保留事实数据入口。
+      </p>
+    </div>
+  </section>
+
+  <!-- HOME_ENTRY_LINKS_V1 -->
+  <section style="max-width:1180px;margin:32px auto;padding:28px;border-radius:28px;background:#ffffff;border:1px solid rgba(148,163,184,.24);box-shadow:0 18px 45px rgba(15,23,42,.08);">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:22px;">
+      <div>
+        <h3 style="font-size:30px;margin:0 0 10px;color:#0f2a2e;">2026 世界杯揭幕战数据看板</h3>
+        <p style="margin:0;color:#64748b;font-size:16px;line-height:1.7;">世界杯大幕从 Mexico vs South Africa 拉开。首页先展示揭幕战已接入的数据能力，同时保留城市、球队和全部比赛入口。</p>
+      </div>
+      <span style="display:inline-flex;align-items:center;padding:10px 18px;border-radius:999px;background:#e8f1ff;color:#1d4ed8;font-weight:900;font-size:13px;letter-spacing:.08em;white-space:nowrap;">DATA PLATFORM</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px;">
+      <a href="match.html?id=1" style="display:block;text-decoration:none;padding:24px;border-radius:24px;background:#eaf4ff;border:1px solid rgba(37,99,235,.16);">
+        <span style="display:block;color:#64748b;font-weight:800;font-size:13px;margin-bottom:10px;">MATCH ANALYSIS</span>
+        <strong style="display:block;font-size:26px;color:#0f2a2e;margin-bottom:10px;">Mexico vs South Africa 揭幕战</strong>
+        <p style="margin:0;color:#64748b;line-height:1.7;">2026-06-11 · Mexico City Stadium。当前已接入 40 条赔率记录，覆盖 39 家博彩公司，并完成赔率换算胜率、专业盘 / 大众盘分歧与市场摘要展示。</p>
+      </a>
+
+      <a href="vip.html" style="display:block;text-decoration:none;padding:24px;border-radius:24px;background:#eafaf2;border:1px solid rgba(16,185,129,.16);">
+        <span style="display:block;color:#64748b;font-weight:800;font-size:13px;margin-bottom:10px;">VIP DATA</span>
+        <strong style="display:block;font-size:26px;color:#0f2a2e;margin-bottom:10px;">进入 VIP 高价值数据模块</strong>
+        <p style="margin:0;color:#64748b;line-height:1.7;">查看后续可升级为 VIP 的高价值数据入口，包括实时赔率、临场盘口、CLV、Sharp Consensus 和异常盘口提醒。</p>
+      </a>
+    </div>
+
+    <div style="margin-top:18px;padding:18px 20px;border-radius:22px;background:linear-gradient(135deg,#ffffff,#eef9f5);border-left:6px solid rgba(99,102,241,.35);">
+      <p style="margin:0;color:#64748b;line-height:1.8;"><strong style="color:#0f2a2e;">产品路径：</strong>首页负责引导，比赛页负责展示专业分析，VIP 页负责承载高价值数据模块。后续接入 API 后，可逐步形成真实体育数据分析平台。</p>
+    </div>
+  </section>
+
+
+  <section class="panel" id="home-2022-interesting-samples" style="margin-top:24px;">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">MATCH SIGNALS / 历史比赛信号</p>
+        <h2>不只看比分，看比赛背后的信号</h2>
+      </div>
+      <p class="muted">从 2022 世界杯真实比赛中提取控球陷阱、低射门赢球、大比分等样本，帮助球迷理解哪些比赛可能藏着反常走势；不代表 2026 实时状态。</p>
+    </div>
+    <div id="homeInterestingSamplesList" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch;">
+      <div class="muted">正在读取 2022 世界杯历史样本...</div>
+    </div>
+  </section>
+
+</main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 世界杯数据分析助手</p>
+      <p>Objective Data · Team Comparison · Market Difference · AI Assisted Reading</p>
+    </div>
+  </footer>
+
+ V</body>
+
+<script src="app.js"></script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

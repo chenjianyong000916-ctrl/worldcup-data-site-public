@@ -1,0 +1,759 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>球队数据档案 - 世界杯数据分析助手</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .team-page-wrap {
+      padding: 44px 0 70px;
+      background: linear-gradient(180deg, #eafff6 0%, #f7fffb 48%, #ffffff 100%);
+      min-height: calc(100vh - 90px);
+    }
+    .team-hero-card {
+      border: 1px solid rgba(13, 148, 136, .16);
+      background: rgba(255, 255, 255, .86);
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: 0 24px 70px rgba(15, 118, 110, .10);
+      margin-bottom: 28px;
+    }
+    .team-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .team-code-badge {
+      width: 82px;
+      height: 82px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      font-weight: 900;
+      color: #047857;
+      background: linear-gradient(135deg, #d1fae5, #e0f2fe);
+      border: 1px solid rgba(13, 148, 136, .22);
+    }
+    .team-title-area {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .team-title-area h1 {
+      margin: 0;
+      font-size: 44px;
+      line-height: 1.08;
+      color: #102a2d;
+    }
+    .team-title-area p {
+      margin: 10px 0 0;
+      color: #577174;
+      font-size: 17px;
+    }
+    .team-pill {
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #047857;
+      background: #dffbef;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .team-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .team-metric-card {
+      border: 1px solid rgba(15, 118, 110, .14);
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .team-metric-card span {
+      display: block;
+      color: #60777a;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .team-metric-card strong {
+      color: #102a2d;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .team-content-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+    }
+    .team-panel {
+      border: 1px solid rgba(15, 118, 110, .14);
+      background: rgba(255,255,255,.9);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 16px 40px rgba(15, 118, 110, .07);
+    }
+    .team-panel h2 {
+      margin: 0 0 16px;
+      color: #102a2d;
+      font-size: 24px;
+    }
+    .form-box {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .result-dot {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: white;
+    }
+    .result-W { background: #059669; }
+    .result-D { background: #64748b; }
+    .result-L { background: #dc2626; }
+    .team-select-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .team-select-row select {
+      flex: 1;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 118, 110, .18);
+      font-size: 15px;
+    }
+    .team-select-row button {
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 0;
+      background: #059669;
+      color: white;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .info-list {
+      display: grid;
+      gap: 12px;
+      color: #415f63;
+      line-height: 1.7;
+    }
+    .info-list b { color: #102a2d; }
+    .recent-match-list {
+      display: grid;
+      gap: 12px;
+    }
+    .recent-match-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fffc;
+      border: 1px solid rgba(15, 118, 110, .12);
+    }
+    .recent-match-date {
+      font-weight: 900;
+      color: #0f766e;
+      white-space: nowrap;
+    }
+    .recent-match-opponent {
+      color: #102a2d;
+      font-weight: 800;
+      text-align: right;
+    }
+    @media (max-width: 900px) {
+      .team-topline, .team-title-area { flex-direction: column; }
+      .team-metrics-grid, .team-content-grid { grid-template-columns: 1fr; }
+      .team-title-area h1 { font-size: 34px; }
+    }
+  </style>
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <div class="brand-mark">⚽</div>
+      <div>
+        <strong>世界杯数据分析助手</strong>
+        <small>World Cup Data Analysis Assistant</small>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="index.html">首页</a>
+      <a href="team.html" class="active">球队数据</a>
+      <a href="vip.html">VIP分析</a>
+    </nav>
+  </div>
+</header>
+
+<main class="team-page-wrap">
+  <div class="container">
+
+    <section class="team-hero-card">
+      <div class="team-topline">
+        <div class="team-title-area">
+          <div class="team-code-badge" id="teamCodeBadge">--</div>
+          <div>
+            <h1 id="teamName">加载中...</h1>
+            <p id="teamDesc">正在读取 data/teams.csv...</p>
+          </div>
+        </div>
+        <div class="team-pill" id="dataStatus">统一数据模板</div>
+      </div>
+
+      <div class="team-metrics-grid">
+        <div class="team-metric-card">
+          <span>ELO 评分</span>
+          <strong id="eloValue">-</strong>
+        </div>
+        <div class="team-metric-card">
+          <span>实力排名</span>
+          <strong id="powerRank">-</strong>
+        </div>
+        <div class="team-metric-card">
+          <span>近5场状态</span>
+          <strong id="last5Text">-</strong>
+        </div>
+        <div class="team-metric-card">
+          <span>进失球</span>
+          <strong id="goalStat">-</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="team-content-grid">
+      <div class="team-panel">
+        <h2>近期状态解读</h2>
+        <div class="form-box" id="formBox"></div>
+        <div class="info-list" style="margin-top:18px;">
+          <div><b>说明：</b>W = 胜，D = 平，L = 负。这里只展示可验证的基础数据，不做强预测。</div>
+          <div id="formSummary">正在生成球队状态摘要...</div>
+        </div>
+      </div>
+
+      <div class="team-panel">
+        <h2>近5场比赛详情</h2>
+        <p style="color:#60777a;margin-top:0;">显示比赛日期与对手国家队。</p>
+        <div class="recent-match-list" id="recentMatchList">加载中...</div><div id="debugBox" style="margin-top:12px;color:#dc2626;font-weight:800;"></div>
+      </div>
+
+      <div class="team-panel">
+        <h2>切换球队</h2>
+        <p style="color:#60777a;margin-top:0;">所有球队共用同一个 team.html，通过 code 参数自动切换。</p>
+        <div class="team-select-row">
+          <select id="teamSelect"></select>
+          <button id="goTeamBtn">查看</button>
+        </div>
+      </div>
+
+      <div class="team-panel">
+        <h2>2022 世界杯历史表现</h2>
+        <div class="info-list" id="worldcup2022HistoryCard">
+          <div>正在读取 2022 世界杯历史样本库...</div>
+        </div>
+      </div>
+      
+      <div class="team-panel">
+        <h2>2022 历史模式标签</h2>
+        <div class="info-list" id="teamPatternSignalsCard">
+          <div>正在读取 2022 世界杯历史模式信号...</div>
+        </div>
+      </div>
+      <div class="team-panel">
+        <h2>球队基础档案</h2>
+        <div class="info-list">
+          <div><b>中文名：</b><span id="nameCn">-</span></div>
+          <div><b>英文名：</b><span id="nameEn">-</span></div>
+          <div><b>所属洲：</b><span id="continent">-</span></div>
+          <div><b>足联：</b><span id="confederation">-</span></div>
+          <div><b>数据来源：</b><span id="source">-</span></div>
+        </div>
+      </div>
+
+      <div class="team-panel">
+        <h2>球队深度档案</h2>
+        <div class="info-list">
+          <div><b>FIFA排名：</b><span id="fifaRank">待补充</span></div>
+          <div><b>主教练：</b><span id="coach">待补充</span></div>
+          <div><b>队长：</b><span id="captain">待补充</span></div>
+          <div><b>核心球员：</b><span id="starPlayer">待补充</span></div>
+          <div><b>世界杯冠军数：</b><span id="worldCupTitles">待补充</span></div>
+          <div><b>市场身价：</b><span id="marketValue">待补充</span></div>
+          <div><b>平均年龄：</b><span id="avgAge">待补充</span></div>
+        </div>
+      </div>
+
+      <div class="team-panel">
+        <h2>能力评分</h2>
+        <div class="info-list">
+          <div><b>进攻评分：</b><span id="attackRating">待补充</span></div>
+          <div><b>中场评分：</b><span id="midfieldRating">待补充</span></div>
+          <div><b>防守评分：</b><span id="defenseRating">待补充</span></div>
+        </div>
+      </div>
+      <div class="team-panel">
+        <h2>AI 战术解读</h2>
+        <div class="info-list">
+          <div><b>战术风格：</b><span id="aiStyleSummary">待生成</span></div>
+          <div><b>近期状态：</b><span id="aiFormSummary">待生成</span></div>
+          <div><b>风险因素：</b><span id="aiRiskSummary">待生成</span></div>
+          <div><b>AI总结：</b><span id="aiFinalSummary">待生成</span></div>
+        </div>
+      </div>
+      <div class="team-panel">
+        <h2>攻防基础数据</h2>
+        <div class="info-list">
+          <div><b>近阶段进球：</b><span id="goalsFor">-</span></div>
+          <div><b>近阶段失球：</b><span id="goalsAgainst">-</span></div>
+          <div><b>风格标签：</b><span id="style">待补充</span></div>
+          <div><b>元素标签：</b><span id="element">待补充</span></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(async function () {
+  const params = new URLSearchParams(location.search);
+  let code = (params.get("code") || "").trim().toUpperCase();
+
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/).filter(Boolean);
+    const headers = lines[0].split(",").map(h => h.replace(/"/g, "").trim());
+    return lines.slice(1).map(line => {
+      const values = line.split(",");
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (values[i] || "").replace(/"/g, "").trim());
+      return obj;
+    });
+  }
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value || "-";
+  }
+
+  async function loadWorldCup2022History() {
+    try {
+      const res = await fetch("./data/worldcup_2022_team_profile_summary.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("worldcup_2022_team_profile_summary.csv 加载失败 " + res.status);
+      return parseCSV(await res.text());
+    } catch (err) {
+      console.warn(err);
+      return [];
+    }
+  }
+
+  function renderWorldCup2022History(team, historyRows) {
+    const box = document.getElementById("worldcup2022HistoryCard");
+    if (!box) return;
+
+    const displayName = team.name_en || team.name || team.name_cn || team.code;
+    const code = String(team.code || "").trim().toUpperCase();
+
+    const row = historyRows.find(r =>
+      String(r.team || "").trim().toLowerCase() === String(displayName || "").trim().toLowerCase() ||
+      String(r.team || "").trim().toLowerCase() === String(team.name || "").trim().toLowerCase() ||
+      String(r.team || "").trim().toLowerCase() === String(team.name_en || "").trim().toLowerCase()
+    );
+
+    if (!row) {
+      box.innerHTML = `
+        <div><b>历史样本：</b>暂无 2022 世界杯历史样本。</div>
+        <div style="color:#60777a;">说明：该模块只展示 API-Football 已抓取并整理的 2022 世界杯真实历史数据。</div>
+      `;
+      return;
+    }
+
+    box.innerHTML = `
+      <div><b>出场：</b>${row.matches || "-"} 场</div>
+      <div><b>战绩：</b>${row.wins || "0"}胜 ${row.draws || "0"}平 ${row.losses || "0"}负</div>
+      <div><b>进球 / 失球：</b>${row.goals_for || "-"} / ${row.goals_against || "-"}</div>
+      <div><b>净胜球：</b>${row.goal_diff || "-"}</div>
+      <div><b>常用阵型：</b>${row.common_formation || "-"}</div>
+      <div><b>场均控球：</b>${row.avg_ball_possession || "-"}%</div>
+      <div><b>场均射门 / 射正：</b>${row.avg_total_shots || "-"} / ${row.avg_shots_on_goal || "-"}</div>
+      <div><b>场均角球：</b>${row.avg_corner_kicks || "-"}</div>
+      <div><b>历史样本标签：</b>高控球未胜 ${row.high_possession_not_win_count || "0"} 条，低射门赢球 ${row.low_shots_win_count || "0"} 条，大比分 ${row.big_score_count || "0"} 条</div>
+      <div style="color:#60777a;">数据源：API-Football 2022 World Cup 历史样本库，不代表当前 2026 实时状态。</div>
+    `;
+  }
+
+  function renderTeam(team, allTeams, recentMatches, worldcup2022History = []) {
+    const displayName = team.name_en || team.name || team.name_cn || team.code;
+    const cnName = team.name_cn || team.name || displayName;
+
+    document.title = displayName + " - 球队数据档案";
+    setText("teamCodeBadge", team.code || code);
+    setText("teamName", displayName);
+    setText("teamDesc", `${team.continent || "-"} · ${team.confederation || "-"} · ${cnName}`);
+    setText("dataStatus", "数据已接入");
+
+    setText("eloValue", team.elo || team.elo_rating || "-");
+    setText("powerRank", team.power_rank || "-");
+    setText("last5Text", team.last5 || "-");
+    setText("goalStat", `${team.goals_for || "-"} / ${team.goals_against || "-"}`);
+
+    setText("nameCn", team.name_cn || "-");
+    setText("nameEn", team.name_en || team.name || "-");
+    setText("continent", team.continent || "-");
+    setText("confederation", team.confederation || "-");
+    setText("source", team.source || "-");
+    setText("goalsFor", team.goals_for || "-");
+    setText("goalsAgainst", team.goals_against || "-");
+    setText("style", team.style || "待补充");
+    setText("element", team.element || "待补充");
+
+    setText("fifaRank", team.fifa_rank || "待补充");
+    setText("coach", team.coach || "待补充");
+    setText("captain", team.captain || "待补充");
+    setText("starPlayer", team.star_player || "待补充");
+    setText("worldCupTitles", team.world_cup_titles || "待补充");
+    setText("marketValue", team.market_value || "待补充");
+    setText("avgAge", team.avg_age || "待补充");
+    setText("attackRating", team.attack_rating || "待补充");
+    setText("midfieldRating", team.midfield_rating || "待补充");
+    setText("defenseRating", team.defense_rating || "待补充");
+
+    setText("aiStyleSummary", `${displayName} 当前整体节奏较快，倾向于主动推进和边路进攻。`);
+    setText("aiFormSummary", `近5场战绩为 ${team.last5 || "暂无"}，可作为判断近期状态的基础参考。`);
+    setText("aiRiskSummary", `面对高压逼抢或身体对抗型球队时，后场稳定性需要重点观察。`);
+    setText("aiFinalSummary", `${displayName} 具备小组竞争力，后续可结合赛程、对手和伤停数据继续分析。`);
+
+    renderWorldCup2022History(team, worldcup2022History);
+
+    const formBox = document.getElementById("formBox");
+    formBox.innerHTML = "";
+    String(team.last5 || "").split("").forEach(r => {
+      const item = document.createElement("div");
+      item.className = "result-dot result-" + r;
+      item.textContent = r;
+      formBox.appendChild(item);
+    });
+
+    const wins = String(team.last5 || "").split("").filter(x => x === "W").length;
+    const draws = String(team.last5 || "").split("").filter(x => x === "D").length;
+    const losses = String(team.last5 || "").split("").filter(x => x === "L").length;
+    setText("formSummary", `近5场：${wins}胜 ${draws}平 ${losses}负。ELO ${team.elo || team.elo_rating || "-"}，用于建立球队基础背景。`);
+
+    const list = document.getElementById("recentMatchList");
+    if (list) {
+      const rows = recentMatches
+        .filter(m => String(m.team_code || "").replace(/"/g,"").trim().toUpperCase() === String(team.code || "").trim().toUpperCase())
+        .slice(0, 5);
+
+      if (!rows.length) {
+        list.textContent = "暂无近5场详情数据";
+      } else {
+        list.innerHTML = rows.map(m => {
+          const scoreText = m.team_score !== "" && m.opponent_score !== ""
+            ? ` · ${m.team_score}-${m.opponent_score}`
+            : "";
+          const resultText = m.result ? ` · ${m.result}` : "";
+          return `
+            <div class="recent-match-item">
+              <div class="recent-match-date">${m.date || "-"}</div>
+              <div class="recent-match-opponent">vs ${m.opponent_name || "-"}${m.opponent_code ? " (" + m.opponent_code + ")" : ""}  ${m.team_score}-${m.opponent_score}  [${m.result}]</div>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    const select = document.getElementById("teamSelect");
+    select.innerHTML = "";
+    allTeams.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t.code;
+      opt.textContent = `${t.code} - ${t.name_en || t.name || t.name_cn}`;
+      if (t.code === team.code) opt.selected = true;
+      select.appendChild(opt);
+    });
+  }
+
+  const [text, recentText, worldcup2022History] = await Promise.all([
+    fetch("./data/teams.csv").then(r => r.text()),
+    fetch("./data/team_recent_matches.csv").then(r => { if(!r.ok){ throw new Error("team_recent_matches.csv 加载失败 " + r.status); } return r.text(); }),
+    loadWorldCup2022History()
+  ]);
+
+  const teams = parseCSV(text);
+  const recentMatches = parseCSV(recentText);
+
+  if (!code && teams[0]) {
+    code = teams[0].code;
+    history.replaceState(null, "", `team.html?code=${code}`);
+  }
+
+  const team = teams.find(t => String(t.code || "").toUpperCase() === code);
+
+  if (!team) {
+    setText("teamName", "未找到球队：" + code);
+    setText("teamDesc", "请检查 data/teams.csv 中是否存在该 code。");
+    return;
+  }
+
+  renderTeam(team, teams, recentMatches, worldcup2022History);
+
+  document.getElementById("goTeamBtn").addEventListener("click", () => {
+    const nextCode = document.getElementById("teamSelect").value;
+    location.href = `team.html?code=${nextCode}`;
+  });
+})().catch(err => {
+  const box = document.getElementById("debugBox");
+  if (box) box.textContent = "页面脚本错误：" + err.message;
+  console.error(err);
+});
+</script>
+
+
+<script id="team-pattern-signals-v1">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) {
+      row.push(cell);
+      rows.push(row);
+    }
+
+    if (!rows.length) return [];
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  async function loadCSV(path) {
+    const res = await fetch(path + "?v=" + Date.now());
+    if (!res.ok) throw new Error(path + " 加载失败 " + res.status);
+    return parseCSV(await res.text());
+  }
+
+  function getCurrentCode() {
+    const params = new URLSearchParams(location.search);
+    return String(params.get("code") || params.get("id") || "").trim().toUpperCase();
+  }
+
+  function pick(row, keys, fallback) {
+    for (const key of keys) {
+      if (row && row[key] !== undefined && String(row[key]).trim() !== "") {
+        return String(row[key]).trim();
+      }
+    }
+    return fallback || "";
+  }
+
+  async function renderTeamPatternSignals() {
+    const box = document.getElementById("teamPatternSignalsCard");
+    if (!box) return;
+
+    try {
+      const code = getCurrentCode();
+      const teams = await loadCSV("./data/teams.csv");
+      const signals = await loadCSV("./data/worldcup_2022_pattern_signals.csv");
+
+      const team = teams.find(t => String(pick(t, ["code", "team_id", "id"], "")).toUpperCase() === code) || teams[0];
+      const teamName = pick(team, ["name_en", "name", "name_cn"], code);
+
+      const rows = signals
+        .filter(r => String(r.team || "").trim().toLowerCase() === String(teamName || "").trim().toLowerCase())
+        .sort((a, b) => Number(b.signal_strength || 0) - Number(a.signal_strength || 0))
+        .slice(0, 6);
+
+      if (!rows.length) {
+        box.innerHTML = `
+          <div><b>历史模式：</b>暂无该队 2022 世界杯历史模式信号。</div>
+          <div style="color:#60777a;">说明：该模块只展示已整理的 2022 世界杯真实历史统计模式，不代表当前 2026 实时状态。</div>
+        `;
+        return;
+      }
+
+      const cards = rows.map(r => `
+        <div style="padding:14px;border:1px solid rgba(12,80,70,.14);border-radius:16px;background:rgba(255,255,255,.72);">
+          <div style="font-weight:900;color:#047857;">${r.signal_label || "历史模式"}</div>
+          <div style="margin-top:6px;font-weight:800;">${r.team} vs ${r.opponent} · ${r.score} · ${r.result}</div>
+          <div style="margin-top:6px;color:#60777a;line-height:1.6;">${r.note || "该样本来自 2022 世界杯真实历史统计数据。"}</div>
+        </div>
+      `).join("");
+
+      box.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+          ${cards}
+        </div>
+        <div style="color:#60777a;margin-top:10px;">
+          数据源：data/worldcup_2022_pattern_signals.csv。该模块展示历史模式标签，不代表当前 2026 实时状态，不构成比赛预测结论。
+        </div>
+      `;
+    } catch (err) {
+      console.warn("2022 历史模式标签读取失败：", err);
+      box.innerHTML = `<div style="color:#60777a;">2022 历史模式标签暂未加载成功，请检查 worldcup_2022_pattern_signals.csv。</div>`;
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderTeamPatternSignals);
+  } else {
+    renderTeamPatternSignals();
+  }
+})();
+</script>
+
+<script id="team-data-trust-cleanup-v1">
+(function () {
+  function replacePanelByTitle(titleText, newTitle, html) {
+    const panels = Array.from(document.querySelectorAll(".team-panel"));
+    const panel = panels.find(p => {
+      const h2 = p.querySelector("h2");
+      return h2 && h2.textContent.trim() === titleText;
+    });
+
+    if (!panel) return;
+
+    const h2 = panel.querySelector("h2");
+    h2.textContent = newTitle;
+
+    const oldChildren = Array.from(panel.children).filter(el => el !== h2);
+    oldChildren.forEach(el => el.remove());
+
+    const box = document.createElement("div");
+    box.className = "info-list";
+    box.innerHTML = html;
+    panel.appendChild(box);
+  }
+
+  function appendNoteToPanel(titleText, noteHtml) {
+    const panels = Array.from(document.querySelectorAll(".team-panel"));
+    const panel = panels.find(p => {
+      const h2 = p.querySelector("h2");
+      return h2 && h2.textContent.trim() === titleText;
+    });
+
+    if (!panel || panel.querySelector(".data-trust-note")) return;
+
+    const note = document.createElement("div");
+    note.className = "data-trust-note";
+    note.style.cssText = "margin-top:14px;color:#60777a;line-height:1.7;font-size:14px;";
+    note.innerHTML = noteHtml;
+    panel.appendChild(note);
+  }
+
+  replacePanelByTitle(
+    "能力评分",
+    "能力评分（待接入计算规则）",
+    `
+      <div><b>当前状态：</b>旧版评分暂不作为核心依据展示。</div>
+      <div style="color:#60777a;line-height:1.7;">
+        后续如恢复评分，必须明确计算来源，例如 FIFA 排名、Elo、近阶段进球/失球、射门、射正、控球、传球成功率等字段，并写清楚计算规则。
+      </div>
+      <div style="color:#60777a;line-height:1.7;">
+        当前不使用 AI 主观评分，不把样例评分当作真实能力结论。
+      </div>
+    `
+  );
+
+  replacePanelByTitle(
+    "AI 战术解读",
+    "数据说明（待接入真实战术字段）",
+    `
+      <div><b>当前状态：</b>旧版 AI 战术解读已降级，不作为比赛判断依据。</div>
+      <div style="color:#60777a;line-height:1.7;">
+        后续如展示战术相关内容，必须来自可追溯字段，例如阵型、控球率、射门、射正、传球成功率、角球、犯规、黄牌、近 5 场赛果等。
+      </div>
+      <div style="color:#60777a;line-height:1.7;">
+        本站定位是客观数据采集、整理和展示，不做 AI 自行预测或主观战术编写。
+      </div>
+    `
+  );
+
+  replacePanelByTitle(
+    "风格标签",
+    "风格标签（待数据化）",
+    `
+      <div><b>当前状态：</b>旧版风格标签暂不作为核心依据。</div>
+      <div style="color:#60777a;line-height:1.7;">
+        后续如保留风格标签，必须由客观字段计算产生，例如控球率区间、射门结构、传球成功率、犯规强度、定位球数量等。
+      </div>
+    `
+  );
+
+  replacePanelByTitle(
+    "元素标签",
+    "元素标签（暂不作为核心数据）",
+    `
+      <div><b>当前状态：</b>元素标签属于早期娱乐化设计，暂不作为核心数据模块。</div>
+      <div style="color:#60777a;line-height:1.7;">
+        当前产品主线转为真实数据平台，优先展示可验证数据、API 数据和可解释计算结果。
+      </div>
+    `
+  );
+
+  appendNoteToPanel(
+    "球队深度档案",
+    "说明：本栏目前多数字段仍为待补充，后续需要接入真实来源后再展示，例如 FIFA 排名、主教练、队长、平均年龄、市场身价等。"
+  );
+
+  appendNoteToPanel(
+    "攻防基础数据",
+    "说明：本栏如显示近阶段进球/失球，应明确来自 teams.csv 或 team_recent_matches.csv。后续需要统一补充字段来源说明。"
+  );
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

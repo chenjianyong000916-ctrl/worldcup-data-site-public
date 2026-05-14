@@ -1,0 +1,41 @@
+match_id,bookmaker,market,team_a_odds,draw_odds,team_b_odds,team_a_implied,draw_implied,team_b_implied,recorded_at,source,bookmaker_type
+1,BetMGM,1X2,1.48,3.9,5.5,67.6,25.6,18.2,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,FanDuel,1X2,1.53,4.1,6.5,65.4,24.4,15.4,2026-05-11T13:17:48Z,theoddsapi_sample,soft
+1,Paddy Power,1X2,1.5,4,6.5,66.7,25.0,15.4,2026-05-11T13:18:30Z,theoddsapi_sample,soft
+1,Sky Bet,1X2,1.5,4,6.5,66.7,25.0,15.4,2026-05-11T13:19:02Z,theoddsapi_sample,soft
+1,Marathon Bet,1X2,1.55,4.2,6.7,64.5,23.8,14.9,2026-05-11T13:18:32Z,theoddsapi_sample,unknown
+1,Pinnacle,1X2,1.52,4.04,6.08,65.8,24.8,16.4,2026-05-11T13:18:58Z,theoddsapi_sample,sharp
+1,Grosvenor,1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,Betfair,1X2,1.55,4.4,6.4,64.5,22.7,15.6,2026-05-11T13:19:30Z,theoddsapi_sample,sharp
+1,Betfair,1X2,1.55,4.4,6.4,64.5,22.7,15.6,2026-05-11T13:19:14Z,theoddsapi_sample,sharp
+1,Everygame,1X2,1.5,3.9,5.75,66.7,25.6,17.4,2026-05-11T13:17:34Z,theoddsapi_sample,soft
+1,Unibet (FR),1X2,1.48,4,5.8,67.6,25.0,17.2,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,Bovada,1X2,1.54,4.1,6.25,64.9,24.4,16.0,2026-05-11T13:18:16Z,theoddsapi_sample,soft
+1,Smarkets,1X2,1.54,4.1,6.2,64.9,24.4,16.1,2026-05-11T13:19:31Z,theoddsapi_sample,sharp
+1,Casumo,1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,Coolbet,1X2,1.55,4.2,7,64.5,23.8,14.3,2026-05-11T13:19:01Z,theoddsapi_sample,soft
+1,Coral,1X2,1.53,4.2,6,65.4,23.8,16.7,2026-05-11T13:18:30Z,theoddsapi_sample,soft
+1,Ladbrokes,1X2,1.53,4.2,6,65.4,23.8,16.7,2026-05-11T13:18:32Z,theoddsapi_sample,soft
+1,Betway,1X2,1.5,4,5.75,66.7,25.0,17.4,2026-05-11T13:18:45Z,theoddsapi_sample,soft
+1,888sport,1X2,1.5,3.8,6,66.7,26.3,16.7,2026-05-11T13:19:28Z,theoddsapi_sample,soft
+1,William Hill,1X2,1.5,3.8,6,66.7,26.3,16.7,2026-05-11T13:18:30Z,theoddsapi_sample,soft
+1,Unibet (UK),1X2,1.48,4,6,67.6,25.0,16.7,2026-05-11T13:18:45Z,theoddsapi_sample,soft
+1,Unibet (NL),1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:18:59Z,theoddsapi_sample,soft
+1,LiveScore Bet,1X2,1.52,4.1,6,65.8,24.4,16.7,2026-05-11T13:18:59Z,theoddsapi_sample,soft
+1,LeoVegas,1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:19:13Z,theoddsapi_sample,soft
+1,LeoVegas (SE),1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:18:32Z,theoddsapi_sample,soft
+1,Virgin Bet,1X2,1.52,4.1,6,65.8,24.4,16.7,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,Unibet (SE),1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:19:29Z,theoddsapi_sample,soft
+1,BetOnline.ag,1X2,1.53,4.4,6.55,65.4,22.7,15.3,2026-05-11T13:18:58Z,theoddsapi_sample,soft
+1,BoyleSports,1X2,1.53,3.8,6,65.4,26.3,16.7,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,PMU (FR),1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:18:31Z,theoddsapi_sample,soft
+1,DraftKings,1X2,1.54,4.2,6,64.9,23.8,16.7,2026-05-11T13:18:30Z,theoddsapi_sample,soft
+1,Winamax (FR),1X2,1.44,4,6,69.4,25.0,16.7,2026-05-11T13:18:47Z,theoddsapi_sample,soft
+1,Betclic (FR),1X2,1.44,3.95,5.75,69.4,25.3,17.4,2026-05-11T13:17:47Z,theoddsapi_sample,unknown
+1,BetRivers,1X2,1.51,4.1,6,66.2,24.4,16.7,2026-05-11T13:18:32Z,theoddsapi_sample,soft
+1,Betsson,1X2,1.55,4.05,6.7,64.5,24.7,14.9,2026-05-11T13:19:17Z,theoddsapi_sample,soft
+1,GTbets,1X2,1.55,4.15,6.18,64.5,24.1,16.2,2026-05-11T13:18:47Z,theoddsapi_sample,soft
+1,Nordic Bet,1X2,1.55,4.05,6.7,64.5,24.7,14.9,2026-05-11T13:18:47Z,theoddsapi_sample,soft
+1,Betfred (UK),1X2,1.53,4,6.5,65.4,25.0,15.4,2026-05-11T13:18:45Z,theoddsapi_sample,soft
+1,Bet Victor,1X2,1.5,3.8,6,66.7,26.3,16.7,2026-05-11T13:17:21Z,theoddsapi_sample,soft
+1,1xBet,1X2,1.57,4.2,6.45,63.7,23.8,15.5,2026-05-11T13:18:30Z,theoddsapi_sample,unknown

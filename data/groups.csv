@@ -1,0 +1,49 @@
+﻿group,slot,team_id,team_name,status
+A,1,MEX,Mexico,confirmed
+A,2,RSA,South Africa,confirmed
+A,3,KOR,South Korea,confirmed
+A,4,CZE,Czech Republic,playoff_or_pending
+B,1,CAN,Canada,confirmed
+B,2,BIH,Bosnia & Herzegovina,playoff_or_pending
+B,3,QAT,Qatar,confirmed
+B,4,SUI,Switzerland,confirmed
+C,1,BRA,Brazil,confirmed
+C,2,MAR,Morocco,confirmed
+C,3,HAI,Haiti,confirmed
+C,4,SCO,Scotland,confirmed
+D,1,USA,USA,confirmed
+D,2,PAR,Paraguay,confirmed
+D,3,AUS,Australia,confirmed
+D,4,TUR,Turkey,playoff_or_pending
+E,1,GER,Germany,confirmed
+E,2,CUW,Curaçao,confirmed
+E,3,CIV,Ivory Coast,confirmed
+E,4,ECU,Ecuador,confirmed
+F,1,NED,Netherlands,confirmed
+F,2,JPN,Japan,confirmed
+F,3,TUN,Tunisia,confirmed
+F,4,UEFA_PLAYOFF_B,UEFA Playoff B,pending
+G,1,BEL,Belgium,confirmed
+G,2,IRN,Iran,confirmed
+G,3,EGY,Egypt,confirmed
+G,4,NZL,New Zealand,confirmed
+H,1,ESP,Spain,confirmed
+H,2,URU,Uruguay,confirmed
+H,3,KSA,Saudi Arabia,confirmed
+H,4,CPV,Cape Verde,confirmed
+I,1,FRA,France,confirmed
+I,2,SEN,Senegal,confirmed
+I,3,NOR,Norway,confirmed
+I,4,FIFA_PLAYOFF_2,FIFA Playoff 2,pending
+J,1,ARG,Argentina,confirmed
+J,2,AUT,Austria,confirmed
+J,3,ALG,Algeria,confirmed
+J,4,JOR,Jordan,confirmed
+K,1,POR,Portugal,confirmed
+K,2,COL,Colombia,confirmed
+K,3,UZB,Uzbekistan,confirmed
+K,4,FIFA_PLAYOFF_1,FIFA Playoff 1,pending
+L,1,ENG,England,confirmed
+L,2,CRO,Croatia,confirmed
+L,3,GHA,Ghana,confirmed
+L,4,PAN,Panama,confirmed

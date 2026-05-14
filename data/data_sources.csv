@@ -1,0 +1,13 @@
+﻿"data_type","provider","api_name","status","update_frequency","fields","priority","confidence","page_usage","notes"
+"matches","manual","local_csv","active","daily","match_id,team_a,team_b,date,city,stadium","P0","high","首页/比赛页/球队页","当前 MVP 主赛事数据"
+"teams","manual","local_csv","active","weekly","elo,last5,attack_rating,defense_rating","P0","high","首页/球队页/比赛页","当前球队基础档案"
+"odds","pending","API_Football","pending","realtime","odds,implied_probability","P1","medium","比赛页/VIP页","后续接入市场赔率"
+"lineups","pending","API_Football","pending","matchday","starting_xi,bench,formation","P1","medium","比赛页/VIP页","后续接入首发阵容"
+"injuries","pending","SportMonks","pending","daily","injury,status,return_date","P1","medium","比赛页/球队页/VIP页","后续接入伤停数据"
+"weather","pending","OpenWeather","pending","hourly","temperature,humidity,wind","P2","medium","比赛页/VIP页","后续接入天气"
+"venues","pending","Statorium","pending","static","stadium,capacity,altitude","P2","medium","比赛页/城市页/VIP页","后续接入球场资料"
+"stats","pending","Sportradar","pending","realtime","xg,possession,shots,passes","P1","medium","比赛页/VIP页","后续接入高级比赛统计"
+"attention","pending","GoogleTrends","pending","daily","search_index,social_mentions","P3","low","首页/VIP页","后续接入热度数据"
+"travel","pending","custom_model","pending","daily","distance,rest_days,fatigue","P2","medium","比赛页/VIP页","后续接入旅行疲劳模型"
+"historical_assets_2022","API-Football","worldcup_2022_data_asset_index","active","static_history","fixtures,lineups,statistics,derived_samples,pattern_signals,standings","P1","high","首页历史样本,球队页历史表现,球队页历史模式标签,数据来源说明,历史积分榜",""
+"odds_snapshot","TheOddsAPI","theoddsapi_worldcup_odds_snapshot","active","manual_snapshot","h2h,spreads,totals,bookmaker_count,market_record_count","P0","high","比赛页赔率市场分析,VIP市场信号,当前数据资产说明",

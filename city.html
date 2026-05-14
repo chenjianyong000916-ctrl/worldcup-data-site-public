@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>城市 / 球场详情 - 世界杯数据分析助手</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .city-wrap{max-width:1280px;margin:0 auto;padding:34px 28px 80px}
+    .city-hero{background:linear-gradient(135deg,#ecfdf5,#eff6ff);border:1px solid #dbeafe;border-radius:28px;padding:30px;margin-bottom:22px}
+    .city-hero h1{margin:0;font-size:38px;color:#0f2a2e}
+    .city-hero p{margin:12px 0 0;color:#64748b;font-size:17px;line-height:1.7}
+    .kicker{font-size:13px;font-weight:900;letter-spacing:.12em;color:#059669;margin-bottom:10px}
+    .stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0}
+    .stat-card{background:#fff;border:1px solid #dbeafe;border-radius:22px;padding:18px}
+    .stat-card span{display:block;color:#64748b;font-weight:800;margin-bottom:8px}
+    .stat-card strong{display:block;color:#0f172a;font-size:21px;line-height:1.35}
+    .section-card{background:#fff;border:1px solid #dbeafe;border-radius:28px;padding:26px;margin-top:22px}
+    .section-card h2{margin:0 0 10px;font-size:28px;color:#0f2a2e}
+    .muted{color:#64748b;line-height:1.7}
+    .match-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+    .match-card{display:block;text-decoration:none;color:inherit;background:#f8fafc;border:1px solid #dbeafe;border-radius:20px;padding:18px}
+    .match-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(15,118,110,.12)}
+    .teams{font-size:20px;font-weight:950;color:#0f172a;margin-bottom:8px}
+    .meta{color:#64748b;line-height:1.7;font-weight:700}
+    .back{display:inline-flex;margin-bottom:18px;text-decoration:none;color:#059669;font-weight:900}
+    @media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr)}.match-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">⚽</div>
+      <div>
+        <h1>世界杯数据分析助手</h1>
+        <p>World Cup Data Analysis Assistant</p>
+      </div>
+    </div>
+    <nav>
+      <a href="index.html">首页</a>
+      <a href="team.html">球队数据</a>
+      <a href="vip.html">VIP分析</a>
+    </nav>
+  </header>
+
+  <main class="city-wrap">
+    <a class="back" href="index.html">← 返回首页 16 城市 / 球场入口</a>
+
+    <section class="city-hero">
+      <div class="kicker">HOST CITY / VENUE</div>
+      <h1 id="city-title">城市 / 球场详情</h1>
+      <p id="city-lead">正在读取城市、球场和承办比赛数据...</p>
+    </section>
+
+    <section class="stat-grid">
+      <div class="stat-card"><span>球场</span><strong id="stadium-name">-</strong></div>
+      <div class="stat-card"><span>容量</span><strong id="capacity">-</strong></div>
+      <div class="stat-card"><span>海拔</span><strong id="altitude">-</strong></div>
+      <div class="stat-card"><span>时区</span><strong id="timezone">-</strong></div>
+    </section>
+
+    <section class="section-card">
+      <h2>承办比赛</h2>
+      <p class="muted" id="match-summary">正在读取该城市承办的比赛...</p>
+      <div id="match-list" class="match-grid"></div>
+    </section>
+  </main>
+
+  <script>
+    function parseCSV(text){
+      text = text.replace(/^\uFEFF/,"");
+      const rows=[]; let row=[], cell="", q=false;
+      for(let i=0;i<text.length;i++){
+        const ch=text[i], next=text[i+1];
+        if(ch === '"' && q && next === '"'){ cell+='"'; i++; }
+        else if(ch === '"'){ q=!q; }
+        else if(ch === "," && !q){ row.push(cell); cell=""; }
+        else if((ch === "\n" || ch === "\r") && !q){
+          if(ch === "\r" && next === "\n") i++;
+          row.push(cell); if(row.some(v=>v!=="")) rows.push(row);
+          row=[]; cell="";
+        } else cell+=ch;
+      }
+      if(cell.length || row.length){ row.push(cell); if(row.some(v=>v!=="")) rows.push(row); }
+      const headers=(rows.shift()||[]).map(h=>h.trim());
+      return rows.map(r=>{const o={}; headers.forEach((h,i)=>o[h]=r[i]||""); return o;});
+    }
+    async function loadCSV(path){
+      const res=await fetch(path);
+      if(!res.ok) throw new Error(path+" 读取失败");
+      return parseCSV(await res.text());
+    }
+    function param(name){ return new URLSearchParams(location.search).get(name)||""; }
+    function pick(o, keys, fallback=""){
+      for(const k of keys){ if(o && o[k] && String(o[k]).trim()) return o[k]; }
+      return fallback;
+    }
+    function fmt(v){ return v ? Number(v).toLocaleString("en-US") : "-"; }
+
+    async function main(){
+      const venueId=param("venue_id");
+      const [venues,matches]=await Promise.all([
+        loadCSV("data/worldcup_2026_venue_environment_base.csv"),
+        loadCSV("data/matches.csv")
+      ]);
+
+      const venue=venues.find(v=>v.venue_id===venueId);
+      if(!venue){
+        document.getElementById("city-title").textContent="未找到城市 / 球场";
+        document.getElementById("city-lead").textContent="请从首页城市卡片进入。";
+        return;
+      }
+
+      const cityMatches=matches.filter(m =>
+        m.stadium_id===venue.venue_id ||
+        m.city===venue.fifa_city ||
+        m.stadium===venue.fifa_stadium_name ||
+        m.stadium===venue.real_stadium_name
+      );
+
+      document.getElementById("city-title").textContent=venue.fifa_city;
+      document.getElementById("city-lead").textContent =
+        venue.real_stadium_name + " · " + venue.country + " · 已整理该城市球场环境基础数据。";
+
+      document.getElementById("stadium-name").textContent=venue.real_stadium_name || venue.fifa_stadium_name || "-";
+      document.getElementById("capacity").textContent=fmt(venue.capacity);
+      document.getElementById("altitude").textContent=venue.altitude_m ? venue.altitude_m+" m" : "-";
+      document.getElementById("timezone").textContent=venue.timezone || "-";
+
+      const knownMatches = cityMatches.filter(m => {
+        const rawA = pick(m,["team_a","home","home_team"],"TBD");
+        const rawB = pick(m,["team_b","away","away_team"],"TBD");
+        const codeA = pick(m,["team_a_code","home_code","home_team_code"],"");
+        const codeB = pick(m,["team_b_code","away_code","away_team_code"],"");
+        const aKnown = rawA && rawA !== "TBD" && rawA !== "待定" || codeA;
+        const bKnown = rawB && rawB !== "TBD" && rawB !== "待定" || codeB;
+        return aKnown && bKnown;
+      });
+
+      const pendingCount = cityMatches.length - knownMatches.length;
+
+      document.getElementById("match-summary").textContent =
+        "该城市当前承办 " + cityMatches.length + " 场比赛，其中已明确对阵 " + knownMatches.length +
+        " 场，待官方最终落位 " + pendingCount + " 场。点击比赛可进入对应比赛详情页。";
+
+      const list=document.getElementById("match-list");
+      if(!cityMatches.length){
+        list.innerHTML='<p class="muted">matches.csv 中暂未匹配到该城市比赛。</p>';
+        return;
+      }
+
+      list.innerHTML=cityMatches.map(m=>{
+        const id=pick(m,["id","match_id"]);
+        let a=pick(m,["team_a","home","home_team"],"TBD");
+        let b=pick(m,["team_b","away","away_team"],"TBD");
+
+        if (!a || a === "TBD" || a === "待定") {
+          const codeA = pick(m,["team_a_code","home_code","home_team_code"],"");
+          const placeholderA = pick(m,["team_a_placeholder","home_placeholder","teamAPlaceholder"],"");
+          a = codeA || placeholderA || "TBD";
+        }
+        if (!b || b === "TBD" || b === "待定") {
+          const codeB = pick(m,["team_b_code","away_code","away_team_code"],"");
+          const placeholderB = pick(m,["team_b_placeholder","away_placeholder","teamBPlaceholder"],"");
+          b = codeB || placeholderB || "TBD";
+        }
+
+        const hasPlaceholder =
+          !!pick(m,["team_a_placeholder","home_placeholder","teamAPlaceholder"],"") ||
+          !!pick(m,["team_b_placeholder","away_placeholder","teamBPlaceholder"],"");
+
+        const date=pick(m,["date","matchDate","match_date"]);
+        const group=pick(m,["group","stage","round"]);
+        const groupLabel = pick(m,["group"],"");
+        const stageLabel = pick(m,["stage","round"],"");
+        const isPending = (!a || a === "TBD" || a === "待定") && (!b || b === "TBD" || b === "待定");
+        const groupFixtureTitle =
+          isPending && groupLabel
+            ? `${groupLabel} fixture TBD`
+            : "";
+        const title = isPending ? (groupFixtureTitle || "对阵待定") : `${a} vs ${b}`;
+        const statusLine = isPending
+          ? (groupFixtureTitle ? "对阵：小组赛官方对阵待最终落位<br>" : "对阵：等待官方最终落位<br>")
+          : (hasPlaceholder ? "对阵：官方赛程占位，待晋级球队产生<br>" : "");
+
+        return `
+          <a class="match-card" href="match.html?id=${encodeURIComponent(id)}">
+            <div class="teams">${title}</div>
+            <div class="meta">
+              ${statusLine}
+              ${date ? "时间："+date+"<br>" : ""}
+              ${group ? "阶段："+group+"<br>" : ""}
+              城市：${venue.fifa_city}<br>
+              球场：${venue.real_stadium_name}
+            </div>
+          </a>
+        `;
+      }).join("");
+    }
+    main().catch(err=>{
+      document.getElementById("city-title").textContent="城市详情读取失败";
+      document.getElementById("city-lead").textContent=err.message;
+    });
+  </script>
+</body>
+</html>
+
+

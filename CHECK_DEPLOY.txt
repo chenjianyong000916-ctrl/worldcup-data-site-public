@@ -1,0 +1,5 @@
+﻿World Cup Data Analysis Assistant
+Netlify upload package: 152
+This file confirms the site root is correct.
+Required data file: /data/odds.csv
+Latest commit: ebbed4b
