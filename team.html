@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>球队数据档案 - 世界杯数据分析助手</title>
+  <title>2026世界杯球队数据档案｜历史风格与球队解读</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     .team-page-wrap {
@@ -185,7 +185,7 @@
     <div class="brand">
       <div class="brand-mark">⚽</div>
       <div>
-        <strong>世界杯数据分析助手</strong>
+        <strong>2026世界杯数据分析助手</strong>
         <small>World Cup Data Analysis Assistant</small>
       </div>
     </div>
@@ -744,8 +744,235 @@
   );
 })();
 </script>
+<script id="team-fan-explain-layer-inline-v1">
+/* === TEAM_FAN_EXPLAIN_LAYER_INLINE_V1 === */
+(function () {
+  function parseCsvText(text) {
+    const clean = String(text || "").replace(/^\uFEFF/, "").trim();
+    if (!clean) return [];
+
+    const lines = clean.split(/\r?\n/);
+    const headers = lines.shift().split(",").map(function (h) {
+      return h.trim().replace(/^"|"$/g, "");
+    });
+
+    return lines.map(function (line) {
+      const cells = [];
+      let cur = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        const next = line[i + 1];
+
+        if (ch === '"' && inQuotes && next === '"') {
+          cur += '"';
+          i++;
+        } else if (ch === '"') {
+          inQuotes = !inQuotes;
+        } else if (ch === "," && !inQuotes) {
+          cells.push(cur);
+          cur = "";
+        } else {
+          cur += ch;
+        }
+      }
+
+      cells.push(cur);
+
+      const row = {};
+      headers.forEach(function (h, idx) {
+        row[h] = String(cells[idx] || "").trim();
+      });
+      return row;
+    });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v == null ? "" : v).trim();
+    return s || (fallback || "—");
+  }
+
+  function getTeamCodeFromUrl() {
+    const params = new URLSearchParams(location.search);
+    return String(params.get("code") || params.get("id") || "").trim().toUpperCase();
+  }
+
+  function normalizeName(v) {
+    return String(v || "").trim().toLowerCase();
+  }
+
+  function labelTone(value) {
+    const v = String(value || "");
+    if (v.includes("高") || v.includes("稳") || v.includes("压制")) return "background:#dcfce7;color:#047857;border-color:#86efac;";
+    if (v.includes("风险")) return "background:#fee2e2;color:#b91c1c;border-color:#fecaca;";
+    if (v.includes("偏低")) return "background:#fef3c7;color:#92400e;border-color:#fde68a;";
+    return "background:#e0f2fe;color:#0369a1;border-color:#bae6fd;";
+  }
+
+  function badge(label, value) {
+    return `
+      <div style="border:1px solid var(--border);background:#f8fcfb;border-radius:16px;padding:14px;">
+        <div style="font-size:12px;color:var(--muted);font-weight:900;">${label}</div>
+        <div style="display:inline-block;margin-top:8px;padding:7px 10px;border-radius:999px;border:1px solid;${labelTone(value)}font-weight:1000;">
+          ${safe(value)}
+        </div>
+      </div>
+    `;
+  }
+
+  async function loadCsv(path) {
+    const res = await fetch(path + "?v=" + Date.now());
+    if (!res.ok) throw new Error(path + " 加载失败");
+    return parseCsvText(await res.text());
+  }
+
+  function findInsertTarget() {
+    return document.querySelector("main") || document.querySelector(".container") || document.body;
+  }
+
+  function insertAfterBestAnchor(section) {
+    const target = findInsertTarget();
+
+    // 优先插在顶部球队 Hero 卡片下面。
+    // 不再写死 France / 法国，避免不同球队页面插入位置不一致。
+    const anchors = Array.from(document.querySelectorAll("section, .panel, .card, .team-card, .hero, header"));
+
+    const heroAnchor = anchors.find(function (el) {
+      const text = (el.innerText || "").trim();
+      return (
+        text.includes("ELO 评分") &&
+        text.includes("近5场状态") &&
+        text.includes("进失球")
+      );
+    });
+
+    if (heroAnchor && heroAnchor.parentNode) {
+      heroAnchor.insertAdjacentElement("afterend", section);
+      return;
+    }
+
+    // 兜底：插在第一个主要内容卡片后面，保证位置尽量靠上。
+    const firstPanel = anchors.find(function (el) {
+      const text = (el.innerText || "").trim();
+      return text.length > 0 && !text.includes("首页") && !text.includes("VIP分析");
+    });
+
+    if (firstPanel && firstPanel.parentNode) {
+      firstPanel.insertAdjacentElement("afterend", section);
+      return;
+    }
+
+    if (target.firstElementChild) {
+      target.firstElementChild.insertAdjacentElement("afterend", section);
+    } else {
+      target.appendChild(section);
+    }
+  }
+
+  async function renderTeamFanExplainLayer() {
+    if (document.getElementById("team-fan-explain-layer")) return;
+
+    const code = getTeamCodeFromUrl();
+    if (!code) return;
+
+    let profiles = [];
+    let rows = [];
+
+    try {
+      const loaded = await Promise.all([
+        loadCsv("./data/apifootball_team_profiles_48.csv"),
+        loadCsv("./data/team_style_interpretation_v2_draft.csv")
+      ]);
+      profiles = loaded[0] || [];
+      rows = loaded[1] || [];
+    } catch (err) {
+      console.warn("球队解释层加载失败：", err);
+      return;
+    }
+
+    const profile = profiles.find(function (p) {
+      return String(p.local_code || "").trim().toUpperCase() === code;
+    });
+
+    const teamNameCandidates = [
+      profile && profile.api_team_name,
+      profile && profile.local_name,
+      code
+    ].filter(Boolean).map(normalizeName);
+
+    const row = rows.find(function (r) {
+      return teamNameCandidates.includes(normalizeName(r.team_name));
+    });
+
+    const section = document.createElement("section");
+    section.id = "team-fan-explain-layer";
+    section.className = "panel";
+    section.style.margin = "20px 0 26px";
+
+    if (!row) {
+      section.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
+          <div>
+            <h2 style="margin:0;font-size:26px;">一眼看懂这支球队</h2>
+            <p style="margin:8px 0 0;color:var(--muted);line-height:1.8;">
+              暂无该队 2022 世界杯历史样本。后续将结合最新赛程、赔率和真实比赛数据补充。
+            </p>
+          </div>
+          <span style="padding:9px 14px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:1000;">样本待补充</span>
+        </div>
+      `;
+    } else {
+      section.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
+          <div>
+            <h2 style="margin:0;font-size:26px;">一眼看懂这支球队</h2>
+            <p style="margin:8px 0 0;color:var(--muted);line-height:1.8;">
+              把 API-Football 历史数据翻译成球迷能理解的判断语言。
+            </p>
+          </div>
+          <span style="padding:9px 14px;border-radius:999px;background:#dcfce7;color:#047857;font-weight:1000;">客观数据解释</span>
+        </div>
+
+        <div style="margin-top:16px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(15,23,42,.03));border:1px solid rgba(16,185,129,.24);">
+          <div style="font-size:13px;color:#047857;font-weight:1000;margin-bottom:8px;">核心解读</div>
+          <div style="font-size:16px;line-height:1.9;font-weight:800;color:#062b2f;">
+            ${safe(row.fan_readable_summary)}
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px;">
+          ${badge("进攻火力", row.attack_level)}
+          ${badge("防守稳定性", row.defense_stability)}
+          ${badge("控球风格", row.possession_style)}
+          ${badge("射正质量", row.shot_quality_label)}
+        </div>
+
+        <div style="margin-top:16px;border-radius:18px;background:#f8fcfb;border:1px solid var(--border);padding:16px;">
+          <div style="font-size:13px;color:var(--muted);font-weight:1000;margin-bottom:8px;">比赛判断参考</div>
+          <div style="font-size:15px;line-height:1.8;color:#0f172a;font-weight:800;">
+            ${safe(row.match_judgement_reference)}
+          </div>
+          <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.7;">
+            数据依据：${safe(row.data_basis)}。当前为 2022 世界杯历史样本，不代表实时预测。
+          </div>
+        </div>
+      `;
+    }
+
+    insertAfterBestAnchor(section);
+  }
+
+  setTimeout(renderTeamFanExplainLayer, 800);
+  setTimeout(renderTeamFanExplainLayer, 1600);
+})();
+</script>
 </body>
 </html>
+
+
+
+
 
 
 
