@@ -388,6 +388,23 @@
     </div>
   </section>
 
+
+<!-- home-news-alerts-224 -->
+<section class="panel home-news-alerts-224" style="margin:28px 0;">
+  <div class="panel-head">
+    <div>
+      <h2>2026世界杯即时动态</h2>
+      <p>接入官方新闻、赛程变更、球队消息与数据提醒；当前为公开试运行版动态窗口。</p>
+    </div>
+    <span class="mini-label">LIVE DATA WINDOW</span>
+  </div>
+
+  <div id="home-news-alerts-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px;">
+    <div class="ai-box">
+      <p>正在读取 2026世界杯即时动态...</p>
+    </div>
+  </div>
+</section>
 </main>
 
   <footer class="site-footer">
@@ -397,11 +414,122 @@
     </div>
   </footer>
 
- V</body>
+ V
+<!-- home-news-alerts-script-224 -->
+<script>
+(function () {
+  function parseCsvLine(line) {
+    const result = [];
+    let current = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+
+      if (char === '"' && insideQuotes && next === '"') {
+        current += '"';
+        i++;
+      } else if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === "," && !insideQuotes) {
+        result.push(current);
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+
+    result.push(current);
+    return result;
+  }
+
+  function parseCsv(text) {
+    const lines = String(text || "").trim().split(/\r?\n/).filter(Boolean);
+    if (!lines.length) return [];
+
+    const headers = parseCsvLine(lines.shift()).map(h => h.trim());
+
+    return lines.map(line => {
+      const values = parseCsvLine(line);
+      const row = {};
+      headers.forEach((h, i) => {
+        row[h] = values[i] || "";
+      });
+      return row;
+    });
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function severityLabel(level) {
+    const value = String(level || "").toLowerCase();
+    if (value === "high") return "重要";
+    if (value === "medium") return "关注";
+    return "一般";
+  }
+
+  async function renderHomeNewsAlerts224() {
+    const box = document.getElementById("home-news-alerts-list");
+    if (!box) return;
+
+    try {
+      const res = await fetch("data/news_alerts.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("news_alerts.csv " + res.status);
+
+      const rows = parseCsv(await res.text())
+        .filter(row => String(row.is_homepage_visible || "").toLowerCase() === "yes")
+        .slice(0, 6);
+
+      if (!rows.length) {
+        box.innerHTML = '<div class="ai-box"><p>暂无可展示的 2026世界杯即时动态。</p></div>';
+        return;
+      }
+
+      box.innerHTML = rows.map(row => {
+        const category = escapeHtml(row.category || "动态");
+        const title = escapeHtml(row.title || "未命名动态");
+        const summary = escapeHtml(row.summary || "");
+        const source = escapeHtml(row.source_name || "待确认来源");
+        const published = escapeHtml(row.published_at || "待确认时间");
+        const level = severityLabel(row.severity);
+
+        return `
+          <article class="ai-box" style="min-height:150px;">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px;">
+              <span class="mini-label">${category}</span>
+              <span style="font-size:12px;color:var(--muted);">${level}</span>
+            </div>
+            <h3 style="margin:0 0 8px;font-size:18px;">${title}</h3>
+            <p style="margin:0;color:var(--muted);line-height:1.7;">${summary}</p>
+            <p style="margin:12px 0 0;font-size:12px;color:var(--muted);">
+              来源：${source} · 时间：${published}
+            </p>
+          </article>
+        `;
+      }).join("");
+    } catch (err) {
+      console.warn("2026世界杯即时动态读取失败：", err);
+      box.innerHTML = '<div class="ai-box"><p>2026世界杯即时动态读取失败，请检查 data/news_alerts.csv。</p></div>';
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderHomeNewsAlerts224);
+})();
+</script>
+</body>
 
 <script src="app.js"></script>
 
 </html>
+
 
 
 
