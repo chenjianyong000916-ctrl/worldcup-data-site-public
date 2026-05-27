@@ -444,12 +444,24 @@
       <div style="color:#60777a;line-height:1.7;">数据源：API-Football 2022 World Cup historical statistics；这里只展示历史客观统计，不代表 2026 实时状态，也不生成比赛预测。</div>
     `;
   }
+  function getTeamFlagCode572B(code) {
+    const key = String(code || "").trim().toUpperCase();
+    const map = {
+      MEX:"mx", RSA:"za", KOR:"kr", CZE:"cz", CAN:"ca", BIH:"ba", QAT:"qa", SUI:"ch",
+      BRA:"br", MAR:"ma", HAI:"ht", SCO:"gb-sct", USA:"us", PAR:"py", AUS:"au", TUR:"tr",
+      GER:"de", CUW:"cw", CIV:"ci", ECU:"ec", NED:"nl", JPN:"jp", SWE:"se", TUN:"tn",
+      BEL:"be", EGY:"eg", IRN:"ir", NZL:"nz", ESP:"es", CPV:"cv", KSA:"sa", URU:"uy",
+      FRA:"fr", SEN:"sn", IRQ:"iq", NOR:"no", ARG:"ar", ALG:"dz", AUT:"at", JOR:"jo",
+      POR:"pt", COD:"cd", UZB:"uz", COL:"co", ENG:"gb-eng", CRO:"hr", GHA:"gh", PAN:"pa"
+    };
+    return map[key] || key.slice(0,2).toLowerCase();
+  }
   function renderTeam(team, allTeams, recentMatches, worldcup2022History = [], matches = []) {
     const displayName = team.name_en || team.name || team.name_cn || team.code;
     const cnName = team.name_cn || team.name || displayName;
 
     document.title = displayName + " - 球队数据档案";
-    setText("teamCodeBadge", team.code || code);
+    const badgeCode = team.code || code; const badge = document.getElementById("teamCodeBadge"); if (badge) badge.innerHTML = `<img src="https://flagcdn.com/w80/${getTeamFlagCode572B(badgeCode)}.png" alt="${badgeCode} flag" style="width:62px;height:42px;object-fit:cover;border-radius:10px;box-shadow:0 8px 20px rgba(15,118,110,.12);" onerror="this.outerHTML='<span>${badgeCode}</span>'">`;
     setText("teamName", displayName);
     setText("teamDesc", `${team.continent || "-"} · ${team.confederation || "-"} · ${cnName}`);
     setText("dataStatus", "数据已接入");
@@ -864,6 +876,7 @@
 </script>
 </body>
 </html>
+
 
 
 
