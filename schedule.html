@@ -1,0 +1,442 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>完整赛程时间线 - 2026世界杯数据分析助手</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .schedule-page-shell{max-width:1220px;margin:0 auto;padding:34px 24px 80px;}
+    .schedule-hero{border-radius:30px;padding:34px;background:linear-gradient(135deg,#064e3b,#0f766e 52%,#e0f2fe);box-shadow:0 24px 80px rgba(15,118,110,.18);color:white;margin-bottom:34px;}
+    .schedule-hero p{max-width:820px;color:rgba(255,255,255,.78);line-height:1.8;font-size:16px;}
+    .schedule-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px;}
+    .schedule-actions a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:12px 18px;font-weight:900;text-decoration:none;}
+    .schedule-actions .primary{background:white;color:#065f46;}
+    .schedule-actions .ghost{border:1px solid rgba(255,255,255,.35);color:white;}
+    .timeline-tools{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 24px;}
+    .timeline-tools button{border:1px solid rgba(15,118,110,.18);background:white;border-radius:999px;padding:10px 16px;font-weight:900;color:#0f766e;cursor:pointer;}
+    .timeline-tools button.active{background:#0f766e;color:white;}
+    .timeline-day{margin:28px 0 44px;}
+    .timeline-day-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px;border-bottom:1px solid rgba(15,118,110,.16);padding-bottom:10px;}
+    .timeline-day-head h2{margin:0;font-size:26px;color:#063f3a;}
+    .timeline-day-head span{color:#64748b;font-weight:800;}
+    .timeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+    .timeline-card{display:block;text-decoration:none;color:inherit;background:white;border:1px solid rgba(15,118,110,.13);border-radius:24px;padding:20px;box-shadow:0 18px 48px rgba(15,23,42,.06);}
+    .timeline-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px;color:#0f766e;font-size:13px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;}
+    .timeline-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:18px;}
+    .timeline-side{min-width:0;}
+    .timeline-side strong{display:block;font-size:22px;color:#0f172a;line-height:1.2;}
+    .timeline-side small{display:block;margin-top:5px;color:#64748b;font-weight:800;}
+    .timeline-vs{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#0f766e;color:white;font-weight:950;}
+    .timeline-info{border-top:1px solid rgba(15,118,110,.12);padding-top:14px;color:#475569;line-height:1.7;}
+    .timeline-stage-badge{display:inline-flex;border-radius:999px;background:#ecfdf5;color:#047857;padding:6px 10px;font-weight:900;font-size:12px;margin-bottom:8px;}
+    .timeline-empty{background:white;border-radius:20px;padding:24px;color:#64748b;}
+      .schedule-page-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 36px;background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(15,118,110,.12);}
+    .schedule-page-header .brand{display:flex;align-items:center;gap:14px;}
+    .schedule-page-header .brand-icon{width:46px;height:46px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#0f766e;color:white;font-size:22px;}
+    .schedule-page-header h1{margin:0;font-size:28px;line-height:1.1;color:#0f172a;}
+    .schedule-page-header p{margin:6px 0 0;color:#64748b;font-weight:700;}
+    .schedule-page-header nav{display:flex;align-items:center;gap:20px;font-weight:900;}
+    .schedule-page-header nav a{text-decoration:none;color:#475569;}
+    .schedule-page-header nav a.active{color:#0f766e;}
+    @media(max-width:760px){.schedule-page-header{align-items:flex-start;flex-direction:column;padding:18px 20px}.schedule-page-header nav{flex-wrap:wrap}.schedule-page-header h1{font-size:22px}}
+      .timeline-card-cta{margin-top:14px;color:#0f766e;font-weight:950;}
+  /* ===== 548/100 - schedule card polish ===== */
+.timeline-grid{
+  gap:24px !important;
+}
+.timeline-card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  position:relative;
+  overflow:hidden;
+  border-radius:32px !important;
+  border:1px solid rgba(15,118,110,.10) !important;
+  background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(246,252,250,.96)) !important;
+  box-shadow:0 18px 42px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.85) !important;
+  padding:24px 22px 20px !important;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.timeline-card::before{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:0;
+  height:6px;
+  background:linear-gradient(90deg,#10b981 0%, #3b82f6 52%, #8b5cf6 100%);
+}
+.timeline-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 24px 46px rgba(15,23,42,.12), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  border-color:rgba(59,130,246,.20) !important;
+}
+.timeline-meta{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px;
+  margin-bottom:14px !important;
+}
+.timeline-meta > *:first-child{
+  color:#0f766e !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  letter-spacing:.08em !important;
+}
+.timeline-meta > *:last-child{
+  color:#0f766e !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+}
+.timeline-card > *:nth-child(2){
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  margin-bottom:16px !important;
+  border-radius:999px;
+  background:rgba(16,185,129,.10);
+  color:#0f766e !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+}
+.timeline-card > *:nth-child(3){
+  display:grid !important;
+  grid-template-columns:1fr 72px 1fr;
+  align-items:center;
+  gap:16px;
+  margin-bottom:18px !important;
+}
+.timeline-card > *:nth-child(3) > *:first-child,
+.timeline-card > *:nth-child(3) > *:last-child{
+  min-height:106px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:16px 18px;
+  border-radius:24px;
+  background:rgba(240,248,246,.92);
+  border:1px solid rgba(15,118,110,.08);
+}
+.timeline-card > *:nth-child(3) > *:last-child{
+  text-align:right;
+  align-items:flex-end;
+}
+.timeline-card > *:nth-child(3) > *:first-child > *:first-child,
+.timeline-card > *:nth-child(3) > *:last-child > *:first-child{
+  font-size:20px !important;
+  line-height:1.18 !important;
+  font-weight:950 !important;
+  color:#0f172a !important;
+  margin-bottom:6px !important;
+}
+.timeline-card > *:nth-child(3) > *:first-child > *:last-child,
+.timeline-card > *:nth-child(3) > *:last-child > *:last-child{
+  font-size:14px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  color:#64748b !important;
+  letter-spacing:.06em !important;
+}
+.timeline-vs{
+  width:72px !important;
+  height:72px !important;
+  border-radius:999px !important;
+  display:grid !important;
+  place-items:center !important;
+  background:linear-gradient(180deg,#0f766e,#0b5f59) !important;
+  color:#fff !important;
+  font-size:24px !important;
+  font-weight:950 !important;
+  box-shadow:0 14px 28px rgba(15,118,110,.22) !important;
+}
+.timeline-card > *:nth-child(4){
+  margin-top:4px !important;
+  padding-top:14px !important;
+  border-top:1px solid rgba(15,23,42,.08) !important;
+  color:#475569 !important;
+  line-height:1.7 !important;
+  font-size:14px !important;
+}
+.timeline-card-cta{
+  margin-top:16px !important;
+  display:inline-flex !important;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(15,118,110,.08);
+  color:#0f766e !important;
+  font-size:14px !important;
+  font-weight:950 !important;
+}
+.timeline-card-cta::after{
+  content:"→";
+}
+@media (max-width: 900px){
+  .timeline-card > *:nth-child(3){
+    grid-template-columns:1fr;
+  }
+  .timeline-vs{
+    margin:0 auto;
+  }
+  .timeline-card > *:nth-child(3) > *:last-child{
+    text-align:left;
+    align-items:flex-start;
+  }
+}
+</style>
+</head>
+<body>
+  <header class="schedule-page-header">
+    <a class="brand" href="./index.html" style="text-decoration:none;color:inherit;">
+      <div class="brand-icon">⚽</div>
+      <div>
+        <h1>2026世界杯数据分析助手</h1>
+        <p>World Cup Data Analysis Assistant</p>
+      </div>
+    </a>
+    <nav>
+      <a href="./index.html">首页</a>
+      <a href="./schedule.html" class="active">完整赛程</a>
+      <a href="./team.html">球队数据</a>
+      <a href="./vip.html">VIP分析</a>
+    </nav>
+  </header>
+
+  <main class="schedule-page-shell">
+    <section class="schedule-hero">
+      <p class="eyebrow">TOURNAMENT TIMELINE</p>
+      <h1>按时间看懂 2026 世界杯怎么推进</h1>
+      <p>从揭幕战、小组赛到淘汰赛和决赛，按日期串起全部比赛。小组赛显示真实对阵；淘汰赛在球队未落位前显示官方路径占位，后续可随数据更新自动替换。</p>
+      <div class="schedule-actions">
+        <a class="primary" href="./index.html">返回首页</a>
+        <a class="ghost" href="./match.html?id=1">查看揭幕战数据看板</a>
+      </div>
+    </section>
+
+    <section class="timeline-tools" id="timeline-filters">
+      <button data-filter="all" class="active">全部</button>
+      <button data-filter="group">小组赛</button>
+      <button data-filter="knockout">淘汰赛 / 决赛</button>
+    </section>
+
+    <section id="schedule-timeline-root">
+      <div class="timeline-empty">正在读取 data/matches.csv ...</div>
+    </section>
+  </main>
+
+  <script>
+    function parseCsv(text) {
+      const rows = [];
+      let row = [], cell = "", inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i], next = text[i + 1];
+        if (ch === '"' && inQuotes && next === '"') { cell += '"'; i++; continue; }
+        if (ch === '"') { inQuotes = !inQuotes; continue; }
+        if (ch === "," && !inQuotes) { row.push(cell); cell = ""; continue; }
+        if ((ch === "\n" || ch === "\r") && !inQuotes) {
+          if (ch === "\r" && next === "\n") i++;
+          row.push(cell); cell = "";
+          if (row.some(v => String(v).trim() !== "")) rows.push(row);
+          row = [];
+          continue;
+        }
+        cell += ch;
+      }
+      if (cell || row.length) { row.push(cell); rows.push(row); }
+      const headers = rows.shift().map(h => h.trim());
+      return rows.map(cols => {
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (cols[i] || "").trim());
+        return obj;
+      });
+    }
+
+    function stageType(stage) {
+      const s = String(stage || "").toLowerCase();
+      if (s.includes("round") || s.includes("quarter") || s.includes("semi") || s.includes("final") || s.includes("third")) return "knockout";
+      return "group";
+    }
+
+    function dateLabel(value) {
+      if (!value) return "日期待定";
+      const parts = value.split("-");
+      if (parts.length === 3) return `${parts[1]}月${parts[2]}日`;
+      return value;
+    }
+
+    function sideName(row, side) {
+      const name = row[side === "a" ? "team_a" : "team_b"] || "";
+      const code = row[side === "a" ? "team_a_code" : "team_b_code"] || "";
+      const placeholder = row[side === "a" ? "team_a_placeholder" : "team_b_placeholder"] || "";
+      if (name && name !== "TBD") return name;
+      if (code && code !== "TBD") return code;
+      if (placeholder && placeholder !== "false") return placeholder;
+      return "待定";
+    }
+
+    function renderTimeline(rows, filter = "all") {
+      const root = document.getElementById("schedule-timeline-root");
+      const list = rows
+        .filter(r => filter === "all" || stageType(r.stage) === filter)
+        .sort((a, b) => {
+          const da = String(a.match_date || "");
+          const db = String(b.match_date || "");
+          if (da !== db) return da.localeCompare(db);
+          return String(a.kickoff || "").localeCompare(String(b.kickoff || ""));
+        });
+
+      if (!list.length) {
+        root.innerHTML = '<div class="timeline-empty">暂无赛程数据。</div>';
+        return;
+      }
+
+      const groups = {};
+      list.forEach(r => {
+        const key = r.match_date || "date_pending";
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r);
+      });
+
+      root.innerHTML = Object.keys(groups).map(date => {
+        const dayRows = groups[date];
+        return `
+          <section class="timeline-day">
+            <div class="timeline-day-head">
+              <h2>${dateLabel(date)}</h2>
+              <span>${dayRows.length} 场比赛</span>
+            </div>
+            <div class="timeline-grid">
+              ${dayRows.map(m => {
+                const id = m.match_id || "";
+                const a = sideName(m, "a");
+                const b = sideName(m, "b");
+                const type = stageType(m.stage);
+                return `
+                  <a class="timeline-card" href="./match.html?id=${encodeURIComponent(id)}">
+                    <div class="timeline-meta">
+                      <span>${m.stage || "阶段待定"}</span>
+                      <strong>${m.match_date || ""}</strong>
+                    </div>
+                    <span class="timeline-stage-badge">${type === "group" ? (m.group || "小组赛") : "淘汰赛路径"}</span>
+                    <div class="timeline-teams">
+                      <div class="timeline-side"><strong>${a}</strong><small>${m.team_a_code || ""}</small></div>
+                      <div class="timeline-vs">VS</div>
+                      <div class="timeline-side"><strong>${b}</strong><small>${m.team_b_code || ""}</small></div>
+                    </div>
+                    <div class="timeline-info">
+                      开球：${m.kickoff || "待定"}<br>
+                      ${m.city || ""}${m.country ? ", " + m.country : ""}<br>
+                      ${m.stadium || ""}
+                    </div>
+                    <div class="timeline-card-cta">点击进入本场数据看板 →</div>
+                  </a>
+                `;
+              }).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+    }
+
+    async function init() {
+      const root = document.getElementById("schedule-timeline-root");
+      try {
+        const text = await fetch("./data/matches.csv?v=" + Date.now()).then(r => r.text());
+        const rows = parseCsv(text);
+        renderTimeline(rows, "all");
+
+        document.querySelectorAll("#timeline-filters button").forEach(btn => {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll("#timeline-filters button").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            renderTimeline(rows, btn.dataset.filter);
+          });
+        });
+      } catch (err) {
+        root.innerHTML = '<div class="timeline-empty">赛程数据读取失败，请检查 data/matches.csv。</div>';
+      }
+    }
+
+    init();
+  </script>
+<script id="schedule-cn-team-patch-562I">
+(function(){
+  const nameMap = {
+    "Mexico":"墨西哥",
+    "South Africa":"南非",
+    "South Korea":"韩国",
+    "Czech Republic":"捷克",
+    "Canada":"加拿大",
+    "Bosnia and Herzegovina":"波黑",
+    "Qatar":"卡塔尔",
+    "Switzerland":"瑞士",
+    "Brazil":"巴西",
+    "Morocco":"摩洛哥",
+    "Haiti":"海地",
+    "Scotland":"苏格兰",
+    "United States":"美国",
+    "Paraguay":"巴拉圭",
+    "Australia":"澳大利亚",
+    "Turkey":"土耳其",
+    "Germany":"德国",
+    "Curaçao":"库拉索",
+    "Ivory Coast":"科特迪瓦",
+    "Ecuador":"厄瓜多尔",
+    "Netherlands":"荷兰",
+    "Japan":"日本",
+    "Sweden":"瑞典",
+    "Tunisia":"突尼斯",
+    "Belgium":"比利时",
+    "Egypt":"埃及",
+    "Iran":"伊朗",
+    "New Zealand":"新西兰",
+    "Spain":"西班牙",
+    "Cape Verde":"佛得角",
+    "Saudi Arabia":"沙特阿拉伯",
+    "Uruguay":"乌拉圭",
+    "France":"法国",
+    "Senegal":"塞内加尔",
+    "Iraq":"伊拉克",
+    "Norway":"挪威",
+    "Argentina":"阿根廷",
+    "Algeria":"阿尔及利亚",
+    "Austria":"奥地利",
+    "Jordan":"约旦",
+    "Portugal":"葡萄牙",
+    "DR Congo":"刚果民主共和国",
+    "Uzbekistan":"乌兹别克斯坦",
+    "Colombia":"哥伦比亚",
+    "England":"英格兰",
+    "Croatia":"克罗地亚",
+    "Ghana":"加纳",
+    "Panama":"巴拿马"
+  };
+
+  function patchNames(){
+    const root = document.getElementById("schedule-timeline-root");
+    if (!root) return;
+
+    root.querySelectorAll(".timeline-side strong").forEach(el => {
+      const text = String(el.textContent || "").trim();
+      if (nameMap[text]) el.textContent = nameMap[text];
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(patchNames, 300);
+    setTimeout(patchNames, 900);
+    setTimeout(patchNames, 1800);
+  });
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

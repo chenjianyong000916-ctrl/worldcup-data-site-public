@@ -1,0 +1,11 @@
+﻿match_id,team,travel_distance_km,rest_days,time_zone_shift,fatigue_level,summary
+1,Mexico,320,5,0,low,"旅途压力较低，恢复时间充足"
+1,South Africa,9800,3,7,high,"长途飞行与时差影响明显"
+M002,Brazil,4200,4,2,medium,"存在一定旅行与恢复压力"
+M002,Japan,11200,3,8,high,"超长距离移动，体能恢复需关注"
+M003,USA,650,6,0,low,"本地比赛环境更稳定"
+M003,Germany,7600,4,6,medium,"跨洲旅行带来一定疲劳"
+M004,Argentina,5100,4,3,medium,"存在中等旅途压力"
+M004,Canada,1200,5,1,low,"旅途影响较小"
+
+

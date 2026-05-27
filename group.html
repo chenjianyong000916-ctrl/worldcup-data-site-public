@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小组详情 - 世界杯数据分析助手</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-icon">⚽</div>
+        <div>
+          <h1>世界杯数据分析助手</h1>
+          <p>World Cup Data Analysis Assistant</p>
+        </div>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">首页</a>
+        <a href="team.html">球队数据</a>
+        <a href="vip.html">VIP分析</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="product-home-v2 group-page-v1">
+    <section class="home-hero hero-v2">
+      <div class="hero-copy">
+        <p class="eyebrow">GROUP DETAIL</p>
+        <h1 id="group-page-title">小组详情</h1>
+        <p class="hero-subtitle">
+          查看本组球队、国旗、落位状态与小组赛程。积分榜和晋级概率将在后续接入。
+        </p>
+        <div class="hero-actions">
+          <a href="index.html#home-groups-entry" class="hero-btn primary">返回小组列表</a>
+          <a href="index.html#home-schedule-preview" class="hero-btn ghost">查看全部赛程</a>
+        </div>
+      </div>
+
+      <div class="hero-visual-card">
+        <div class="hero-match-label">GROUP STAGE</div>
+        <div class="hero-match-title"><span id="group-hero-code">A</span> 组</div>
+        <div class="hero-match-meta">球队落位 · 小组赛程 · 数据结构</div>
+      </div>
+    </section>
+
+    <section class="home-section">
+      <div class="section-head">
+        <p class="eyebrow">TEAMS</p>
+        <h2>本组球队</h2>
+      </div>
+      <div id="group-teams-panel" class="groups-grid"></div>
+    </section>
+
+    <section class="home-section">
+      <div class="section-head">
+        <p class="eyebrow">STANDINGS</p>
+        <h2>小组积分榜</h2>
+        <p>赛前阶段全部为 0，比赛结果接入后自动计算排名、积分和净胜球。</p>
+      </div>
+      <div id="group-standings-panel" class="standings-card"></div>
+    </section>
+    <section class="home-section">
+      <div class="section-head">
+        <p class="eyebrow">MATCHES</p>
+        <h2>本组比赛</h2>
+      </div>
+      <div id="group-matches-panel" class="home-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 世界杯数据分析助手</p>
+      <p>Objective Data · Team Comparison · Market Difference · AI Assisted Reading</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+

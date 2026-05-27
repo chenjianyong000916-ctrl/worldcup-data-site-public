@@ -22,7 +22,7 @@ E,4,ECU,Ecuador,confirmed
 F,1,NED,Netherlands,confirmed
 F,2,JPN,Japan,confirmed
 F,3,TUN,Tunisia,confirmed
-F,4,UEFA_PLAYOFF_B,UEFA Playoff B,pending
+F,4,SWE,Sweden,confirmed
 G,1,BEL,Belgium,confirmed
 G,2,IRN,Iran,confirmed
 G,3,EGY,Egypt,confirmed
@@ -34,7 +34,7 @@ H,4,CPV,Cape Verde,confirmed
 I,1,FRA,France,confirmed
 I,2,SEN,Senegal,confirmed
 I,3,NOR,Norway,confirmed
-I,4,FIFA_PLAYOFF_2,FIFA Playoff 2,pending
+I,4,IRQ,Iraq,confirmed
 J,1,ARG,Argentina,confirmed
 J,2,AUT,Austria,confirmed
 J,3,ALG,Algeria,confirmed
@@ -42,7 +42,7 @@ J,4,JOR,Jordan,confirmed
 K,1,POR,Portugal,confirmed
 K,2,COL,Colombia,confirmed
 K,3,UZB,Uzbekistan,confirmed
-K,4,FIFA_PLAYOFF_1,FIFA Playoff 1,pending
+K,4,COD,Congo DR,confirmed
 L,1,ENG,England,confirmed
 L,2,CRO,Croatia,confirmed
 L,3,GHA,Ghana,confirmed

@@ -303,22 +303,26 @@
         </div>
       </div>
       <div class="team-panel">
-        <h2>AI 战术解读</h2>
+        <h2>数据来源说明</h2>
         <div class="info-list">
-          <div><b>战术风格：</b><span id="aiStyleSummary">待生成</span></div>
-          <div><b>近期状态：</b><span id="aiFormSummary">待生成</span></div>
-          <div><b>风险因素：</b><span id="aiRiskSummary">待生成</span></div>
-          <div><b>AI总结：</b><span id="aiFinalSummary">待生成</span></div>
+          <div><b>展示原则：</b><span>本页只展示已采集到的客观数据。</span></div>
+          <div style="color:#60777a;line-height:1.7;">
+            包括球队资料、近 5 场比赛、小组赛赛程、历史样本和市场数据。未接入明确来源的数据，不生成风格标签、元素标签或 AI 战术判断。
+          </div>
+          <div style="color:#60777a;line-height:1.7;">
+            数据来源：teams.csv、team_recent_matches.csv、matches.csv，以及后续已接入的 API / 公开数据源。
+          </div>
         </div>
       </div>
       <div class="team-panel">
-        <h2>攻防基础数据</h2>
-        <div class="info-list">
-          <div><b>近阶段进球：</b><span id="goalsFor">-</span></div>
-          <div><b>近阶段失球：</b><span id="goalsAgainst">-</span></div>
-          <div><b>风格标签：</b><span id="style">待补充</span></div>
-          <div><b>元素标签：</b><span id="element">待补充</span></div>
+        <h2>夺冠赔率</h2>
+        <div class="info-list" id="winnerOddsCard">
+          <div>正在读取夺冠赔率数据...</div>
         </div>
+      </div>
+      <div class="team-panel">
+        <h2>2026 小组赛赛程</h2>
+        <div class="recent-match-list" id="groupFixtureList">加载中...</div>
       </div>
     </section>
 
@@ -348,51 +352,99 @@
 
   async function loadWorldCup2022History() {
     try {
-      const res = await fetch("./data/worldcup_2022_team_profile_summary.csv?v=" + Date.now());
-      if (!res.ok) throw new Error("worldcup_2022_team_profile_summary.csv 加载失败 " + res.status);
+      const res = await fetch("./data/worldcup_2022_team_style_summary.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("worldcup_2022_team_style_summary.csv 加载失败 " + res.status);
       return parseCSV(await res.text());
     } catch (err) {
       console.warn(err);
       return [];
     }
   }
+  async function renderWinnerOddsCard(team) {
+    const box = document.getElementById("winnerOddsCard");
+    if (!box) return;
 
+    function marketZone(avgPrice) {
+      const n = Number(avgPrice);
+      if (!Number.isFinite(n) || n <= 0) return "等待更多市场数据";
+      if (n <= 12) return "主要争冠区";
+      if (n <= 30) return "强竞争区";
+      if (n <= 80) return "黑马区";
+      if (n <= 300) return "冷门区";
+      return "超长赔率区";
+    }
+
+    try {
+      const res = await fetch("./data/theoddsapi_worldcup_winner_summary.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("theoddsapi_worldcup_winner_summary.csv 加载失败 " + res.status);
+
+      const rows = parseCSV(await res.text());
+      const displayName = team.name_en || team.name || team.name_cn || team.code;
+      const row = rows.find(r =>
+        String(r.team || "").trim().toLowerCase() === String(displayName || "").trim().toLowerCase() ||
+        String(r.team || "").trim().toLowerCase() === String(team.name || "").trim().toLowerCase() ||
+        String(r.team || "").trim().toLowerCase() === String(team.name_en || "").trim().toLowerCase()
+      );
+
+      if (!row) {
+        box.innerHTML = `
+          <div><b>当前状态：</b><span>暂无该队夺冠赔率数据。</span></div>
+          <div style="color:#60777a;line-height:1.7;">数据源：theoddsapi_worldcup_winner_summary.csv。未匹配到球队时不生成市场判断。</div>
+        `;
+        return;
+      }
+
+      box.innerHTML = `
+        <div><b>市场位置：</b><span>${marketZone(row.avg_price)}</span></div>
+        <div><b>当前参考赔率：</b><span>${row.avg_price || "-"} </span></div>
+        <div><b>最高赔率：</b><span>${row.best_price || "-"}</span></div>
+        <div><b>覆盖博彩公司：</b><span>${row.bookmaker_count || "-"} 家 / ${row.record_count || "-"} 条记录</span></div>
+        <div style="color:#60777a;line-height:1.7;">数据源：${row.source || "theoddsapi_worldcup_winner_summary.csv"}；这里只展示博彩公司冠军市场数据，不代表本站预测。</div>
+      `;
+    } catch (err) {
+      box.innerHTML = `
+        <div><b>当前状态：</b><span>夺冠赔率数据读取失败。</span></div>
+        <div style="color:#60777a;line-height:1.7;">请检查 theoddsapi_worldcup_winner_summary.csv 是否存在。</div>
+      `;
+      console.warn(err);
+    }
+  }
   function renderWorldCup2022History(team, historyRows) {
     const box = document.getElementById("worldcup2022HistoryCard");
     if (!box) return;
 
     const displayName = team.name_en || team.name || team.name_cn || team.code;
-    const code = String(team.code || "").trim().toUpperCase();
 
     const row = historyRows.find(r =>
-      String(r.team || "").trim().toLowerCase() === String(displayName || "").trim().toLowerCase() ||
-      String(r.team || "").trim().toLowerCase() === String(team.name || "").trim().toLowerCase() ||
-      String(r.team || "").trim().toLowerCase() === String(team.name_en || "").trim().toLowerCase()
+      String(r.team_name || "").trim().toLowerCase() === String(displayName || "").trim().toLowerCase() ||
+      String(r.team_name || "").trim().toLowerCase() === String(team.name || "").trim().toLowerCase() ||
+      String(r.team_name || "").trim().toLowerCase() === String(team.name_en || "").trim().toLowerCase()
     );
 
     if (!row) {
       box.innerHTML = `
-        <div><b>历史样本：</b>暂无 2022 世界杯历史样本。</div>
-        <div style="color:#60777a;">说明：该模块只展示 API-Football 已抓取并整理的 2022 世界杯真实历史数据。</div>
+        <div><b>历史样本：</b>暂无可直接匹配的 2022 世界杯球队样本。</div>
+        <div style="color:#60777a;line-height:1.7;">说明：该球队可能未参加 2022 世界杯，或当前为附加赛 / 新晋级球队。本站不补造历史数据。</div>
       `;
       return;
     }
 
     box.innerHTML = `
-      <div><b>出场：</b>${row.matches || "-"} 场</div>
+      <div><b>2022 出场：</b>${row.matches_played || "-"} 场</div>
       <div><b>战绩：</b>${row.wins || "0"}胜 ${row.draws || "0"}平 ${row.losses || "0"}负</div>
       <div><b>进球 / 失球：</b>${row.goals_for || "-"} / ${row.goals_against || "-"}</div>
-      <div><b>净胜球：</b>${row.goal_diff || "-"}</div>
-      <div><b>常用阵型：</b>${row.common_formation || "-"}</div>
-      <div><b>场均控球：</b>${row.avg_ball_possession || "-"}%</div>
+      <div><b>净胜球：</b>${row.goal_difference || "-"}</div>
+      <div><b>场均进球 / 失球：</b>${row.avg_goals_for || "-"} / ${row.avg_goals_against || "-"}</div>
+      <div><b>场均控球：</b>${row.avg_ball_possession_pct || "-"}%</div>
       <div><b>场均射门 / 射正：</b>${row.avg_total_shots || "-"} / ${row.avg_shots_on_goal || "-"}</div>
       <div><b>场均角球：</b>${row.avg_corner_kicks || "-"}</div>
-      <div><b>历史样本标签：</b>高控球未胜 ${row.high_possession_not_win_count || "0"} 条，低射门赢球 ${row.low_shots_win_count || "0"} 条，大比分 ${row.big_score_count || "0"} 条</div>
-      <div style="color:#60777a;">数据源：API-Football 2022 World Cup 历史样本库，不代表当前 2026 实时状态。</div>
+      <div><b>场均犯规 / 黄牌：</b>${row.avg_fouls || "-"} / ${row.avg_yellow_cards || "-"}</div>
+      <div><b>传球：</b>${row.avg_total_passes || "-"} 次 / 成功率 ${row.avg_pass_accuracy_pct || "-"}%</div>
+      <div><b>常用阵型：</b>${row.most_used_formation || "-"}</div>
+      <div style="color:#60777a;line-height:1.7;">数据源：API-Football 2022 World Cup historical statistics；这里只展示历史客观统计，不代表 2026 实时状态，也不生成比赛预测。</div>
     `;
   }
-
-  function renderTeam(team, allTeams, recentMatches, worldcup2022History = []) {
+  function renderTeam(team, allTeams, recentMatches, worldcup2022History = [], matches = []) {
     const displayName = team.name_en || team.name || team.name_cn || team.code;
     const cnName = team.name_cn || team.name || displayName;
 
@@ -432,6 +484,8 @@
     setText("aiFormSummary", `近5场战绩为 ${team.last5 || "暂无"}，可作为判断近期状态的基础参考。`);
     setText("aiRiskSummary", `面对高压逼抢或身体对抗型球队时，后场稳定性需要重点观察。`);
     setText("aiFinalSummary", `${displayName} 具备小组竞争力，后续可结合赛程、对手和伤停数据继续分析。`);
+
+    renderWinnerOddsCard(team);
 
     renderWorldCup2022History(team, worldcup2022History);
 
@@ -473,6 +527,38 @@
       }
     }
 
+    const groupFixtureList = document.getElementById("groupFixtureList");
+    if (groupFixtureList) {
+      const currentCode = String(team.code || "").trim().toUpperCase();
+      const groupRows = matches
+        .filter(m => {
+          const a = String(m.team_a_code || "").trim().toUpperCase();
+          const b = String(m.team_b_code || "").trim().toUpperCase();
+          const groupName = String(m.group || "").trim();
+          return (a === currentCode || b === currentCode) && /^Group\s+/i.test(groupName);
+        })
+        .sort((a, b) => Number(a.match_id || 0) - Number(b.match_id || 0))
+        .slice(0, 3);
+
+      if (!groupRows.length) {
+        groupFixtureList.textContent = "暂无 2026 小组赛赛程数据";
+      } else {
+        groupFixtureList.innerHTML = groupRows.map(m => {
+          const matchId = String(m.match_id || "").trim();
+          const aName = m.team_a || m.team_a_code || "待定";
+          const bName = m.team_b || m.team_b_code || "待定";
+          const city = m.city ? ` · ${m.city}` : "";
+          const stadium = m.stadium ? ` · ${m.stadium}` : "";
+          const href = matchId ? `match.html?id=${matchId}` : "#";
+          return `
+            <a class="recent-match-item" href="${href}" style="text-decoration:none;color:inherit;display:block;">
+              <div class="recent-match-date">${m.stage || m.group || "Group Stage"}${city}</div>
+              <div class="recent-match-opponent">${aName} vs ${bName}${stadium}</div>
+            </a>
+          `;
+        }).join("");
+      }
+    }
     const select = document.getElementById("teamSelect");
     select.innerHTML = "";
     allTeams.forEach(t => {
@@ -484,14 +570,16 @@
     });
   }
 
-  const [text, recentText, worldcup2022History] = await Promise.all([
+  const [text, recentText, matchesText, worldcup2022History] = await Promise.all([
     fetch("./data/teams.csv").then(r => r.text()),
     fetch("./data/team_recent_matches.csv").then(r => { if(!r.ok){ throw new Error("team_recent_matches.csv 加载失败 " + r.status); } return r.text(); }),
+    fetch("./data/matches.csv").then(r => { if(!r.ok){ throw new Error("matches.csv 加载失败 " + r.status); } return r.text(); }),
     loadWorldCup2022History()
   ]);
 
   const teams = parseCSV(text);
   const recentMatches = parseCSV(recentText);
+  const matches = parseCSV(matchesText);
 
   if (!code && teams[0]) {
     code = teams[0].code;
@@ -506,7 +594,7 @@
     return;
   }
 
-  renderTeam(team, teams, recentMatches, worldcup2022History);
+  renderTeam(team, teams, recentMatches, worldcup2022History, matches);
 
   document.getElementById("goTeamBtn").addEventListener("click", () => {
     const nextCode = document.getElementById("teamSelect").value;
@@ -697,278 +785,93 @@
     `
   );
 
-  replacePanelByTitle(
-    "AI 战术解读",
-    "数据说明（待接入真实战术字段）",
-    `
-      <div><b>当前状态：</b>旧版 AI 战术解读已降级，不作为比赛判断依据。</div>
-      <div style="color:#60777a;line-height:1.7;">
-        后续如展示战术相关内容，必须来自可追溯字段，例如阵型、控球率、射门、射正、传球成功率、角球、犯规、黄牌、近 5 场赛果等。
-      </div>
-      <div style="color:#60777a;line-height:1.7;">
-        本站定位是客观数据采集、整理和展示，不做 AI 自行预测或主观战术编写。
-      </div>
-    `
-  );
-
-  replacePanelByTitle(
-    "风格标签",
-    "风格标签（待数据化）",
-    `
-      <div><b>当前状态：</b>旧版风格标签暂不作为核心依据。</div>
-      <div style="color:#60777a;line-height:1.7;">
-        后续如保留风格标签，必须由客观字段计算产生，例如控球率区间、射门结构、传球成功率、犯规强度、定位球数量等。
-      </div>
-    `
-  );
-
-  replacePanelByTitle(
-    "元素标签",
-    "元素标签（暂不作为核心数据）",
-    `
-      <div><b>当前状态：</b>元素标签属于早期娱乐化设计，暂不作为核心数据模块。</div>
-      <div style="color:#60777a;line-height:1.7;">
-        当前产品主线转为真实数据平台，优先展示可验证数据、API 数据和可解释计算结果。
-      </div>
-    `
-  );
-
-  appendNoteToPanel(
-    "球队深度档案",
-    "说明：本栏目前多数字段仍为待补充，后续需要接入真实来源后再展示，例如 FIFA 排名、主教练、队长、平均年龄、市场身价等。"
-  );
-
-  appendNoteToPanel(
-    "攻防基础数据",
-    "说明：本栏如显示近阶段进球/失球，应明确来自 teams.csv 或 team_recent_matches.csv。后续需要统一补充字段来源说明。"
-  );
 })();
 </script>
-<script id="team-fan-explain-layer-inline-v1">
-/* === TEAM_FAN_EXPLAIN_LAYER_INLINE_V1 === */
+<script id="apifootball-founded-year-v1">
 (function () {
-  function parseCsvText(text) {
-    const clean = String(text || "").replace(/^\uFEFF/, "").trim();
-    if (!clean) return [];
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+    text = String(text || "").replace(/^\uFEFF/, "");
 
-    const lines = clean.split(/\r?\n/);
-    const headers = lines.shift().split(",").map(function (h) {
-      return h.trim().replace(/^"|"$/g, "");
-    });
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
 
-    return lines.map(function (line) {
-      const cells = [];
-      let cur = "";
-      let inQuotes = false;
-
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        const next = line[i + 1];
-
-        if (ch === '"' && inQuotes && next === '"') {
-          cur += '"';
-          i++;
-        } else if (ch === '"') {
-          inQuotes = !inQuotes;
-        } else if (ch === "," && !inQuotes) {
-          cells.push(cur);
-          cur = "";
-        } else {
-          cur += ch;
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
         }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
       }
+    }
 
-      cells.push(cur);
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
 
-      const row = {};
-      headers.forEach(function (h, idx) {
-        row[h] = String(cells[idx] || "").trim();
-      });
-      return row;
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows.filter(r => r.some(x => String(x || "").trim() !== "")).map(r => {
+      const obj = {};
+      headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+      return obj;
     });
   }
 
-  function safe(v, fallback) {
-    const s = String(v == null ? "" : v).trim();
-    return s || (fallback || "—");
+  function getTeamCode() {
+    const params = new URLSearchParams(window.location.search);
+    return String(params.get("code") || params.get("team") || params.get("team_code") || "MEX").trim().toUpperCase();
   }
 
-  function getTeamCodeFromUrl() {
-    const params = new URLSearchParams(location.search);
-    return String(params.get("code") || params.get("id") || "").trim().toUpperCase();
-  }
-
-  function normalizeName(v) {
-    return String(v || "").trim().toLowerCase();
-  }
-
-  function labelTone(value) {
-    const v = String(value || "");
-    if (v.includes("高") || v.includes("稳") || v.includes("压制")) return "background:#dcfce7;color:#047857;border-color:#86efac;";
-    if (v.includes("风险")) return "background:#fee2e2;color:#b91c1c;border-color:#fecaca;";
-    if (v.includes("偏低")) return "background:#fef3c7;color:#92400e;border-color:#fde68a;";
-    return "background:#e0f2fe;color:#0369a1;border-color:#bae6fd;";
-  }
-
-  function badge(label, value) {
-    return `
-      <div style="border:1px solid var(--border);background:#f8fcfb;border-radius:16px;padding:14px;">
-        <div style="font-size:12px;color:var(--muted);font-weight:900;">${label}</div>
-        <div style="display:inline-block;margin-top:8px;padding:7px 10px;border-radius:999px;border:1px solid;${labelTone(value)}font-weight:1000;">
-          ${safe(value)}
-        </div>
-      </div>
-    `;
-  }
-
-  async function loadCsv(path) {
-    const res = await fetch(path + "?v=" + Date.now());
-    if (!res.ok) throw new Error(path + " 加载失败");
-    return parseCsvText(await res.text());
-  }
-
-  function findInsertTarget() {
-    return document.querySelector("main") || document.querySelector(".container") || document.body;
-  }
-
-  function insertAfterBestAnchor(section) {
-    const target = findInsertTarget();
-
-    // 优先插在顶部球队 Hero 卡片下面。
-    // 不再写死 France / 法国，避免不同球队页面插入位置不一致。
-    const anchors = Array.from(document.querySelectorAll("section, .panel, .card, .team-card, .hero, header"));
-
-    const heroAnchor = anchors.find(function (el) {
-      const text = (el.innerText || "").trim();
-      return (
-        text.includes("ELO 评分") &&
-        text.includes("近5场状态") &&
-        text.includes("进失球")
-      );
-    });
-
-    if (heroAnchor && heroAnchor.parentNode) {
-      heroAnchor.insertAdjacentElement("afterend", section);
-      return;
-    }
-
-    // 兜底：插在第一个主要内容卡片后面，保证位置尽量靠上。
-    const firstPanel = anchors.find(function (el) {
-      const text = (el.innerText || "").trim();
-      return text.length > 0 && !text.includes("首页") && !text.includes("VIP分析");
-    });
-
-    if (firstPanel && firstPanel.parentNode) {
-      firstPanel.insertAdjacentElement("afterend", section);
-      return;
-    }
-
-    if (target.firstElementChild) {
-      target.firstElementChild.insertAdjacentElement("afterend", section);
-    } else {
-      target.appendChild(section);
-    }
-  }
-
-  async function renderTeamFanExplainLayer() {
-    if (document.getElementById("team-fan-explain-layer")) return;
-
-    const code = getTeamCodeFromUrl();
-    if (!code) return;
-
-    let profiles = [];
-    let rows = [];
-
+  async function injectFoundedYear() {
     try {
-      const loaded = await Promise.all([
-        loadCsv("./data/apifootball_team_profiles_48.csv"),
-        loadCsv("./data/team_style_interpretation_v2_draft.csv")
-      ]);
-      profiles = loaded[0] || [];
-      rows = loaded[1] || [];
+      if (document.querySelector("[data-apifootball-founded-year='1']")) return;
+
+      const code = getTeamCode();
+      const text = await fetch("data/apifootball_team_profiles_48.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text);
+      const row = rows.find(r => String(r.local_code || "").trim().toUpperCase() === code);
+      if (!row || !row.founded) return;
+
+      const infoList = document.querySelector(".team-panel .info-list");
+      if (!infoList) return;
+
+      const item = document.createElement("div");
+      item.setAttribute("data-apifootball-founded-year", "1");
+      item.innerHTML = `<b>成立年份：</b> ${row.founded}`;
+      infoList.appendChild(item);
     } catch (err) {
-      console.warn("球队解释层加载失败：", err);
-      return;
+      console.warn("成立年份接入失败：", err);
     }
-
-    const profile = profiles.find(function (p) {
-      return String(p.local_code || "").trim().toUpperCase() === code;
-    });
-
-    const teamNameCandidates = [
-      profile && profile.api_team_name,
-      profile && profile.local_name,
-      code
-    ].filter(Boolean).map(normalizeName);
-
-    const row = rows.find(function (r) {
-      return teamNameCandidates.includes(normalizeName(r.team_name));
-    });
-
-    const section = document.createElement("section");
-    section.id = "team-fan-explain-layer";
-    section.className = "panel";
-    section.style.margin = "20px 0 26px";
-
-    if (!row) {
-      section.innerHTML = `
-        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
-          <div>
-            <h2 style="margin:0;font-size:26px;">一眼看懂这支球队</h2>
-            <p style="margin:8px 0 0;color:var(--muted);line-height:1.8;">
-              暂无该队 2022 世界杯历史样本。后续将结合最新赛程、赔率和真实比赛数据补充。
-            </p>
-          </div>
-          <span style="padding:9px 14px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:1000;">样本待补充</span>
-        </div>
-      `;
-    } else {
-      section.innerHTML = `
-        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
-          <div>
-            <h2 style="margin:0;font-size:26px;">一眼看懂这支球队</h2>
-            <p style="margin:8px 0 0;color:var(--muted);line-height:1.8;">
-              把 API-Football 历史数据翻译成球迷能理解的判断语言。
-            </p>
-          </div>
-          <span style="padding:9px 14px;border-radius:999px;background:#dcfce7;color:#047857;font-weight:1000;">客观数据解释</span>
-        </div>
-
-        <div style="margin-top:16px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(15,23,42,.03));border:1px solid rgba(16,185,129,.24);">
-          <div style="font-size:13px;color:#047857;font-weight:1000;margin-bottom:8px;">核心解读</div>
-          <div style="font-size:16px;line-height:1.9;font-weight:800;color:#062b2f;">
-            ${safe(row.fan_readable_summary)}
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px;">
-          ${badge("进攻火力", row.attack_level)}
-          ${badge("防守稳定性", row.defense_stability)}
-          ${badge("控球风格", row.possession_style)}
-          ${badge("射正质量", row.shot_quality_label)}
-        </div>
-
-        <div style="margin-top:16px;border-radius:18px;background:#f8fcfb;border:1px solid var(--border);padding:16px;">
-          <div style="font-size:13px;color:var(--muted);font-weight:1000;margin-bottom:8px;">比赛判断参考</div>
-          <div style="font-size:15px;line-height:1.8;color:#0f172a;font-weight:800;">
-            ${safe(row.match_judgement_reference)}
-          </div>
-          <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.7;">
-            数据依据：${safe(row.data_basis)}。当前为 2022 世界杯历史样本，不代表实时预测。
-          </div>
-        </div>
-      `;
-    }
-
-    insertAfterBestAnchor(section);
   }
 
-  setTimeout(renderTeamFanExplainLayer, 800);
-  setTimeout(renderTeamFanExplainLayer, 1600);
+  document.addEventListener("DOMContentLoaded", injectFoundedYear);
 })();
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 
 

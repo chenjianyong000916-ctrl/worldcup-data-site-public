@@ -109,8 +109,21 @@ function teamId(team) {
   return first(team, ["team_id", "id", "code"]);
 }
 
+
+function cnTeamNameByCode558(code, fallback) {
+  const map = {
+    MEX:"墨西哥", RSA:"南非", KOR:"韩国", CZE:"捷克", CAN:"加拿大", BIH:"波黑", QAT:"卡塔尔", SUI:"瑞士",
+    BRA:"巴西", MAR:"摩洛哥", HAI:"海地", SCO:"苏格兰", AUS:"澳大利亚", TUR:"土耳其", NED:"荷兰", JPN:"日本",
+    TUN:"突尼斯", SWE:"瑞典", FRA:"法国", SEN:"塞内加尔", NOR:"挪威", IRQ:"伊拉克", POR:"葡萄牙", COL:"哥伦比亚",
+    UZB:"乌兹别克斯坦", COD:"刚果民主共和国", GER:"德国", CUW:"库拉索", CIV:"科特迪瓦", ECU:"厄瓜多尔",
+    ARG:"阿根廷", AUT:"奥地利", ALG:"阿尔及利亚", JOR:"约旦", USA:"美国", PAR:"巴拉圭", BEL:"比利时", EGY:"埃及",
+    ESP:"西班牙", CPV:"佛得角", KSA:"沙特阿拉伯", URU:"乌拉圭", ENG:"英格兰", CRO:"克罗地亚", PAN:"巴拿马", GHA:"加纳"
+  };
+  const key = String(code || "").toUpperCase();
+  return map[key] || fallback || "待定";
+}
 function teamName(team) {
-  return first(team, ["name_zh", "team_name_zh", "name_en", "name", "team_name"]) || EMPTY;
+  return first(team, ["name_cn", "name_zh", "team_name_zh", "name", "team_name", "name_en"]) || EMPTY;
 }
 
 function teamElo(team) {
@@ -326,7 +339,7 @@ function getFlagCode(code) {
     USA:"us", JPN:"jp", AUS:"au", NZL:"nz", ITA:"it", NED:"nl", BEL:"be",
     CRO:"hr", DEN:"dk", POL:"pl", URU:"uy", COL:"co", ECU:"ec", SEN:"sn",
     GHA:"gh", MAR:"ma", TUN:"tn", IRN:"ir", KSA:"sa", NOR:"no", SWE:"se",
-    AUT:"at", TUR:"tr", UKR:"ua", CMR:"cm", NGA:"ng", CIV:"ci", EGY:"eg"
+    AUT:"at", TUR:"tr", UKR:"ua", CMR:"cm", NGA:"ng", CIV:"ci", EGY:"eg", IRQ:"iq", COD:"cd", CUW:"cw", CPV:"cv", ALG:"dz", JOR:"jo", UZB:"uz", PAN:"pa"
   };
   return map[String(code).toUpperCase()] || "un";
 }
@@ -414,8 +427,8 @@ async function renderHomeGroupsV2(teams) {
                 }
 
                 <div class="group-team-info">
-                  <strong>${name}</strong>
-                  <span>${code}</span>
+                  <a href="team.html?code=${encodeURIComponent(code)}" style="text-decoration:none;color:inherit;"><strong>${name}</strong></a>
+                <span>${code}</span>
                 </div>
 
                 <em class="${
@@ -546,6 +559,7 @@ async function renderGroupPageV1(teams, matches) {
   const teamsPanel = document.querySelector("#group-teams-panel");
   const matchesPanel = document.querySelector("#group-matches-panel");
   const standingsPanel = document.querySelector("#group-standings-panel");
+  const teamContextPanel = document.querySelector("#group-team-context-panel");
 
   if (title) title.textContent = `${groupCode} 组详情`;
   if (heroCode) heroCode.textContent = groupCode;
@@ -594,7 +608,7 @@ async function renderGroupPageV1(teams, matches) {
             <div class="group-team-row">
               ${flag ? `<img class="group-flag" src="${flag}" alt="${name}">` : `<div class="group-flag-placeholder">?</div>`}
               <div class="group-team-info">
-                <strong>${name}</strong>
+                <a href="team.html?code=${encodeURIComponent(code)}" style="text-decoration:none;color:inherit;"><strong>${name}</strong></a>
                 <span>${code}</span>
               </div>
               <em class="${row.status === "confirmed" ? "ok" : "pending"}">${status}</em>
@@ -609,6 +623,67 @@ async function renderGroupPageV1(teams, matches) {
       return g === groupCode || g === ("GROUP " + groupCode);
     });
 
+    if (teamContextPanel) {
+      const [rankText, wc22Text] = await Promise.all([
+        fetch("./data/fifa_rank_reference.csv?v=" + Date.now()).then(r => r.ok ? r.text() : "").catch(() => ""),
+        fetch("./data/worldcup_2022_standings.csv?v=" + Date.now()).then(r => r.ok ? r.text() : "").catch(() => "")
+      ]);
+
+      const parseCsv = (text) => {
+        const lines = String(text || "").replace(/\r/g, "").split("\n").filter(Boolean);
+        if (lines.length < 2) return [];
+        const headers = lines[0].split(",").map(x => x.trim());
+        return lines.slice(1).map(line => {
+          const cols = line.split(",");
+          const obj = {};
+          headers.forEach((h, i) => obj[h] = (cols[i] || "").trim());
+          return obj;
+        });
+      };
+
+      const rankRows = parseCsv(rankText);
+      const wc22Rows = parseCsv(wc22Text);
+
+      teamContextPanel.innerHTML = groupRows
+        .sort((a, b) => Number(a.slot || 0) - Number(b.slot || 0))
+        .map(row => {
+          const code = String(row.team_id || "").toUpperCase();
+          const team = teamMap[code];
+          const name = team?.name || row.team_name || code || "TBD";
+          const flag = team?.flag || "";
+          const rank = rankRows.find(x => String(x.team_code || "").toUpperCase() === code);
+          const wc22 = wc22Rows.find(x =>
+            String(x.team || "").toLowerCase() === String(name || "").toLowerCase() ||
+            (name === "South Korea" && String(x.team || "").toLowerCase().includes("korea"))
+          );
+
+          const isPlaceholder = code.includes("PLAYOFF") || name.includes("Playoff");
+          const fifaText = rank?.fifa_rank
+            ? `FIFA 排名：${rank.fifa_rank}`
+            : (isPlaceholder ? "FIFA 排名：待官方落位后接入" : "FIFA 排名：暂无参考值");
+
+          const dateText = rank?.ranking_date ? `排名日期：${rank.ranking_date}` : "排名日期：-";
+          const wcText = wc22
+            ? `2022 世界杯：${wc22.group} 第 ${wc22.rank}，${wc22.points} 分`
+            : (isPlaceholder ? "2022 世界杯：待官方落位后判断" : "2022 世界杯：未参加 2022 正赛 / 暂无正赛样本");
+
+          return `
+            <a class="home-card home-link-card" href="team.html?code=${encodeURIComponent(code)}" style="text-decoration:none;color:inherit;">
+              <div class="group-team-row">
+                ${flag ? `<img class="group-flag" src="${flag}" alt="${name}">` : `<div class="group-flag-placeholder">?</div>`}
+                <div class="group-team-info">
+                  <strong>${name}</strong>
+                  <span>${code}</span>
+                </div>
+              </div>
+              <p style="margin:12px 0 0;color:#475569;font-weight:800;">${fifaText}</p>
+              <p style="margin:6px 0 0;color:#64748b;font-size:13px;">${dateText}</p>
+              <p style="margin:8px 0 0;color:#64748b;font-size:13px;line-height:1.6;">${wcText}</p>
+            </a>
+          `;
+        }).join("");
+    }
+
     if (standingsPanel) {
       const standingsTeams = groupRows
         .sort((a, b) => Number(a.slot || 0) - Number(b.slot || 0))
@@ -621,6 +696,7 @@ async function renderGroupPageV1(teams, matches) {
             code,
             name: team?.name || row.team_name || code || "TBD",
             flag: team?.flag || "",
+            originalOrder: Number(row.slot || index + 1),
             played: 0,
             win: 0,
             draw: 0,
@@ -686,7 +762,7 @@ async function renderGroupPageV1(teams, matches) {
         b.points - a.points ||
         b.goalDiff - a.goalDiff ||
         b.goalsFor - a.goalsFor ||
-        a.name.localeCompare(b.name)
+        a.originalOrder - b.originalOrder
       );
 
       standingsTeams.forEach((team, index) => {
@@ -711,10 +787,10 @@ async function renderGroupPageV1(teams, matches) {
           ${standingsTeams.map(team => `
             <div class="standings-row">
               <span>${team.rank}</span>
-              <span class="standing-team">
+              <a class="standing-team" href="team.html?code=${encodeURIComponent(team.code)}" style="text-decoration:none;color:inherit;">
                 ${team.flag ? `<img src="${team.flag}" alt="${team.name} flag">` : ""}
                 <strong>${team.name}</strong>
-              </span>
+              </a>
               <span>${team.played}</span>
               <span>${team.win}</span>
               <span>${team.draw}</span>
@@ -753,9 +829,22 @@ async function renderGroupPageV1(teams, matches) {
       ];
 
       matchesPanel.innerHTML = groupMatches.map((m, index) => {
-        const pair = pairings[index] || [];
-        const left = groupTeams[pair[0]] || { name: "TBD", flag: "" };
-        const right = groupTeams[pair[1]] || { name: "TBD", flag: "" };
+        const rawCodeA = String(pick(m, ["team_a_code", "teamACode"], "")).toUpperCase();
+        const rawCodeB = String(pick(m, ["team_b_code", "teamBCode"], "")).toUpperCase();
+        const mappedA = teamMap[rawCodeA];
+        const mappedB = teamMap[rawCodeB];
+
+        const left = {
+          code: rawCodeA,
+          name: mappedA?.name || pick(m, ["team_a", "teamA"], "TBD"),
+          flag: mappedA?.flag || ""
+        };
+
+        const right = {
+          code: rawCodeB,
+          name: mappedB?.name || pick(m, ["team_b", "teamB"], "TBD"),
+          flag: mappedB?.flag || ""
+        };
 
         return `
           <article class="home-card schedule-poster-card">
@@ -960,7 +1049,7 @@ function renderTeamList(teams) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
     <div class="panel-head">
@@ -1007,17 +1096,27 @@ function renderMatch(teams, matches) {
   const placeholderA = first(match, ["team_a_placeholder", "teamAPlaceholder", "home_placeholder"], "");
   const placeholderB = first(match, ["team_b_placeholder", "teamBPlaceholder", "away_placeholder"], "");
 
-  const aName =
+  const aName = cnTeamNameByCode558(
+    codeA,
+    a.name_cn ||
+    a.name_zh ||
+    a.team_name_zh ||
     a.name ||
     (rawAName && rawAName !== "TBD" && rawAName !== "待定" ? rawAName : "") ||
     placeholderA ||
-    "一方";
+    "一方"
+  );
 
-  const bName =
+  const bName = cnTeamNameByCode558(
+    codeB,
+    b.name_cn ||
+    b.name_zh ||
+    b.team_name_zh ||
     b.name ||
     (rawBName && rawBName !== "TBD" && rawBName !== "待定" ? rawBName : "") ||
     placeholderB ||
-    "另一方";
+    "另一方"
+  );
 
   renderSimpleAIProbability(match, a, b);
 
@@ -1061,11 +1160,6 @@ function renderMatch(teams, matches) {
     if (cells[1]) cells[1].textContent = safe(first(a, fields[i] || []));
     if (cells[2]) cells[2].textContent = safe(first(b, fields[i] || []));
   });
-
-  const aiBox = document.querySelector(".ai-box p");
-  if (aiBox) {
-    aiBox.textContent = `${aName} 与 ${bName} 的比赛已接入基础数据。本页当前基于 ELO、FIFA排名、近期状态、进失球和能力评分做赛前辅助阅读，后续可继续接入赔率、伤停、天气与新闻信号。`;
-  }
 }
 
 /* ---------- VIP页 ---------- */
@@ -1334,7 +1428,7 @@ function renderGroupsOnIndex(groups) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px;">
@@ -1531,7 +1625,7 @@ function getStrengthText(a, b) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
         <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px;">
@@ -1858,7 +1952,7 @@ function getStrengthText(a, b) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px;">
@@ -2199,7 +2293,7 @@ function getStrengthText(a, b) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
       <div style="font-size:14px;color:#38bdf8;font-weight:800;">MATCH ANALYSIS DETAIL</div>
@@ -2334,7 +2428,7 @@ function getStrengthText(a, b) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
       <h2 style="margin:0 0 16px;font-size:26px;">核心数据分析</h2>
@@ -2477,7 +2571,7 @@ function getStrengthText(a, b) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
       <div style="font-size:14px;color:#38bdf8;font-weight:800;">DATA HEALTH CHECK</div>
@@ -3052,7 +3146,7 @@ function renderSimpleAIProbability(match, a, b) {
     "低";
 
   const aiSummaryText =
-    `${a.name} vs ${b.name}：${a.name} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${b.name} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
+    `${cnTeamNameByCode558(codeA, a.name)} vs ${cnTeamNameByCode558(codeB, b.name)}：${cnTeamNameByCode558(codeA, a.name)} 胜率 ${Math.round(aWin)}%，平局 ${Math.round(draw)}%，${cnTeamNameByCode558(codeB, b.name)} 胜率 ${Math.round(bWin)}%。模型倾向：${aWin > bWin ? a.name : b.name} 略占优势。爆冷风险：${Math.abs(aWin - bWin) < 12 ? "较高" : Math.abs(aWin - bWin) < 22 ? "中等" : "较低"}。`;
 
   panel.innerHTML = `
     <div style="margin-bottom:18px;padding:16px 18px;border-radius:18px;background:#eff6ff;border:1px solid #bfdbfe;">
@@ -3075,8 +3169,8 @@ function renderSimpleAIProbability(match, a, b) {
         Math.abs(aWin - bWin) < 10
           ? "双方数据接近，本场不确定性较高。"
           : aWin > bWin
-          ? `${a.name} 当前模型优势更明显，但仍需关注临场状态。`
-          : `${b.name} 当前模型优势更明显，但仍需关注临场状态。`
+          ? `${cnTeamNameByCode558(codeA, a.name)} 当前模型优势更明显，但仍需关注临场状态。`
+          : `${cnTeamNameByCode558(codeB, b.name)} 当前模型优势更明显，但仍需关注临场状态。`
       }
     </div>
 
@@ -3112,7 +3206,7 @@ function renderSimpleAIProbability(match, a, b) {
       <div style="margin-top:18px;">
 
         <div style="margin-bottom:12px;">
-          <strong>${a.name}</strong>
+          <strong>${cnTeamNameByCode558(codeA, a.name)}</strong>
           <div style="height:10px;background:#dbeafe;border-radius:999px;margin-top:6px;overflow:hidden;">
             <div style="width:${Math.round(aWin)}%;height:100%;background:#3b82f6;"></div>
           </div>
@@ -3128,7 +3222,7 @@ function renderSimpleAIProbability(match, a, b) {
         </div>
 
         <div style="margin-bottom:18px;">
-          <strong>${b.name}</strong>
+          <strong>${cnTeamNameByCode558(codeB, b.name)}</strong>
           <div style="height:10px;background:#fef3c7;border-radius:999px;margin-top:6px;overflow:hidden;">
             <div style="width:${Math.round(bWin)}%;height:100%;background:#f59e0b;"></div>
           </div>
@@ -3169,12 +3263,12 @@ function renderSimpleAIProbability(match, a, b) {
           </div>
 
           <div style="margin-top:10px;">
-            ${a.name}：
+            ${cnTeamNameByCode558(codeA, a.name)}：
             ${renderLast5Dots(a.last5)}
           </div>
 
           <div style="margin-top:10px;">
-            ${b.name}：
+            ${cnTeamNameByCode558(codeB, b.name)}：
             ${renderLast5Dots(b.last5)}
           </div>
         </div>
@@ -3199,8 +3293,8 @@ function renderSimpleAIProbability(match, a, b) {
         Math.abs(aWin - bWin) < 10
           ? "双方数据接近，本场不确定性较高。"
           : aWin > bWin
-          ? `${a.name} 当前模型优势更明显，但仍需关注临场状态。`
-          : `${b.name} 当前模型优势更明显，但仍需关注临场状态。`
+          ? `${cnTeamNameByCode558(codeA, a.name)} 当前模型优势更明显，但仍需关注临场状态。`
+          : `${cnTeamNameByCode558(codeB, b.name)} 当前模型优势更明显，但仍需关注临场状态。`
       }
     </div>
 
@@ -3232,8 +3326,8 @@ function renderSimpleAIProbability(match, a, b) {
         <strong>模型倾向：</strong>
         ${
           aWin > bWin
-            ? `${a.name} 略占优势`
-            : `${b.name} 略占优势`
+            ? `${cnTeamNameByCode558(codeA, a.name)} 略占优势`
+            : `${cnTeamNameByCode558(codeB, b.name)} 略占优势`
         }
       </div>
 
@@ -3977,5 +4071,19 @@ document.addEventListener("DOMContentLoaded", renderDataSourcesPanel);
     setTimeout(activateCityCards, 1800);
   });
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

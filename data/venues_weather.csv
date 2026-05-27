@@ -1,0 +1,11 @@
+match_id,city,stadium,latitude,longitude,altitude,temperature,humidity,wind_speed,rain_probability,weather_condition,source,last_updated
+1,Mexico City,Estadio Azteca,19.3029,-99.1505,2200,17,71,4,93,light_rain,open_meteo_api,2026-05-11
+M002,Guadalajara,Estadio Akron,20.6818,-103.4622,1566,28,42,9,8,sunny,local_sample,2026-05-08
+M003,Monterrey,Estadio BBVA,25.6688,-100.2447,540,31,51,13,10,sunny,local_sample,2026-05-08
+M004,Los Angeles,SoFi Stadium,33.9535,-118.3392,38,23,58,12,5,clear,local_sample,2026-05-08
+M005,New York,MetLife Stadium,40.8135,-74.0745,2,26,61,14,18,cloudy,local_sample,2026-05-08
+M006,Dallas,AT&T Stadium,32.7473,-97.0945,163,33,55,16,15,hot,local_sample,2026-05-08
+M007,Miami,Hard Rock Stadium,25.9580,-80.2389,2,30,72,15,28,humid,local_sample,2026-05-08
+M008,Seattle,Lumen Field,47.5952,-122.3316,5,19,68,10,35,light_rain,local_sample,2026-05-08
+M009,Toronto,BMO Field,43.6332,-79.4186,76,22,64,13,20,cloudy,local_sample,2026-05-08
+M010,Vancouver,BC Place,49.2767,-123.1119,2,18,70,9,32,light_rain,local_sample,2026-05-08

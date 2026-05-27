@@ -1,5 +1,0 @@
-﻿PUBLIC_TRIAL_210
-Generated at: 2026-05-18 16:07:00
-Purpose: 2026 World Cup Data Analysis Assistant public trial static package.
-Includes: 2026 public title positioning, team fan explanation layer, odds display, public static data only.
-Excludes: API keys, raw JSON, fetch scripts, private docs, backups, git history.

@@ -427,6 +427,179 @@
     }
   }
 </style>
+<style id="vip-public-polish-404">
+  .vip-public-note-404{
+    margin:18px 0 0;padding:18px 22px;border-radius:18px;
+    background:#f0fdfa;border:1px solid #bdeade;
+    color:#315b61;line-height:1.75;font-weight:700;
+  }
+  .vip-public-note-404 strong{color:#0f2a2e;}
+</style>
+<style id="vip-cleanup-550">
+  /* 550/100 - hide empty placeholder ranking blocks and fix VIP layout */
+  #data-sources-panel{
+    max-width:1180px;
+    margin:32px auto !important;
+    padding:28px;
+    border-radius:28px;
+    background:#ffffff;
+    border:1px solid rgba(148,163,184,.24);
+    box-shadow:0 18px 45px rgba(15,23,42,.08);
+    box-sizing:border-box;
+  }
+  #data-sources-panel .panel-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:18px;
+    margin-bottom:18px;
+  }
+  #data-sources-panel h3{
+    font-size:30px;
+    margin:0 0 10px;
+    color:#0f2a2e;
+  }
+  #data-sources-panel p{
+    margin:0;
+    color:#64748b;
+    font-size:16px;
+    line-height:1.7;
+  }
+  #data-sources-panel .mini-label{
+    display:inline-flex;
+    align-items:center;
+    padding:10px 18px;
+    border-radius:999px;
+    background:#e8f1ff;
+    color:#1d4ed8;
+    font-weight:900;
+    font-size:13px;
+    letter-spacing:.08em;
+    white-space:nowrap;
+  }
+
+  /* 当前没有可靠数据的榜单先隐藏，避免 VIP 页出现大量空表 */
+  .vip-section.data-card:has(h3:nth-child(1)),
+  section.data-card:has(h3){
+    box-sizing:border-box;
+  }
+
+  /* 通过标题精准隐藏空榜单区块 */
+  .data-card:has(h3):has(td):has(.tag.orange),
+  .data-card:has(h3):has(td):has(.tag.blue){
+    display:none !important;
+  }
+
+  /* 兜底：保留后续有真实价值说明的模块 */
+  #vip-product-value-v2,
+  #vip-match-signals-v1,
+  #vip-api-value-v2,
+  #data-sources-panel{
+    display:block !important;
+  }
+
+  .vip-hero-stats strong{
+    font-size:22px;
+    line-height:1.2;
+  }
+
+  @media(max-width:900px){
+    #data-sources-panel{
+      margin:24px 14px !important;
+      padding:22px;
+    }
+    #data-sources-panel .panel-head{
+      flex-direction:column;
+    }
+  }
+</style>
+<style id="vip-clean-layout-552">
+  /* 552/100 - VIP clean layout */
+  .vip-page,
+  .vip-container,
+  .vip-hero,
+  .vip-section,
+  .data-card,
+  .data-panel,
+  #data-sources-panel,
+  #vip-product-value-v2,
+  #vip-api-value-v2{
+    max-width:1180px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    box-sizing:border-box !important;
+  }
+
+  .vip-section,
+  .data-card,
+  .data-panel,
+  #data-sources-panel,
+  #vip-product-value-v2,
+  #vip-api-value-v2{
+    border-radius:28px !important;
+  }
+
+  .vip-section p,
+  .data-card p,
+  .data-panel p,
+  #data-sources-panel p{
+    max-width:920px;
+    line-height:1.65 !important;
+  }
+
+  .vip-section li,
+  .data-card li,
+  .data-panel li{
+    line-height:1.55 !important;
+    margin-bottom:6px !important;
+  }
+
+  .vip-hero h2{
+    letter-spacing:-.04em;
+  }
+
+  .vip-hero > p,
+  .vip-hero .lead,
+  .vip-hero-subtitle{
+    max-width:880px !important;
+    font-size:17px !important;
+    line-height:1.65 !important;
+  }
+
+  .vip-hero-stats p{
+    font-size:14px !important;
+    line-height:1.5 !important;
+    color:#64748b !important;
+  }
+
+  .vip-public-note-404,
+  .vip-disclaimer,
+  .vip-note{
+    max-width:1180px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+
+  /* 先把过长解释压缩成产品卡片感，不要像文章 */
+  .vip-long-text,
+  .vip-story-block{
+    display:none !important;
+  }
+
+  @media(max-width:900px){
+    .vip-page,
+    .vip-container,
+    .vip-hero,
+    .vip-section,
+    .data-card,
+    .data-panel,
+    #data-sources-panel,
+    #vip-product-value-v2,
+    #vip-api-value-v2{
+      max-width:calc(100% - 28px) !important;
+    }
+  }
+</style>
 </head>
 
 <body>
@@ -455,55 +628,215 @@
         <div class="vip-hero-top">
           <div>
             <span class="eyebrow">VIP ANALYSIS CENTER</span>
-            <h2>AI综合分析中心</h2>
+            <h2>赛前深度数据中心</h2>
             <p>
               VIP层不直接给结果建议，而是整合比赛事实、球队数据、市场信号与模型偏差，
               帮助用户理解哪些比赛更值得深入分析。
             </p>
           </div>
-          <span class="vip-status-pill">数据待接入</span>
+          <span class="vip-status-pill">公开试运行版</span>
         </div>
 
         <div class="vip-summary-grid">
           <div class="vip-summary-card">
             <span>高分歧比赛</span>
             <strong>暂无可靠数据</strong>
-            <p>等待模型与市场数据接入。</p>
+            <p>当前公开版先展示产品结构，深度市场数据后续接入。</p>
           </div>
 
           <div class="vip-summary-card">
             <span>高风险比赛</span>
             <strong>暂无可靠数据</strong>
-            <p>等待风险指标接入。</p>
+            <p>后续接入伤停、赛程、赔率变化等风险指标。</p>
           </div>
 
           <div class="vip-summary-card">
             <span>被低估球队</span>
             <strong>暂无可靠数据</strong>
-            <p>等待球队与市场偏差计算。</p>
+            <p>后续对比球队基础数据与市场隐含概率差异。</p>
           </div>
 
           <div class="vip-summary-card">
             <span>AI解释状态</span>
-            <strong>待生成</strong>
-            <p>需先接入可靠数据。</p>
+            <strong>说明开放中</strong>
+            <p>公开版先说明分析逻辑，不生成强结论。</p>
           </div>
         </div>
       </section>
 
-      <section class="vip-panel">
+      <section id="vip-market-radar-554" style="max-width:1180px;margin:32px auto;padding:30px;border-radius:30px;background:#fff;border:1px solid rgba(15,118,110,.14);box-shadow:0 18px 50px rgba(15,23,42,.08);">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:22px;">
+    <div>
+      <p style="margin:0 0 8px;color:#0f766e;font-weight:950;letter-spacing:.16em;font-size:13px;">LIVE DATA RADAR / 动态市场数据雷达</p>
+      <h2 style="margin:0;color:#0f172a;font-size:32px;line-height:1.2;">VIP 价值来自持续更新的比赛与赔率信号</h2>
+      <p style="margin:12px 0 0;color:#64748b;font-size:16px;line-height:1.65;font-weight:700;">页面动态读取 odds.csv 和 matches.csv。后续赔率、盘口、伤停和首发数据继续接入后，这里会优先变成 VIP 赛前信号入口。</p>
+    </div>
+    <span id="vip-market-radar-status-554" style="display:inline-flex;align-items:center;padding:10px 16px;border-radius:999px;background:#dcfce7;color:#047857;font-weight:950;white-space:nowrap;">正在读取</span>
+  </div>
+
+  <div id="vip-market-radar-stats-554" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px;">
+    <div style="padding:20px;border-radius:22px;background:#f8fafc;border:1px solid rgba(148,163,184,.22);">
+      <div style="color:#64748b;font-weight:900;font-size:13px;">赔率记录</div>
+      <strong data-vip-stat="oddsRecords" style="display:block;margin-top:8px;font-size:30px;color:#0f172a;">读取中</strong>
+      <p style="margin:8px 0 0;color:#64748b;line-height:1.5;">来自当前 odds.csv。</p>
+    </div>
+    <div style="padding:20px;border-radius:22px;background:#f8fafc;border:1px solid rgba(148,163,184,.22);">
+      <div style="color:#64748b;font-weight:900;font-size:13px;">赔率覆盖比赛</div>
+      <strong data-vip-stat="coveredMatches" style="display:block;margin-top:8px;font-size:30px;color:#0f172a;">读取中</strong>
+      <p style="margin:8px 0 0;color:#64748b;line-height:1.5;">可进入单场数据看板。</p>
+    </div>
+    <div style="padding:20px;border-radius:22px;background:#f8fafc;border:1px solid rgba(148,163,184,.22);">
+      <div style="color:#64748b;font-weight:900;font-size:13px;">最新赔率时间</div>
+      <strong data-vip-stat="latestTime" style="display:block;margin-top:8px;font-size:20px;color:#0f172a;">读取中</strong>
+      <p style="margin:8px 0 0;color:#64748b;line-height:1.5;">用于判断数据新鲜度。</p>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin:24px 0 14px;">
+    <h3 style="margin:0;font-size:22px;color:#0f172a;">当前已有市场数据的比赛</h3>
+    <span style="font-size:13px;font-weight:900;color:#0f766e;background:#ecfdf5;border-radius:999px;padding:8px 12px;">点击进入比赛页</span>
+  </div>
+
+  <div id="vip-market-radar-list-554" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;">
+    <div style="padding:18px;border-radius:20px;background:#f8fafc;border:1px solid rgba(148,163,184,.22);color:#64748b;font-weight:800;">正在读取赔率覆盖比赛...</div>
+  </div>
+</section>
+
+<script id="vip-market-radar-script-554">
+(function(){
+  const root = document.getElementById("vip-market-radar-554");
+  if (!root) return;
+
+  function parseCsv(text){
+    const rows = [];
+    let row = [], cell = "", inQuotes = false;
+    for (let i = 0; i < text.length; i++){
+      const ch = text[i], next = text[i + 1];
+      if (ch === '"' && inQuotes && next === '"'){ cell += '"'; i++; continue; }
+      if (ch === '"'){ inQuotes = !inQuotes; continue; }
+      if (ch === "," && !inQuotes){ row.push(cell); cell = ""; continue; }
+      if ((ch === "\n" || ch === "\r") && !inQuotes){
+        if (ch === "\r" && next === "\n") i++;
+        row.push(cell); cell = "";
+        if (row.some(v => String(v).trim() !== "")) rows.push(row);
+        row = [];
+        continue;
+      }
+      cell += ch;
+    }
+    row.push(cell);
+    if (row.some(v => String(v).trim() !== "")) rows.push(row);
+    if (!rows.length) return [];
+    const headers = rows.shift().map(h => String(h || "").trim());
+    return rows.map(r => {
+      const obj = {};
+      headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+      return obj;
+    });
+  }
+
+  function pick(obj, keys, fallback){
+    for (const k of keys){
+      if (obj && obj[k] != null && String(obj[k]).trim() !== "") return String(obj[k]).trim();
+    }
+    return fallback || "";
+  }
+
+  function setStat(name, value){
+    const el = root.querySelector('[data-vip-stat="' + name + '"]');
+    if (el) el.textContent = value;
+  }
+
+  Promise.all([
+    fetch("./data/odds.csv?v=" + Date.now()).then(r => r.ok ? r.text() : ""),
+    fetch("./data/matches.csv?v=" + Date.now()).then(r => r.ok ? r.text() : ""), fetch("./data/teams.csv?v=" + Date.now()).then(r => r.ok ? r.text() : "")
+  ]).then(([oddsText, matchesText, teamsText]) => {
+    const odds = parseCsv(oddsText);
+    const matches = parseCsv(matchesText);
+    const vipTeamCnMap558 = {};
+    parseCsv(teamsText || "").forEach(t => {
+      const code = String(t.code || t.team_id || "").toUpperCase();
+      const cn = String(t.name_cn || "").trim();
+      if (code && cn) vipTeamCnMap558[code] = cn;
+    });
+    const matchMap = {};
+    matches.forEach(m => {
+      const id = pick(m, ["match_id","id"], "");
+      if (id) matchMap[id] = m;
+    });
+
+    const grouped = {};
+    odds.forEach(o => {
+      const id = pick(o, ["match_id","id"], "");
+      if (!id) return;
+      if (!grouped[id]) grouped[id] = [];
+      grouped[id].push(o);
+    });
+
+    const ids = Object.keys(grouped).sort((a,b) => Number(a) - Number(b));
+    const latest = odds
+      .map(o => pick(o, ["recorded_at","last_updated","updated_at","timestamp"], ""))
+      .filter(Boolean)
+      .sort()
+      .pop() || "暂无时间";
+
+    setStat("oddsRecords", odds.length + " 条");
+    setStat("coveredMatches", ids.length + " 场");
+    setStat("latestTime", latest.replace("T", " ").replace("Z", ""));
+
+    const status = document.getElementById("vip-market-radar-status-554");
+    if (status) status.textContent = "动态读取完成";
+
+    const list = document.getElementById("vip-market-radar-list-554");
+    if (!list) return;
+
+    const cards = ids.slice(0, 8).map(id => {
+      const m = matchMap[id] || {};
+      const aCode = pick(m, ["team_a_code","teamACode"], ""); const a = vipTeamCnMap558[String(aCode).toUpperCase()] || pick(m, ["team_a","teamA","team_a_name"], aCode || "待定");
+      const bCode = pick(m, ["team_b_code","teamBCode"], ""); const b = vipTeamCnMap558[String(bCode).toUpperCase()] || pick(m, ["team_b","teamB","team_b_name"], bCode || "待定");
+      const date = pick(m, ["date","match_date"], "");
+      const city = pick(m, ["city"], "");
+      const stadium = pick(m, ["stadium"], "");
+      const rows = grouped[id] || [];
+      const books = Array.from(new Set(rows.map(x => pick(x, ["bookmaker","bookmaker_name"], "")).filter(Boolean))).length;
+
+      return `
+        <a href="./match.html?id=${encodeURIComponent(id)}" style="display:block;text-decoration:none;color:inherit;padding:18px;border-radius:20px;background:#f8fafc;border:1px solid rgba(148,163,184,.22);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;">
+            <span style="color:#0f766e;font-weight:950;font-size:13px;">Match ${id}</span>
+            <span style="color:#64748b;font-weight:850;font-size:13px;">${date}</span>
+          </div>
+          <div style="font-size:20px;font-weight:950;color:#0f172a;line-height:1.25;">${a} <span style="color:#f59e0b;">vs</span> ${b}</div>
+          <div style="margin-top:10px;color:#64748b;font-weight:750;line-height:1.45;">${city}${stadium ? " · " + stadium : ""}</div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="padding:7px 10px;border-radius:999px;background:#ecfdf5;color:#047857;font-weight:900;font-size:12px;">赔率记录 ${rows.length}</span>
+            <span style="padding:7px 10px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:900;font-size:12px;">博彩公司 ${books}</span>
+          </div>
+        </a>
+      `;
+    }).join("");
+
+    list.innerHTML = cards || '<div style="padding:18px;border-radius:20px;background:#f8fafc;border:1px solid rgba(148,163,184,.22);color:#64748b;font-weight:800;">当前 odds.csv 暂无可展示比赛。</div>';
+  }).catch(() => {
+    const status = document.getElementById("vip-market-radar-status-554");
+    if (status) status.textContent = "读取失败";
+    const list = document.getElementById("vip-market-radar-list-554");
+    if (list) list.innerHTML = '<div style="padding:18px;border-radius:20px;background:#fef2f2;border:1px solid rgba(239,68,68,.18);color:#b91c1c;font-weight:900;">动态数据读取失败，请检查 data/odds.csv 和 data/matches.csv。</div>';
+  });
+})();
+</script>
+<section class="vip-panel">
         <div class="panel-head">
           <div>
-            <h3>AI综合分析</h3>
-            <p>基于已展示数据进行整合解释，不替用户做决定。</p>
+            <h3>VIP 数据解读方向</h3><p>只整理可验证数据，不替用户预测赛果。</p>
           </div>
           <span class="mini-label">AI SUMMARY</span>
         </div>
 
         <div class="analysis-box">
           <p>
-            当前阶段暂未接入完整比赛数据、球队数据与市场数据，因此不生成强结论。
-            当数据接入后，AI综合分析将重点解释：
+            当前公开试运行版只展示可公开的数据结构与分析逻辑；深度赔率、临场盘口、伤停首发和模型偏差等内容将在后续通过受控接口逐步开放。
+            后续 VIP 重点呈现：
           </p>
 
           <ul>
@@ -539,22 +872,22 @@
               <td>#1</td>
               <td>暂无可靠数据</td>
               <td>暂无可靠数据</td>
-              <td>等待模型与市场数据接入</td>
-              <td><span class="tag orange">待计算</span></td>
+              <td>公开版展示逻辑，深度数据后续开放</td>
+              <td><span class="tag orange">后续开放</span></td>
             </tr>
             <tr>
               <td>#2</td>
               <td>暂无可靠数据</td>
               <td>暂无可靠数据</td>
-              <td>等待模型与市场数据接入</td>
-              <td><span class="tag orange">待计算</span></td>
+              <td>公开版展示逻辑，深度数据后续开放</td>
+              <td><span class="tag orange">后续开放</span></td>
             </tr>
             <tr>
               <td>#3</td>
               <td>暂无可靠数据</td>
               <td>暂无可靠数据</td>
-              <td>等待模型与市场数据接入</td>
-              <td><span class="tag orange">待计算</span></td>
+              <td>公开版展示逻辑，深度数据后续开放</td>
+              <td><span class="tag orange">后续开放</span></td>
             </tr>
           </tbody>
         </table>
@@ -680,6 +1013,24 @@
         </table>
       </section>
 
+      <section id="vip-apply-entry-566" style="max-width:1180px;margin:32px auto;padding:28px;border-radius:28px;background:linear-gradient(135deg,#fff7ed 0%,#ecfdf5 58%,#eef2ff 100%);border:1px solid rgba(15,118,110,.16);box-shadow:0 18px 45px rgba(15,23,42,.08);">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;">
+    <div style="max-width:780px;">
+      <p style="margin:0 0 8px;color:#0f766e;font-weight:950;letter-spacing:.14em;font-size:13px;">VIP INNER TEST / 合作申请</p>
+      <h3 style="margin:0 0 12px;color:#0f172a;font-size:30px;line-height:1.2;">申请 VIP 内测或数据合作</h3>
+      <p style="margin:0;color:#475569;line-height:1.75;font-weight:750;">
+        当前为公开试运行版。后续将优先接入临场赔率、伤停、首发、盘口变化和赛前提醒。球迷社群、内容账号、数据合作方可先提交合作意向。
+      </p>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="mailto:chenjianyong000916@gmail.com?subject=世界杯数据助手VIP内测申请" style="display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:13px 18px;background:#0f766e;color:white;text-decoration:none;font-weight:950;">申请 VIP 内测</a>
+      <a href="mailto:chenjianyong000916@gmail.com?subject=世界杯数据助手合作咨询" style="display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:13px 18px;background:#ffffff;color:#0f766e;text-decoration:none;font-weight:950;border:1px solid rgba(15,118,110,.22);">合作咨询</a>
+    </div>
+  </div>
+  <p style="margin:18px 0 0;color:#64748b;font-size:13px;line-height:1.7;">
+    说明：VIP 内容仅用于体育数据阅读和比赛信息整理，不提供下注建议，不承诺赛果预测。
+  </p>
+</section>
       <section class="vip-notice">
         <strong>重要说明：</strong>
         VIP分析仅用于体育数据阅读、比赛信息整合和AI辅助解释，不构成任何下注、投资或决策建议。
@@ -902,81 +1253,9 @@
       </div>
     </section>
 
-    <section id="vip-match-signals-v1" class="vip-section data-card" style="margin-top:24px;">
-      <div class="section-header">
-        <div>
-          <p class="eyebrow">MATCH SIGNALS / 赛前隐藏信号</p>
-          <h2>普通球迷看比分，VIP 看比赛背后的信号</h2>
-        </div>
-        <span class="badge">Historical Patterns</span>
-      </div>
+    
 
-      <div class="grid-3" style="margin-top:16px;">
-        <div class="mini-card">
-          <h3>1. 控球多，不一定赢球</h3>
-          <p>有些球队整场控球占优，但最后没有拿下比赛。真正值得关注的是控球背后的效率、射门质量和防守风险。</p>
-        </div>
-
-        <div class="mini-card">
-          <h3>2. 射门少，也可能赢球</h3>
-          <p>射门少不代表没机会。高效反击、关键机会把握和对手压上留下的空间，往往是爆冷比赛的重要信号。</p>
-        </div>
-
-        <div class="mini-card">
-          <h3>3. 冷门不是凭空发生的</h3>
-          <p>爆冷通常来自多个信号叠加：赔率变化、射门效率、纪律风险、阵型选择和比赛节奏变化。</p>
-        </div>
-      </div>
-
-      <div class="mini-card" style="margin-top:16px;">
-        <h3>4. 阵型变化会暴露比赛意图</h3>
-        <p>球队是收缩防守、快速反击，还是主动压上，阵型和首发变化会提前暴露比赛思路。说明：这些内容基于真实历史比赛数据整理，用来帮助球迷理解赛前风险，不是 AI 主观编造预测。</p>
-      </div>
-    </section>
-
-    <section id="vip-api-value-v2" class="vip-section data-card" style="margin-top:24px;">
-      <div class="section-header">
-        <div>
-          <p class="eyebrow">API READY / 接入后价值</p>
-          <h2>后续接入真实 API 后，VIP 数据如何产生价值？</h2>
-        </div>
-        <span class="badge vip-badge">VIP Roadmap</span>
-      </div>
-
-      <div class="timeline-list" style="margin-top:16px;">
-        <div class="timeline-item">
-          <strong>赔率 API 接入</strong>
-          <p>
-            接入 TheOddsAPI、OddsJam 等数据源后，可从单一静态赔率升级为多家公司实时赔率能力对比，
-            形成市场一致性、异常波动、Sharp Consensus 和 Steam Move 分析。
-          </p>
-        </div>
-
-        <div class="timeline-item">
-          <strong>球队与比赛 API 接入</strong>
-          <p>
-            接入 API-Football、SportMonks 等数据源后，可补充球队近期状态、历史交锋、赛程密度、
-            球员出场、伤停与阵容变化，为赔率变化提供客观背景解释。
-          </p>
-        </div>
-
-        <div class="timeline-item">
-          <strong>环境与外部因素 API 接入</strong>
-          <p>
-            接入 OpenWeather 等数据源后，可把比赛城市天气、温度、湿度、风速、海拔、旅行距离等因素纳入赛前评估，
-            用于解释比赛节奏、体能消耗和临场不确定性。
-          </p>
-        </div>
-
-        <div class="timeline-item">
-          <strong>综合评估输出</strong>
-          <p>
-            系统不做无来源的主观预测，而是基于客观数据来源、计算逻辑和多维信号，
-            输出可追溯、可解释、可复核的赛前数据分析结论。
-          </p>
-        </div>
-      </div>
-    </section>
+    
 
   </main>
 
@@ -1077,8 +1356,27 @@
   }
 })();
 </script>
+<script id="vip-public-polish-404-script">
+document.addEventListener("DOMContentLoaded", function(){
+  const hero = document.querySelector(".vip-hero");
+  if(hero && !document.getElementById("vip-public-note-404")){
+    const note = document.createElement("div");
+    note.id = "vip-public-note-404";
+    note.className = "vip-public-note-404";
+    note.innerHTML = "<strong>公开版说明：</strong>当前 VIP 页用于展示后续专业数据服务的方向，不直接给结果建议；正式 VIP 功能将优先接入实时赔率、专业盘信号、临场变化、伤停首发和受控 API 数据。";
+    hero.appendChild(note);
+  }
+});
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 

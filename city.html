@@ -26,6 +26,51 @@
     .back{display:inline-flex;margin-bottom:18px;text-decoration:none;color:#059669;font-weight:900}
     @media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr)}.match-grid{grid-template-columns:1fr}}
   </style>
+<style id="city-public-polish-404">
+  .site-header{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 48px;background:rgba(255,255,255,.94);
+    border-bottom:1px solid #dbeee8;backdrop-filter:blur(10px);
+  }
+  .site-header .brand{display:flex;align-items:center;gap:14px;}
+  .site-header .logo{
+    width:46px;height:46px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#0f766e,#2dd4bf);
+    color:#fff;font-size:24px;font-weight:900;
+  }
+  .site-header h1{margin:0;font-size:26px;line-height:1.1;color:#102a2e;font-weight:900;}
+  .site-header .subtitle{margin-top:4px;color:#64748b;font-size:13px;font-weight:700;}
+  .site-header nav{display:flex;align-items:center;gap:28px;}
+  .site-header nav a{color:#475569;text-decoration:none;font-weight:900;font-size:17px;}
+  .site-header nav a:hover{color:#0f766e;}
+  .city-public-extra-404{
+    margin:24px 0 0;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+  }
+  .city-public-extra-card-404{
+    background:#fff;border:1px solid #dcebf3;border-radius:18px;
+    padding:20px 22px;box-shadow:0 14px 30px rgba(15,42,46,.06);
+  }
+  .city-public-extra-card-404 span{
+    display:block;color:#64748b;font-weight:800;font-size:14px;margin-bottom:8px;
+  }
+  .city-public-extra-card-404 strong{
+    display:block;color:#102a2e;font-size:20px;font-weight:950;line-height:1.35;
+  }
+  .city-public-note-404{
+    margin-top:18px;padding:18px 22px;border-radius:18px;
+    background:#f0fdfa;border:1px solid #bdeade;
+    color:#315b61;line-height:1.75;font-weight:700;
+  }
+  @media(max-width:760px){
+    .site-header{padding:14px 20px;align-items:flex-start;gap:14px;flex-direction:column;}
+    .site-header nav{gap:16px;flex-wrap:wrap;}
+  }
+</style>
 </head>
 <body>
   <header class="site-header">
@@ -98,13 +143,22 @@
     function fmt(v){ return v ? Number(v).toLocaleString("en-US") : "-"; }
 
     async function main(){
-      const venueId=param("venue_id");
+      const venueId=param("venue_id") || param("stadium_id") || param("id");
+      const cityParam=param("city");
+      const stadiumParam=param("stadium");
       const [venues,matches]=await Promise.all([
         loadCSV("data/worldcup_2026_venue_environment_base.csv"),
         loadCSV("data/matches.csv")
       ]);
 
-      const venue=venues.find(v=>v.venue_id===venueId);
+      const venue=venues.find(v =>
+        (venueId && v.venue_id===venueId) ||
+        (cityParam && String(v.fifa_city || "").toLowerCase()===String(cityParam).toLowerCase()) ||
+        (stadiumParam && (
+          String(v.fifa_stadium_name || "").toLowerCase()===String(stadiumParam).toLowerCase() ||
+          String(v.real_stadium_name || "").toLowerCase()===String(stadiumParam).toLowerCase()
+        ))
+      );
       if(!venue){
         document.getElementById("city-title").textContent="未找到城市 / 球场";
         document.getElementById("city-lead").textContent="请从首页城市卡片进入。";
@@ -202,7 +256,80 @@
       document.getElementById("city-lead").textContent=err.message;
     });
   </script>
+<script id="city-public-polish-404-script">
+(function(){
+  function getParam(name){
+    return new URLSearchParams(location.search).get(name);
+  }
+  function parseCSV(text){
+    const rows=[];let row=[],cell="",quote=false;
+    for(let i=0;i<text.length;i++){
+      const ch=text[i],next=text[i+1];
+      if(ch==='"' && quote && next==='"'){cell+='"';i++;}
+      else if(ch==='"'){quote=!quote;}
+      else if(ch===',' && !quote){row.push(cell);cell='';}
+      else if((ch==='\n'||ch==='\r')&&!quote){
+        if(ch==='\r'&&next==='\n')i++;
+        row.push(cell);
+        if(row.some(v=>String(v).trim()!==''))rows.push(row);
+        row=[];cell='';
+      } else cell+=ch;
+    }
+    if(cell.length||row.length){row.push(cell);if(row.some(v=>String(v).trim()!==''))rows.push(row);}
+    const headers=(rows.shift()||[]).map(h=>String(h||'').trim());
+    return rows.map(r=>{const o={};headers.forEach((h,i)=>o[h]=String(r[i]||'').trim());return o;});
+  }
+  function addExtra(venue){
+    if(!venue || document.getElementById("city-public-extra-404")) return;
+    const statRow=document.querySelector(".stats-grid") || document.querySelector(".stat-grid") || document.querySelector(".venue-stats");
+    const anchor=statRow || document.querySelector(".hero-card") || document.querySelector("main");
+    if(!anchor) return;
+
+        const roofMap = {
+      "retractable_roof": "可伸缩屋顶",
+      "fixed_roof": "固定屋顶",
+      "open_air": "露天球场",
+      "indoor": "室内球场"
+    };
+    const roof = venue.indoor_roof ? (roofMap[venue.indoor_roof] || venue.indoor_roof) : "以官方场馆资料为准";
+        const confidenceMap = {
+      "seed_public_reference": "公开资料整理",
+      "official_confirmed": "官方资料确认",
+      "public_reference": "公开资料参考"
+    };
+    const confidence = venue.data_confidence ? (confidenceMap[venue.data_confidence] || venue.data_confidence) : "基础公开资料";
+    const source = venue.source_note ? venue.source_note : "基于公开城市、球场与赛程数据整理";
+
+    const box=document.createElement("div");
+    box.id="city-public-extra-404";
+    box.innerHTML = `
+      <div class="city-public-extra-404">
+        <div class="city-public-extra-card-404"><span>所在区域</span><strong>${venue.local_area || venue.fifa_city || "-"}</strong></div>
+        <div class="city-public-extra-card-404"><span>FIFA 场馆名称</span><strong>${venue.fifa_stadium_name || "-"}</strong></div>
+        <div class="city-public-extra-card-404"><span>屋顶 / 室内信息</span><strong>${roof}</strong></div>
+        <div class="city-public-extra-card-404"><span>数据可信度</span><strong>${confidence}</strong></div>
+      </div>
+      <div class="city-public-note-404">
+        <strong>公开版说明：</strong>${source}。本页用于帮助球迷理解承办城市、球场环境、海拔、容量和时区等客观背景，不涉及赛果预测。
+      </div>
+    `;
+    anchor.insertAdjacentElement("afterend", box);
+  }
+  document.addEventListener("DOMContentLoaded", async function(){
+    try{
+      const venueId=getParam("venue_id") || getParam("stadium_id") || getParam("id");
+      const text=await fetch("data/worldcup_2026_venue_environment_base.csv").then(r=>r.text());
+      const rows=parseCSV(text);
+      const venue=rows.find(v => venueId && v.venue_id===venueId);
+      addExtra(venue);
+    }catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
+
+
+
 
 

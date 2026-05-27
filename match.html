@@ -671,32 +671,14 @@
   </header>
 
   <main class="match-page">
-
-<section id="match-data-summary-v1">
-  <div class="summary-head">
-    <div>
-      <p class="summary-kicker">DATA SUMMARY / 本场数据摘要</p>
-      <h2>基于当前赔率数据，快速看懂这场比赛的市场信号。</h2>
-    </div>
-    <span class="summary-badge">自动读取 odds.csv</span>
-  </div>
-
-  <div class="summary-grid">
-    
-  </div>
-
-  <div class="summary-main-note" id="summary-main-note">
-    <strong>说明：</strong>本摘要只基于当前 odds.csv 中的客观赔率数据生成，不代表最终赛果预测。
-  </div>
-</section>
-    <div class="container page-grid">
+<div class="container page-grid">
 
       <section class="match-hero">
         <div class="match-title-row">
           <div>
             <span class="eyebrow">MATCH DATA CENTER</span>
             <h2>对阵双方</h2>
-            <p>先查看比赛事实，再查看双方客观数据对比，最后阅读数据辅助解读。</p>
+            <p>这是单场比赛数据看板：先看比赛事实和双方信息，再看赔率、市场信号、天气 / 球场等客观数据；页面不做赛果预测，只整理可验证数据。</p>
           </div>
           <span class="match-status-pill">小组赛 · 数据待接入</span>
         </div>
@@ -721,11 +703,24 @@
           </div>
         </div>
       </section>
+<section id="match-data-summary-v1">
+  <div class="summary-head">
+    <div>
+      <p class="summary-kicker">DATA SUMMARY / 本场数据摘要</p>
+      <h2>基于当前赔率数据，快速看懂这场比赛的市场信号。</h2>
+    </div>
+    <span class="summary-badge">自动读取 odds.csv</span>
+  </div>
 
-      
+  <div class="summary-grid">
+    
+  </div>
 
-
-      <section class="data-panel">
+  <div class="summary-main-note" id="summary-main-note">
+    <strong>说明：</strong>本摘要只基于当前 odds.csv 中的客观赔率数据生成，不代表最终赛果预测。
+  </div>
+</section>
+<section class="data-panel">
         <div class="panel-head">
           <div>
             <h3>比赛事实</h3>
@@ -809,8 +804,6 @@
           正在读取伤停数据...
         </div>
       </section>
-
-      
 <section class="data-panel">
         <div class="panel-head">
           <div>
@@ -841,7 +834,7 @@
             </thead>
             <tbody>
               <tr>
-                <td colspan="5" style="padding:10px; color:var(--muted);">等待多博彩公司赔率数据...</td>
+                <td colspan="5" style="padding:10px; color:var(--muted);">正在读取当前比赛多博彩公司赔率...</td>
               </tr>
             </tbody>
           </table>
@@ -849,15 +842,10 @@
 
         <div class="module-explain-v2"><strong>阅读提示：</strong>这里用于判断不同博彩公司给出的赔率方向是否一致，重点观察 Sharp 与 Soft 盘口之间是否存在明显分歧。</div>
         <div id="bookmaker-market-summary" class="ai-box" style="margin-top:14px;">
-          <p>等待多博彩公司数据汇总...</p>
+          <p>正在读取当前比赛多博彩公司汇总...</p>
         </div>
       </section>
-
-      
-      
-
-      
-      <section class="data-panel">
+<section class="data-panel">
         <div class="panel-head">
           <div>
             <h3>赔率变化趋势</h3>
@@ -868,7 +856,7 @@
 
         <div class="signal-grid">
           <div class="signal-card blue" id="odds-move-a">
-            <span>Mexico 赔率变化</span>
+            <span id="odds-move-a-label">球队 A 赔率变化</span>
             <strong>等待更多快照</strong>
             <p>当前只有一次赔率记录，暂不生成趋势判断。</p>
           </div>
@@ -880,15 +868,13 @@
           </div>
 
           <div class="signal-card orange" id="odds-move-b">
-            <span>South Africa 赔率变化</span>
+            <span id="odds-move-b-label">球队 B 赔率变化</span>
             <strong>等待更多快照</strong>
             <p>接入 API 后可观察是否出现临场资金或信息变化。</p>
           </div>
         </div>
       </section>
-
-      
-      <section class="data-panel">
+<section class="data-panel">
         <div class="panel-head">
           <div>
             <h3>Sharp Consensus</h3>
@@ -921,12 +907,6 @@
           <p>等待 Sharp Consensus 数据...</p>
         </div>
       </section>
-
-
-      
-      
-
-      
 <section class="data-panel">
         <div class="panel-head">
           <div>
@@ -935,20 +915,7 @@
           </div>
           <span class="mini-label">DATA EXPLAINER</span>
         </div>
-
-        <div class="ai-box">
-          <p>
-            当前页面已重点验证赔率数据与球队近期状态样例；天气 API 已完成连通性测试，伤停、预计首发、旅途压力等数据仍属于后续接口预留。
-            后续还将继续接入 ELO、FIFA 排名、近期状态、攻防表现、多博彩公司赔率变化等数据，用于辅助观察：
-          </p>
-          <ul>
-            <li>双方客观实力与市场倾向是否一致。</li>
-            <li>赔率变化是否与近期状态一致。</li>
-            <li>市场赔率是否出现异常波动或明显分歧。</li>
-            <li>哪些客观数据值得用户进一步观察。</li>
-          </ul>
-        </div>
-      </section>
+</section>
 
       
       
@@ -969,7 +936,7 @@
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=477"></script>
 
 <script>
 // ===== MATCH PAGE TEAM BIND + CLICK NAV =====
@@ -2032,7 +1999,7 @@ const values = [
 
         if (moveA) {
           moveA.innerHTML = `
-            <span>Mexico 赔率变化</span>
+            <span id="odds-move-a-label">球队 A 赔率变化</span>
             <strong>${formatMove(first.team_a_value, last.team_a_value)}</strong>
             <p>${explainMove(first.team_a_value, last.team_a_value, teamALabel)} · ${detectSteamMove(first.team_a_value, last.team_a_value)}</p>
           `;
@@ -2048,7 +2015,7 @@ const values = [
 
         if (moveB) {
           moveB.innerHTML = `
-            <span>South Africa 赔率变化</span>
+            <span id="odds-move-b-label">球队 B 赔率变化</span>
             <strong>${formatMove(first.team_b_value, last.team_b_value)}</strong>
             <p>${explainMove(first.team_b_value, last.team_b_value, teamBLabel)} · ${detectSteamMove(first.team_b_value, last.team_b_value)}</p>
           `;
@@ -2122,7 +2089,11 @@ const values = [
     try {
       const params = new URLSearchParams(window.location.search);
       const matchId = params.get("id") || "1";
-      const teams = getTeamLabelsFromPage();
+            const teams = getTeamLabelsFromPage();
+      const moveALabel = document.getElementById("odds-move-a-label");
+      const moveBLabel = document.getElementById("odds-move-b-label");
+      if (moveALabel) moveALabel.textContent = `${teams.a} 赔率变化`;
+      if (moveBLabel) moveBLabel.textContent = `${teams.b} 赔率变化`;
 
       const res = await fetch("data/odds_snapshots.csv");
       const text = await res.text();
@@ -2267,7 +2238,11 @@ const values = [
     try {
       const params = new URLSearchParams(window.location.search);
       const matchId = params.get("id") || "1";
-      const teams = getTeamLabelsFromPage();
+            const teams = getTeamLabelsFromPage();
+      const moveALabel = document.getElementById("odds-move-a-label");
+      const moveBLabel = document.getElementById("odds-move-b-label");
+      if (moveALabel) moveALabel.textContent = `${teams.a} 赔率变化`;
+      if (moveBLabel) moveBLabel.textContent = `${teams.b} 赔率变化`;
 
       const res = await fetch("data/odds.csv");
       const text = await res.text();
@@ -3191,6 +3166,2561 @@ const values = [
 })();
 </script>
 <!-- /FIX_TOP_ODDS_CARDS_151 -->
+<script id="match-pair-market-layer-v1">
+/* === MATCH_PAIR_MARKET_LAYER_V1 === */
+(function () {
+  function parseCsvText(text) {
+    const clean = String(text || "").replace(/^\uFEFF/, "").trim();
+    if (!clean) return [];
+
+    const lines = clean.split(/\r?\n/);
+    const headers = lines.shift().split(",").map(function (h) {
+      return h.trim().replace(/^"|"$/g, "");
+    });
+
+    return lines.map(function (line) {
+      const cells = [];
+      let cur = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        const next = line[i + 1];
+
+        if (ch === '"' && inQuotes && next === '"') {
+          cur += '"';
+          i++;
+        } else if (ch === '"') {
+          inQuotes = !inQuotes;
+        } else if (ch === "," && !inQuotes) {
+          cells.push(cur);
+          cur = "";
+        } else {
+          cur += ch;
+        }
+      }
+
+      cells.push(cur);
+
+      const row = {};
+      headers.forEach(function (h, idx) {
+        row[h] = String(cells[idx] || "").trim();
+      });
+      return row;
+    });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v == null ? "" : v).trim();
+    return s || (fallback || "—");
+  }
+
+  function getMatchId() {
+    const params = new URLSearchParams(location.search);
+    return String(params.get("id") || params.get("match_id") || "1").trim();
+  }
+
+  function prettyTeamName(value, row) {
+    const raw = String(value == null ? "" : value).trim();
+    if (!raw) return "—";
+
+    const aCode = String(row.team_a_code || "").trim();
+    const bCode = String(row.team_b_code || "").trim();
+    const aName = String(row.team_a_name || "").trim() || aCode;
+    const bName = String(row.team_b_name || "").trim() || bCode;
+
+    if (raw === aCode || raw.toLowerCase() === aName.toLowerCase()) return aName;
+    if (raw === bCode || raw.toLowerCase() === bName.toLowerCase()) return bName;
+
+    return raw;
+  }
+
+  function prettyTeamText(text, row) {
+    let s = String(text == null ? "" : text);
+
+    const aCode = String(row.team_a_code || "").trim();
+    const bCode = String(row.team_b_code || "").trim();
+    const aName = String(row.team_a_name || "").trim() || aCode;
+    const bName = String(row.team_b_name || "").trim() || bCode;
+
+    if (aCode && aName && aCode !== aName) {
+      s = s.replace(new RegExp("\\b" + aCode.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "g"), aName);
+    }
+
+    if (bCode && bName && bCode !== bName) {
+      s = s.replace(new RegExp("\\b" + bCode.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "g"), bName);
+    }
+
+    return s;
+  }
+
+  async function loadCsv(path) {
+    const res = await fetch(path + "?v=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error(path + " 加载失败");
+    return parseCsvText(await res.text());
+  }
+
+  function metricCard(label, value, note) {
+    return `
+      <div style="border:1px solid var(--border);background:#f8fcfb;border-radius:16px;padding:14px;">
+        <div style="font-size:12px;color:var(--muted);font-weight:900;">${label}</div>
+        <div style="margin-top:8px;font-size:22px;font-weight:1000;color:#0f2a2e;">${safe(value)}</div>
+        <div style="margin-top:6px;font-size:12px;line-height:1.6;color:#64748b;">${safe(note, "")}</div>
+      </div>
+    `;
+  }
+
+  function insertPairLayer(section) {
+    const pageGrid = document.querySelector(".page-grid");
+    const main = document.querySelector("main") || document.body;
+
+    const oddsPanel =
+      document.getElementById("bookmaker-market-summary") ||
+      document.getElementById("match-data-summary-v1") ||
+      document.querySelector(".odds-section") ||
+      document.querySelector(".panel");
+
+    if (oddsPanel && oddsPanel.parentNode) {
+      oddsPanel.insertAdjacentElement("beforebegin", section);
+      return;
+    }
+
+    if (pageGrid) {
+      pageGrid.insertAdjacentElement("beforebegin", section);
+      return;
+    }
+
+    main.insertBefore(section, main.firstChild);
+  }
+
+  async function renderMatchPairMarketLayer() {
+    if (document.getElementById("match-pair-market-layer")) return;
+
+    const matchId = getMatchId();
+
+    let rows = [];
+    try {
+      rows = await loadCsv("./data/match_pair_market_interpretation_draft.csv");
+    } catch (err) {
+      console.warn("比赛级市场解释层加载失败：", err);
+      return;
+    }
+
+    const row = rows.find(function (r) {
+      return String(r.match_id || "").trim() === String(matchId);
+    });
+
+    if (!row) return;
+
+    const hasOdds = Number(row.odds_record_count || 0) > 0;
+
+    const section = document.createElement("section");
+    section.id = "match-pair-market-layer";
+    section.className = "panel";
+    section.style.margin = "20px 0 24px";
+
+    if (!hasOdds) {
+      section.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
+          <div>
+            <h2 style="margin:0;font-size:28px;">两队市场与事实对比</h2>
+            <p style="margin:8px 0 0;color:var(--muted);line-height:1.8;">
+              当前比赛暂无足够赔率数据，暂不生成市场倾向解释。
+            </p>
+          </div>
+          <span style="padding:9px 14px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:1000;">等待赔率数据</span>
+        </div>
+      `;
+    } else {
+      section.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
+          <div>
+            <h2 style="margin:0;font-size:28px;">两队市场与事实对比</h2>
+            <p style="margin:8px 0 0;color:var(--muted);line-height:1.8;">
+              先看博彩市场倾向，再用双方近期事实和历史样本缺口解释这场比赛。
+            </p>
+          </div>
+          <span style="padding:9px 14px;border-radius:999px;background:#dcfce7;color:#047857;font-weight:1000;">市场优先解释</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px;">
+          ${metricCard("市场倾向", prettyTeamName(row.market_lean, row), "平均赔率较低的一方")}
+          ${metricCard("赔率记录", row.odds_record_count + " 条", row.bookmaker_count + " 家博彩公司")}
+          ${metricCard("平均赔率", safe(row.avg_team_a_odds) + " / " + safe(row.avg_draw_odds) + " / " + safe(row.avg_team_b_odds), prettyTeamName(row.team_a_name, row) + " / 平局 / " + prettyTeamName(row.team_b_name, row))}
+          ${metricCard("隐含概率", safe(row.avg_team_a_implied) + "% / " + safe(row.avg_draw_implied) + "% / " + safe(row.avg_team_b_implied) + "%", "赔率换算参考")}
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;">
+          <div style="border:1px solid var(--border);background:#f8fcfb;border-radius:18px;padding:16px;">
+            <div style="font-size:13px;color:var(--muted);font-weight:1000;margin-bottom:8px;">${prettyTeamName(row.team_a_name, row)} 近期事实</div>
+            <div style="font-size:16px;font-weight:900;color:#0f172a;line-height:1.8;">${safe(row.team_a_recent_summary)}</div>
+            <div style="margin-top:8px;font-size:12px;line-height:1.7;color:#64748b;">${safe(row.team_a_recent_detail)}</div>
+          </div>
+          <div style="border:1px solid var(--border);background:#f8fcfb;border-radius:18px;padding:16px;">
+            <div style="font-size:13px;color:var(--muted);font-weight:1000;margin-bottom:8px;">${prettyTeamName(row.team_b_name, row)} 近期事实</div>
+            <div style="font-size:16px;font-weight:900;color:#0f172a;line-height:1.8;">${safe(row.team_b_recent_summary)}</div>
+            <div style="margin-top:8px;font-size:12px;line-height:1.7;color:#64748b;">${safe(row.team_b_recent_detail)}</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;border-radius:18px;background:#f8fcfb;border:1px solid var(--border);padding:16px;">
+          <div style="font-size:13px;color:var(--muted);font-weight:1000;margin-bottom:8px;">本场关键观察点</div>
+          <ol style="margin:0;padding-left:20px;color:#0f172a;font-weight:800;line-height:1.9;">
+            <li>${prettyTeamText(row.key_observation_1, row)}</li>
+            <li>${prettyTeamText(row.key_observation_2, row)}</li>
+            <li>${prettyTeamText(row.key_observation_3, row)}</li>
+          </ol>
+          <div style="margin-top:12px;font-size:13px;color:#64748b;line-height:1.8;">
+            <strong>Sharp / Soft：</strong>${prettyTeamText(row.sharp_soft_alignment, row)}<br>
+            <strong>近期事实：</strong>${prettyTeamText(row.recent_direction_note, row)}<br>
+            <strong>样本说明：</strong>${prettyTeamText(row.history_sample_note, row)}<br>
+            <strong>数据依据：</strong>${safe(row.data_basis)}。以上为客观数据整理，不代表赛果预测。
+          </div>
+        </div>
+      `;
+    }
+
+    insertPairLayer(section);
+  }
+
+  setTimeout(renderMatchPairMarketLayer, 900);
+  setTimeout(renderMatchPairMarketLayer, 1800);
+})();
+</script>
+
+
+<!-- match-core-team-name-normalize-221 -->
+<script>
+(function () {
+  const TEAM_NAME_MAP_221 = {
+    MEX: "Mexico",
+    RSA: "South Africa"
+  };
+
+  function normalizeText221(text) {
+    if (!text) return text;
+    return String(text)
+      .replace(/\bMEX\b/g, TEAM_NAME_MAP_221.MEX)
+      .replace(/\bRSA\b/g, TEAM_NAME_MAP_221.RSA);
+  }
+
+  function walkAndNormalize221(root) {
+    if (!root) return;
+
+    const walker = document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const text = node.nodeValue || "";
+          if (/\b(MEX|RSA)\b/.test(text)) return NodeFilter.FILTER_ACCEPT;
+          return NodeFilter.FILTER_REJECT;
+        }
+      }
+    );
+
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      node.nodeValue = normalizeText221(node.nodeValue);
+    });
+  }
+
+  function findSectionByTitle221(title) {
+    const nodes = Array.from(document.querySelectorAll("section, .panel, .ai-box, div"));
+    return nodes.find(el => {
+      const text = (el.innerText || "").trim();
+      return text.includes(title) && text.length < 12000;
+    });
+  }
+
+  function normalizeCoreMatchSections221() {
+    const targets = [
+      findSectionByTitle221("预计首发与阵型"),
+      findSectionByTitle221("博彩公司赔率与数据解读"),
+      findSectionByTitle221("两队市场与事实对比"),
+      document.getElementById("bookmaker-compare-table"),
+      document.getElementById("bookmaker-market-summary"),
+      document.getElementById("match-pair-market-layer")
+    ].filter(Boolean);
+
+    targets.forEach(walkAndNormalize221);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", normalizeCoreMatchSections221);
+  } else {
+    normalizeCoreMatchSections221();
+  }
+
+  setTimeout(normalizeCoreMatchSections221, 200);
+  setTimeout(normalizeCoreMatchSections221, 700);
+  setTimeout(normalizeCoreMatchSections221, 1500);
+  setTimeout(normalizeCoreMatchSections221, 3000);
+})();
+</script>
+<!-- MATCH_MARKET_DEPTH_OBSERVATION_V1_START -->
+<script id="match-market-depth-observation-v1">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let quote = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && quote && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        quote = !quote;
+      } else if (ch === "," && !quote) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !quote) {
+        if (ch === "\r" && next === "\n") i++;
+        row.push(cell);
+        cell = "";
+        if (row.some(v => String(v).trim() !== "")) rows.push(row);
+        row = [];
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell || row.length) {
+      row.push(cell);
+      if (row.some(v => String(v).trim() !== "")) rows.push(row);
+    }
+
+    if (rows.length < 2) return [];
+    const headers = rows.shift().map(h => String(h).trim());
+
+    return rows.map(cols => {
+      const obj = {};
+      headers.forEach((h, idx) => {
+        obj[h] = cols[idx] == null ? "" : String(cols[idx]).trim();
+      });
+      return obj;
+    });
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function value(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "暂无";
+  }
+
+  function marketLine(team, line) {
+    if (!team && !line) return "暂无";
+    if (team === "平手盘" || Number(line) === 0) return "平手盘";
+    return team + " " + line;
+  }
+
+  function card(title, main, note) {
+    return `
+      <div style="padding:12px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.72);">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">${title}</div>
+        <strong style="display:block;font-size:17px;color:#0f172a;">${main}</strong>
+        <p style="margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6;">${note}</p>
+      </div>
+    `;
+  }
+
+  function ensureSection(anchor) {
+    let section = document.getElementById("market-depth-observation");
+    if (section) return section;
+
+    section = document.createElement("div");
+    section.id = "market-depth-observation";
+    section.className = "ai-box";
+    section.style.marginTop = "14px";
+    section.innerHTML = "<p>正在读取盘口深度观察...</p>";
+
+    if (anchor && anchor.parentNode) {
+      anchor.insertAdjacentElement("afterend", section);
+    }
+
+    return section;
+  }
+
+  async function renderMarketDepthObservation() {
+    const matchId = getMatchId();
+    const anchor = document.getElementById("bookmaker-market-summary");
+    if (!anchor) return;
+
+    const section = ensureSection(anchor);
+
+    try {
+      const res = await fetch("data/theoddsapi_worldcup_market_depth_summary.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("market depth csv " + res.status);
+
+      const rows = parseCSV(await res.text());
+      const row = rows.find(r => String(r.local_match_id || "").trim() === String(matchId).trim());
+
+      if (!row) {
+        section.innerHTML = `
+          <p><strong>盘口深度观察：</strong>当前比赛暂无已匹配的大小球 / 让球摘要。</p>
+          <p>该模块只读取已完成 match_id 映射的 TheOddsAPI 盘口数据，不使用其他比赛样例。</p>
+        `;
+        return;
+      }
+
+      const totalLine = value(row.main_total_line);
+      const sharpTotal = value(row.sharp_total_line);
+      const spreadLine = marketLine(row.main_spread_team, row.main_spread_line);
+      const sharpSpreadLine = marketLine(row.sharp_spread_team, row.sharp_spread_line);
+
+      section.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;">
+          <div>
+            <h3 style="margin:0 0 6px;">盘口深度观察</h3>
+            <p style="margin:0;color:var(--muted);line-height:1.7;">
+              基于 TheOddsAPI 已保存盘口明细整理，重点看大小球、让球以及 Sharp 盘口是否一致。
+            </p>
+          </div>
+          <span class="mini-label">MARKET DEPTH</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px;">
+          ${card("主流大小球线", totalLine, value(row.total_interpretation))}
+          ${card("主流让球线", spreadLine, value(row.spread_interpretation))}
+          ${card("Sharp 大小球", sharpTotal, "专业盘口样本中的主流大小球线。")}
+          ${card("Sharp 让球", sharpSpreadLine, "专业盘口样本中的主流让球方向。")}
+        </div>
+
+        <p style="margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.7;">
+          数据说明：本模块来自 data/theoddsapi_worldcup_market_depth_summary.csv；当前为本地样例闭环验证，不是实时自动刷新，也不代表赛果预测。
+        </p>
+      `;
+    } catch (err) {
+      console.warn("盘口深度观察加载失败：", err);
+      section.innerHTML = `
+        <p><strong>盘口深度观察：</strong>读取失败。</p>
+        <p>请检查 data/theoddsapi_worldcup_market_depth_summary.csv 是否存在，并使用 Live Server 打开页面。</p>
+      `;
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderMarketDepthObservation);
+  } else {
+    renderMarketDepthObservation();
+  }
+
+  setTimeout(renderMarketDepthObservation, 1200);
+})();
+</script>
+<!-- MATCH_MARKET_DEPTH_OBSERVATION_V1_END -->
+<script id="match-odds-move-label-guard-v1">
+/* MATCH_ODDS_MOVE_LABEL_GUARD_V1 */
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function pick(row, keys, fallback) {
+    for (const key of keys) {
+      if (row && row[key] !== undefined && String(row[key]).trim() !== "") {
+        return String(row[key]).trim();
+      }
+    }
+    return fallback || "";
+  }
+
+  async function applyOddsMoveLabels() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const text = await fetch("data/matches.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text);
+      const current = rows.find(row => String(row.match_id || row.id || "").trim() === String(matchId).trim());
+
+      if (!current) return;
+
+      const teamA = pick(current, ["team_a", "teamA", "home", "home_team"], "球队 A");
+      const teamB = pick(current, ["team_b", "teamB", "away", "away_team"], "球队 B");
+
+      const apply = function () {
+        const moveALabel = document.getElementById("odds-move-a-label");
+        const moveBLabel = document.getElementById("odds-move-b-label");
+
+        if (moveALabel) moveALabel.textContent = teamA + " 赔率变化";
+        if (moveBLabel) moveBLabel.textContent = teamB + " 赔率变化";
+      };
+
+      apply();
+      setTimeout(apply, 300);
+      setTimeout(apply, 900);
+      setTimeout(apply, 1800);
+      setTimeout(apply, 3000);
+    } catch (err) {
+      console.warn("赔率变化趋势球队名修正失败", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", applyOddsMoveLabels);
+})();
+</script>
+<script id="match-sharp-consensus-label-guard-v1">
+/* MATCH_SHARP_CONSENSUS_LABEL_GUARD_V1 */
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function pick(row, keys, fallback) {
+    for (const key of keys) {
+      if (row && row[key] !== undefined && String(row[key]).trim() !== "") {
+        return String(row[key]).trim();
+      }
+    }
+    return fallback || "";
+  }
+
+  async function applySharpConsensusLabels() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const text = await fetch("data/matches.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text);
+      const current = rows.find(row => String(row.match_id || row.id || "").trim() === String(matchId).trim());
+
+      if (!current) return;
+
+      const teamA = pick(current, ["team_a", "teamA", "home", "home_team"], "球队 A");
+      const teamB = pick(current, ["team_b", "teamB", "away", "away_team"], "球队 B");
+      const correctPair = teamA + " / " + teamB;
+
+      const apply = function () {
+        const title = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("Sharp Consensus"));
+        const section = title ? title.closest("section") : null;
+        if (!section) return;
+
+        section.innerHTML = section.innerHTML
+          .replaceAll("Mexico / South Africa", correctPair)
+          .replaceAll("球队 A / 球队 B", correctPair)
+          .replaceAll("Mexico", teamA)
+          .replaceAll("South Africa", teamB);
+      };
+
+      apply();
+      setTimeout(apply, 400);
+      setTimeout(apply, 1200);
+      setTimeout(apply, 2400);
+      setTimeout(apply, 3600);
+    } catch (err) {
+      console.warn("Sharp Consensus 球队名修正失败", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", applySharpConsensusLabels);
+})();
+</script>
+<script id="match-market-depth-panel-v1">
+/* MATCH_MARKET_DEPTH_PANEL_V1 */
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function findInsertBeforeSection() {
+    const title = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("赔率变化趋势"));
+    return title ? title.closest("section") : null;
+  }
+
+  async function renderMarketDepthPanel() {
+    try {
+      if (document.getElementById("market-depth-panel-v1")) return;
+
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const text = await fetch("data/theoddsapi_worldcup_market_depth_mapped.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text);
+      const row = rows.find(r => String(r.local_match_id || "").trim() === String(matchId).trim());
+
+      if (!row) return;
+
+      const section = document.createElement("section");
+      section.className = "panel";
+      section.id = "market-depth-panel-v1";
+      section.innerHTML = `
+        <div class="panel-head">
+          <div>
+            <h3>让球 / 大小球市场</h3>
+            <p>读取 TheOddsAPI 已有盘口深度数据，展示本场主要让球线和进球数参考。</p>
+          </div>
+          <span class="mini-label">MARKET DEPTH</span>
+        </div>
+
+        <div class="signal-grid">
+          <div class="signal-card blue">
+            <span>让球参考</span>
+            <strong>${safe(row.main_spread_team)} ${safe(row.main_spread_line)}</strong>
+            <p>${safe(row.spread_interpretation, "暂无让球解释")} · ${safe(row.main_spread_records, "0")} 条记录</p>
+          </div>
+
+          <div class="signal-card green">
+            <span>大小球参考</span>
+            <strong>${safe(row.main_total_line)} 球</strong>
+            <p>${safe(row.total_interpretation, "暂无大小球解释")} · ${safe(row.main_total_records, "0")} 条记录</p>
+          </div>
+        </div>
+
+        <div class="ai-box" style="margin-top:14px;">
+          <p><strong>数据说明：</strong>这里展示的是博彩公司盘口市场数据，不是本站预测。让球线用于观察市场认为哪一方更强，大小球线用于观察市场对进球数的预期。</p>
+        </div>
+      `;
+
+      const before = findInsertBeforeSection();
+      if (before && before.parentNode) {
+        before.parentNode.insertBefore(section, before);
+      } else {
+        document.querySelector("main")?.appendChild(section);
+      }
+    } catch (err) {
+      console.warn("盘口深度数据渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderMarketDepthPanel);
+})();
+</script>
+<script id="match-market-signal-panel-v1">
+/* MATCH_MARKET_SIGNAL_PANEL_V1 */
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function levelText(v) {
+    const s = String(v || "").trim().toLowerCase();
+    if (s === "high") return "分歧较大";
+    if (s === "medium") return "有一定分歧";
+    if (s === "low") return "分歧较小";
+    return safe(v, "暂无");
+  }
+
+  function findInsertBeforeSection() {
+    const depth = document.getElementById("market-depth-panel-v1");
+    if (depth) return depth;
+
+    const title = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("让球 / 大小球市场"));
+    if (title) return title.closest("section");
+
+    const oddsMove = Array.from(document.querySelectorAll("h3")).find(h => h.textContent.includes("赔率变化趋势"));
+    return oddsMove ? oddsMove.closest("section") : null;
+  }
+
+  async function renderMarketSignalPanel() {
+    try {
+      if (document.getElementById("market-signal-panel-v1")) return;
+
+      const params = new URLSearchParams(window.location.search);
+      const matchId = params.get("id") || "1";
+
+      const text = await fetch("data/theoddsapi_worldcup_match_signal_summary.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text);
+      const row = rows.find(r => String(r.local_match_id || "").trim() === String(matchId).trim());
+
+      if (!row) return;
+
+      const section = document.createElement("section");
+      section.className = "panel";
+      section.id = "market-signal-panel-v1";
+      section.innerHTML = `
+        <div class="panel-head">
+          <div>
+            <h3>市场信号</h3>
+            <p>基于多家博彩公司胜平负赔率，整理本场市场倾向和分歧程度。</p>
+          </div>
+          <span class="mini-label">MARKET SIGNAL</span>
+        </div>
+
+        <div class="signal-grid">
+          <div class="signal-card blue">
+            <span>市场更看好</span>
+            <strong>${safe(row.favorite_team)}</strong>
+            <p>参考平均赔率：${safe(row.favorite_avg_price)}</p>
+          </div>
+
+          <div class="signal-card orange">
+            <span>市场信号</span>
+            <strong>${safe(row.signal_label)}</strong>
+            <p>分歧程度：${levelText(row.disagreement_level)}</p>
+          </div>
+
+          <div class="signal-card green">
+            <span>数据覆盖</span>
+            <strong>${safe(row.bookmaker_count, "0")} 家博彩公司</strong>
+            <p>Sharp ${safe(row.sharp_bookmaker_count, "0")} 家 / Soft ${safe(row.soft_bookmaker_count, "0")} 家</p>
+          </div>
+        </div>
+
+        <div class="ai-box" style="margin-top:14px;">
+          <p><strong>数据说明：</strong>${safe(row.fan_summary, "暂无市场信号摘要")}</p>
+          <p style="color:#60777a;">这里展示的是博彩公司赔率市场信号，不代表本站预测。</p>
+        </div>
+      `;
+
+      const before = findInsertBeforeSection();
+      if (before && before.parentNode) {
+        before.parentNode.insertBefore(section, before);
+      } else {
+        document.querySelector("main")?.appendChild(section);
+      }
+    } catch (err) {
+      console.warn("市场信号数据渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderMarketSignalPanel);
+})();
+</script>
+<style id="match-h2h-panel-v1-style">
+  #match-h2h-panel-v1 {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, .32);
+    border-radius: 22px;
+    background: rgba(255,255,255,.86);
+    box-shadow: 0 18px 42px rgba(15,23,42,.08);
+  }
+  #match-h2h-panel-v1 .panel-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  #match-h2h-panel-v1 h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+  #match-h2h-panel-v1 p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+  #match-h2h-panel-v1 .mini-label {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #eef6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  #match-h2h-panel-v1 .h2h-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #match-h2h-panel-v1 .h2h-card {
+    padding: 15px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, .24);
+  }
+  #match-h2h-panel-v1 .h2h-card span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 7px;
+  }
+  #match-h2h-panel-v1 .h2h-card strong {
+    display: block;
+    color: #0f172a;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  #match-h2h-panel-v1 .h2h-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #475569;
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    #match-h2h-panel-v1 {
+      margin: 0 14px 22px;
+      padding: 18px;
+    }
+    #match-h2h-panel-v1 .panel-head {
+      flex-direction: column;
+    }
+    #match-h2h-panel-v1 .h2h-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script id="match-h2h-panel-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    text = String(text || "").replace(/^\uFEFF/, "");
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function buildSection(row) {
+    const section = document.createElement("section");
+    section.id = "match-h2h-panel-v1";
+    section.className = "data-panel";
+
+    const meetings = safe(row.historical_meetings, "0");
+    const latest = row.latest_meeting
+      ? safe(row.latest_meeting_date) + " · " + safe(row.latest_meeting) + " · " + safe(row.latest_meeting_tournament)
+      : "暂无双方已完成交锋记录";
+
+    section.innerHTML = `
+      <div class="panel-head">
+        <div>
+          <h3>两队历史交锋</h3>
+          <p>只统计双方已经完成、且有明确比分的历史比赛，不把 2026 赛程占位算入历史战绩。</p>
+        </div>
+        <span class="mini-label">H2H HISTORY</span>
+      </div>
+
+      <div class="h2h-grid">
+        <div class="h2h-card">
+          <span>历史交锋次数</span>
+          <strong>${meetings} 场</strong>
+        </div>
+        <div class="h2h-card">
+          <span>胜 / 平 / 负</span>
+          <strong>${safe(row.team_a_wins, "0")} / ${safe(row.draws, "0")} / ${safe(row.team_b_wins, "0")}</strong>
+        </div>
+        <div class="h2h-card">
+          <span>世界杯交锋</span>
+          <strong>${safe(row.world_cup_meetings, "0")} 场</strong>
+        </div>
+      </div>
+
+      <div class="h2h-note">
+        <strong>最近一次交锋：</strong>${latest}<br>
+        <strong>数据来源：</strong>${safe(row.source, "data/international_results.csv")}；该模块只做历史交锋事实整理，不生成赛果预测。
+      </div>
+    `;
+
+    return section;
+  }
+
+  async function renderH2HPanel() {
+    try {
+      if (document.getElementById("match-h2h-panel-v1")) return;
+
+      const matchId = getMatchId();
+      const text = await fetch("data/worldcup_2026_h2h_summary.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text);
+      const row = rows.find(r => String(r.local_match_id || "").trim() === String(matchId).trim());
+      if (!row) return;
+
+      const section = buildSection(row);
+
+      const travel = document.getElementById("travel-pressure-card");
+      if (travel && travel.parentNode) {
+        travel.parentNode.insertBefore(section, travel);
+        return;
+      }
+
+      const odds = document.getElementById("bookmaker-market-summary");
+      const oddsSection = odds ? odds.closest("section") : null;
+      if (oddsSection && oddsSection.parentNode) {
+        oddsSection.parentNode.insertBefore(section, oddsSection);
+        return;
+      }
+
+      document.querySelector("main")?.appendChild(section);
+    } catch (err) {
+      console.warn("H2H 历史交锋模块渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderH2HPanel);
+})();
+</script>
+<style id="match-strength-compare-v1-style">
+  #match-strength-compare-v1 {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, .32);
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 18px 42px rgba(15,23,42,.08);
+  }
+  #match-strength-compare-v1 .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  #match-strength-compare-v1 h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+  #match-strength-compare-v1 p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+  #match-strength-compare-v1 .mini-label {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #eef6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  #match-strength-compare-v1 .strength-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  #match-strength-compare-v1 .team-strength-card {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, .24);
+  }
+  #match-strength-compare-v1 .team-strength-card h4 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 18px;
+  }
+  #match-strength-compare-v1 .metric-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  #match-strength-compare-v1 .metric {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, .22);
+  }
+  #match-strength-compare-v1 .metric span {
+    display: block;
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 12px;
+  }
+  #match-strength-compare-v1 .metric strong {
+    display: block;
+    color: #0f172a;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+  #match-strength-compare-v1 .strength-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #475569;
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    #match-strength-compare-v1 {
+      margin: 0 14px 22px;
+      padding: 18px;
+    }
+    #match-strength-compare-v1 .panel-head {
+      flex-direction: column;
+    }
+    #match-strength-compare-v1 .strength-grid,
+    #match-strength-compare-v1 .metric-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script id="match-strength-compare-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    text = String(text || "").replace(/^\uFEFF/, "");
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function hasValue(v) {
+    const s = String(v || "").trim();
+    return s && s !== "-" && s !== "待补充" && s !== "暂无" && s.toLowerCase() !== "null" && s.toLowerCase() !== "undefined";
+  }
+
+  function metric(label, value) {
+    if (!hasValue(value)) return "";
+    return `<div class="metric"><span>${label}</span><strong>${safe(value)}</strong></div>`;
+  }
+
+  function slot(label) {
+    return `<div class="metric"><span>${label}</span><strong>赛前更新</strong></div>`;
+  }
+
+  function teamCard(team) {
+    const displayName = safe(team.name_en || team.name || team.name_cn, "未知球队");
+    const elo = hasValue(team.elo_rating) ? team.elo_rating : team.elo;
+    const goals = (hasValue(team.goals_for) || hasValue(team.goals_against))
+      ? `${safe(team.goals_for, "0")} / ${safe(team.goals_against, "0")}`
+      : "";
+
+    const stableMetrics = [
+      metric("FIFA 排名", team.fifa_rank),
+      metric("Elo 评分", elo),
+      metric("世界杯冠军数", team.world_cup_titles),
+      metric("市值参考", team.market_value),
+      metric("进球 / 失球", goals)
+    ].filter(Boolean).join("");
+
+    const dynamicSlots = [
+      slot("主教练"),
+      slot("队长"),
+      slot("核心球员"),
+      slot("伤停 / 首发")
+    ].join("");
+
+    return `
+      <div class="team-strength-card">
+        <h4>${displayName}</h4>
+        <div class="metric-list">
+          ${stableMetrics}
+          ${team.strength_tier ? `<div class="metric"><span>Elo 实力档位</span><strong>${safe(team.strength_tier)}</strong></div>` : ""}
+          ${dynamicSlots}
+        </div>
+      </div>
+    `;
+  }
+
+  function attachStrengthTier(team, tiers, code) {
+    if (!team) return team;
+
+    const target = String(code || team.team_code || team.code || "").trim().toUpperCase();
+    const row = tiers.find(item => {
+      const current = String(item.team_code || item.code || item.fifa_code || "").trim().toUpperCase();
+      return current === target;
+    });
+
+    if (row) {
+      team.strength_tier = row.strength_tier || row.tier || row.elo_tier || "";
+      team.strength_tier_note = row.tier_note || "";
+    }
+
+    return team;
+  }
+
+  function buildSection(match, teamA, teamB) {
+    const section = document.createElement("section");
+    section.id = "match-strength-compare-v1";
+    section.className = "data-panel";
+
+    section.innerHTML = `
+      <div class="panel-head">
+        <div>
+          <h3>两队基础实力对比</h3>
+          <p>基于 teams.csv 已有球队资料展示稳定硬实力；主教练、队长、核心球员、伤停与首发属于赛前动态数据，先保留更新位。</p>
+        </div>
+        <span class="mini-label">TEAM STRENGTH</span>
+      </div>
+
+      <div class="strength-grid">
+        ${teamCard(teamA)}
+        ${teamCard(teamB)}
+      </div>
+
+      <div class="strength-note">
+        <strong>数据说明：</strong>该模块区分稳定基础数据与赛前动态数据；FIFA 排名参考口径为 2026-04-01；Elo 实力档位来自 teams.csv 的 Elo 字段计算。本模块只展示长期基础实力参考，不代表赛果预测；主教练、队长、核心球员、伤停、首发需等待可靠赛前数据更新。
+      </div>
+    `;
+
+    return section;
+  }
+
+  async function renderStrengthCompare() {
+    try {
+      if (document.getElementById("match-strength-compare-v1")) return;
+
+      const matchId = getMatchId();
+
+      const matchesText = await fetch("data/matches.csv?v=" + Date.now()).then(res => res.text());
+      const teamsText = await fetch("data/teams.csv?v=" + Date.now()).then(res => res.text());
+      const tiersText = await fetch("data/team_strength_tiers.csv?v=" + Date.now()).then(res => res.text());
+
+      const matches = parseCSV(matchesText);
+      const teams = parseCSV(teamsText);
+      const strengthTiers = parseCSV(tiersText);
+
+      const match = matches.find(r => String(r.match_id || r.id || "").trim() === String(matchId).trim());
+      if (!match) return;
+
+      const codeA = String(match.team_a_code || match.teamA_code || "").trim().toUpperCase();
+      const codeB = String(match.team_b_code || match.teamB_code || "").trim().toUpperCase();
+
+      const teamA = teams.find(t => String(t.code || "").trim().toUpperCase() === codeA);
+      const teamB = teams.find(t => String(t.code || "").trim().toUpperCase() === codeB);
+
+      if (!teamA || !teamB) return;
+
+      attachStrengthTier(teamA, strengthTiers, codeA);
+      attachStrengthTier(teamB, strengthTiers, codeB);
+
+      const section = buildSection(match, teamA, teamB);
+
+      const h2h = document.getElementById("match-h2h-panel-v1");
+      if (h2h && h2h.parentNode) {
+        h2h.parentNode.insertBefore(section, h2h);
+        return;
+      }
+
+      const travel = document.getElementById("travel-pressure-card");
+      if (travel && travel.parentNode) {
+        travel.parentNode.insertBefore(section, travel);
+        return;
+      }
+
+      document.querySelector("main")?.appendChild(section);
+    } catch (err) {
+      console.warn("两队基础实力对比模块渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderStrengthCompare);
+})();
+</script>
+<style id="match-schedule-pressure-compare-v1-style">
+  #match-schedule-pressure-compare-v1 {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, .32);
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 18px 42px rgba(15,23,42,.08);
+  }
+  #match-schedule-pressure-compare-v1 .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  #match-schedule-pressure-compare-v1 h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+  #match-schedule-pressure-compare-v1 p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+  #match-schedule-pressure-compare-v1 .mini-label {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #fff7ed;
+    color: #c2410c;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  #match-schedule-pressure-compare-v1 .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  #match-schedule-pressure-compare-v1 .schedule-card {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, .24);
+  }
+  #match-schedule-pressure-compare-v1 .schedule-card h4 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 18px;
+  }
+  #match-schedule-pressure-compare-v1 .metric-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  #match-schedule-pressure-compare-v1 .metric {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, .22);
+  }
+  #match-schedule-pressure-compare-v1 .metric span {
+    display: block;
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 12px;
+  }
+  #match-schedule-pressure-compare-v1 .metric strong {
+    display: block;
+    color: #0f172a;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+  #match-schedule-pressure-compare-v1 .pressure-high strong { color: #b91c1c; }
+  #match-schedule-pressure-compare-v1 .pressure-mid strong { color: #c2410c; }
+  #match-schedule-pressure-compare-v1 .pressure-low strong { color: #047857; }
+  #match-schedule-pressure-compare-v1 .schedule-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #475569;
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    #match-schedule-pressure-compare-v1 {
+      margin: 0 14px 22px;
+      padding: 18px;
+    }
+    #match-schedule-pressure-compare-v1 .panel-head {
+      flex-direction: column;
+    }
+    #match-schedule-pressure-compare-v1 .schedule-grid,
+    #match-schedule-pressure-compare-v1 .metric-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script id="match-schedule-pressure-compare-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    text = String(text || "").replace(/^\uFEFF/, "");
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function pressureClass(level) {
+    if (level === "高") return "pressure-high";
+    if (level === "中") return "pressure-mid";
+    if (level === "低") return "pressure-low";
+    return "";
+  }
+
+  function metric(label, value, extraClass) {
+    return `<div class="metric ${extraClass || ""}"><span>${label}</span><strong>${safe(value)}</strong></div>`;
+  }
+
+  function scheduleCard(row) {
+    const route = row.previous_city
+      ? `${safe(row.previous_city)} → ${safe(row.current_city)}`
+      : `首场小组赛 · ${safe(row.current_city)}`;
+
+    const restText = row.rest_days ? `${row.rest_days} 天` : "首场小组赛";
+    const movedText = row.moved_city === "YES" ? "是" : (row.moved_city === "NO" ? "否" : "首场无上一站");
+
+    return `
+      <div class="schedule-card">
+        <h4>${safe(row.team_name)}</h4>
+        <div class="metric-list">
+          ${metric("城市移动", route)}
+          ${metric("休息天数", restText)}
+          ${metric("是否跨城市", movedText)}
+          ${metric("赛程压力", row.schedule_pressure_level, pressureClass(row.schedule_pressure_level))}
+        </div>
+      </div>
+    `;
+  }
+
+  function compareSummary(rows) {
+    if (rows.length < 2) return "当前比赛只有一方赛程压力数据，等待数据补齐。";
+
+    const a = rows[0];
+    const b = rows[1];
+
+    const aRest = Number(a.rest_days || 999);
+    const bRest = Number(b.rest_days || 999);
+
+    const notes = [];
+
+    if (aRest !== 999 && bRest !== 999 && aRest !== bRest) {
+      const tighter = aRest < bRest ? a : b;
+      notes.push(`${safe(tighter.team_name)} 休息时间更短。`);
+    }
+
+    const movedTeams = rows.filter(r => r.moved_city === "YES").map(r => safe(r.team_name));
+    if (movedTeams.length) {
+      notes.push(`${movedTeams.join("、")} 存在跨城市移动。`);
+    }
+
+    const highTeams = rows.filter(r => r.schedule_pressure_level === "高").map(r => safe(r.team_name));
+    if (highTeams.length) {
+      notes.push(`${highTeams.join("、")} 属于高赛程压力。`);
+    }
+
+    if (!notes.length) {
+      notes.push("双方赛程压力差异不明显。");
+    }
+
+    return notes.join(" ");
+  }
+
+  function buildSection(rows) {
+    const section = document.createElement("section");
+    section.id = "match-schedule-pressure-compare-v1";
+    section.className = "data-panel";
+
+    section.innerHTML = `
+      <div class="panel-head">
+        <div>
+          <h3>两队赛程压力对比</h3>
+          <p>基于小组赛赛程计算双方上一场城市、本场城市、休息天数和跨城市移动情况。</p>
+        </div>
+        <span class="mini-label">SCHEDULE PRESSURE</span>
+      </div>
+
+      <div class="schedule-grid">
+        ${rows.map(scheduleCard).join("")}
+      </div>
+
+      <div class="schedule-note">
+        <strong>对比结论：</strong>${compareSummary(rows)}<br>
+        <strong>数据说明：</strong>该模块由 data/schedule_pressure_enhanced.csv 计算生成，反映赛程间隔与城市移动压力，不代表赛果预测。
+      </div>
+    `;
+
+    return section;
+  }
+
+  async function renderSchedulePressureCompare() {
+    try {
+      if (document.getElementById("match-schedule-pressure-compare-v1")) return;
+
+      const matchId = getMatchId();
+      const text = await fetch("data/schedule_pressure_enhanced.csv?v=" + Date.now()).then(res => res.text());
+      const rows = parseCSV(text).filter(r => String(r.match_id || "").trim() === String(matchId).trim());
+
+      if (!rows.length) return;
+
+      const section = buildSection(rows);
+
+      const strength = document.getElementById("match-strength-compare-v1");
+      if (strength && strength.parentNode) {
+        strength.parentNode.insertBefore(section, strength.nextSibling);
+        return;
+      }
+
+      const h2h = document.getElementById("match-h2h-panel-v1");
+      if (h2h && h2h.parentNode) {
+        h2h.parentNode.insertBefore(section, h2h);
+        return;
+      }
+
+      document.querySelector("main")?.appendChild(section);
+    } catch (err) {
+      console.warn("两队赛程压力对比模块渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderSchedulePressureCompare);
+})();
+</script>
+<style id="match-recent-form-compare-v1-style">
+  #match-recent-form-compare-v1 {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, .32);
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 18px 42px rgba(15,23,42,.08);
+  }
+  #match-recent-form-compare-v1 .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  #match-recent-form-compare-v1 h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+  #match-recent-form-compare-v1 p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+  #match-recent-form-compare-v1 .mini-label {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  #match-recent-form-compare-v1 .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  #match-recent-form-compare-v1 .form-card {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, .24);
+  }
+  #match-recent-form-compare-v1 .form-card h4 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 18px;
+  }
+  #match-recent-form-compare-v1 .metric-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  #match-recent-form-compare-v1 .metric {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, .22);
+  }
+  #match-recent-form-compare-v1 .metric span {
+    display: block;
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 12px;
+  }
+  #match-recent-form-compare-v1 .metric strong {
+    display: block;
+    color: #0f172a;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+  #match-recent-form-compare-v1 .level-strong strong { color: #047857; }
+  #match-recent-form-compare-v1 .level-good strong { color: #2563eb; }
+  #match-recent-form-compare-v1 .level-normal strong { color: #475569; }
+  #match-recent-form-compare-v1 .level-unstable strong { color: #c2410c; }
+  #match-recent-form-compare-v1 .form-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #475569;
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    #match-recent-form-compare-v1 {
+      margin: 0 14px 22px;
+      padding: 18px;
+    }
+    #match-recent-form-compare-v1 .panel-head {
+      flex-direction: column;
+    }
+    #match-recent-form-compare-v1 .form-grid,
+    #match-recent-form-compare-v1 .metric-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script id="match-recent-form-compare-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    text = String(text || "").replace(/^\uFEFF/, "");
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function levelClass(level) {
+    if (level === "强势") return "level-strong";
+    if (level === "良好") return "level-good";
+    if (level === "一般") return "level-normal";
+    if (level === "波动") return "level-unstable";
+    return "";
+  }
+
+  function metric(label, value, extraClass) {
+    return `<div class="metric ${extraClass || ""}"><span>${label}</span><strong>${safe(value)}</strong></div>`;
+  }
+
+  function formCard(row, displayName) {
+    const record = `${safe(row.wins, "0")}胜 ${safe(row.draws, "0")}平 ${safe(row.losses, "0")}负`;
+    const goals = `${safe(row.goals_for, "0")} / ${safe(row.goals_against, "0")}`;
+
+    return `
+      <div class="form-card">
+        <h4>${safe(displayName || row.team_code)}</h4>
+        <div class="metric-list">
+          ${metric("近5场战绩", record)}
+          ${metric("状态等级", row.recent_form_level, levelClass(row.recent_form_level))}
+          ${metric("进球 / 失球", goals)}
+          ${metric("零封 / 被零封", `${safe(row.clean_sheets, "0")} / ${safe(row.failed_to_score, "0")}`)}
+          ${metric("进攻状态", row.attack_note)}
+          ${metric("防守状态", row.defense_note)}
+        </div>
+      </div>
+    `;
+  }
+
+  function compareSummary(rows, nameMap) {
+    if (rows.length < 2) return "当前比赛只有一方近期状态数据，等待数据补齐。";
+
+    const a = rows[0];
+    const b = rows[1];
+    const nameA = safe(nameMap[a.team_code] || a.team_code);
+    const nameB = safe(nameMap[b.team_code] || b.team_code);
+
+    const pointsA = Number(a.wins || 0) * 3 + Number(a.draws || 0);
+    const pointsB = Number(b.wins || 0) * 3 + Number(b.draws || 0);
+
+    const gdA = Number(a.goals_for || 0) - Number(a.goals_against || 0);
+    const gdB = Number(b.goals_for || 0) - Number(b.goals_against || 0);
+
+    const notes = [];
+
+    if (pointsA !== pointsB) {
+      notes.push(`${pointsA > pointsB ? nameA : nameB} 近5场拿分更多。`);
+    }
+
+    if (gdA !== gdB) {
+      notes.push(`${gdA > gdB ? nameA : nameB} 近5场净胜球表现更好。`);
+    }
+
+    const unstable = rows.filter(r => r.recent_form_level === "波动").map(r => safe(nameMap[r.team_code] || r.team_code));
+    if (unstable.length) {
+      notes.push(`${unstable.join("、")} 近期状态存在波动。`);
+    }
+
+    if (!notes.length) {
+      notes.push("双方近期状态差异不明显。");
+    }
+
+    return notes.join(" ");
+  }
+
+  function buildSection(rows, nameMap) {
+    const section = document.createElement("section");
+    section.id = "match-recent-form-compare-v1";
+    section.className = "data-panel";
+
+    section.innerHTML = `
+      <div class="panel-head">
+        <div>
+          <h3>两队近期状态质量对比</h3>
+          <p>基于双方近5场比赛结果，整理胜平负、进失球、零封、进攻与防守状态。</p>
+        </div>
+        <span class="mini-label">RECENT FORM</span>
+      </div>
+
+      <div class="form-grid">
+        ${rows.map(r => formCard(r, nameMap[r.team_code])).join("")}
+      </div>
+
+      <div class="form-note">
+        <strong>对比结论：</strong>${compareSummary(rows, nameMap)}<br>
+        <strong>数据说明：</strong>该模块由 data/recent_form_quality.csv 计算生成，只反映近期状态质量，不代表赛果预测。
+      </div>
+    `;
+
+    return section;
+  }
+
+  async function renderRecentFormCompare() {
+    try {
+      if (document.getElementById("match-recent-form-compare-v1")) return;
+
+      const matchId = getMatchId();
+
+      const matchesText = await fetch("data/matches.csv?v=" + Date.now()).then(res => res.text());
+      const formText = await fetch("data/recent_form_quality.csv?v=" + Date.now()).then(res => res.text());
+
+      const matches = parseCSV(matchesText);
+      const formRows = parseCSV(formText);
+
+      const match = matches.find(r => String(r.match_id || "").trim() === String(matchId).trim());
+      if (!match) return;
+
+      const codeA = String(match.team_a_code || "").trim().toUpperCase();
+      const codeB = String(match.team_b_code || "").trim().toUpperCase();
+
+      const rows = [codeA, codeB]
+        .map(code => formRows.find(r => String(r.team_code || "").trim().toUpperCase() === code))
+        .filter(Boolean);
+
+      if (!rows.length) return;
+
+      const nameMap = {};
+      nameMap[codeA] = match.team_a;
+      nameMap[codeB] = match.team_b;
+
+      const section = buildSection(rows, nameMap);
+
+      const schedule = document.getElementById("match-schedule-pressure-compare-v1");
+      if (schedule && schedule.parentNode) {
+        schedule.parentNode.insertBefore(section, schedule.nextSibling);
+        return;
+      }
+
+      const strength = document.getElementById("match-strength-compare-v1");
+      if (strength && strength.parentNode) {
+        strength.parentNode.insertBefore(section, strength.nextSibling);
+        return;
+      }
+
+      document.querySelector("main")?.appendChild(section);
+    } catch (err) {
+      console.warn("两队近期状态质量对比模块渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderRecentFormCompare);
+})();
+</script>
+<style id="match-recent-details-v1-style">
+  #match-recent-details-v1 {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, .32);
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 18px 42px rgba(15,23,42,.08);
+  }
+  #match-recent-details-v1 .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  #match-recent-details-v1 h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+  #match-recent-details-v1 p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+  #match-recent-details-v1 .mini-label {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  #match-recent-details-v1 .details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  #match-recent-details-v1 .details-card {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, .24);
+  }
+  #match-recent-details-v1 .details-card h4 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 18px;
+  }
+  #match-recent-details-v1 table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  #match-recent-details-v1 th,
+  #match-recent-details-v1 td {
+    padding: 9px 8px;
+    border-bottom: 1px solid rgba(148, 163, 184, .22);
+    text-align: left;
+    vertical-align: top;
+  }
+  #match-recent-details-v1 th {
+    color: #64748b;
+    font-weight: 700;
+    background: rgba(255,255,255,.65);
+  }
+  #match-recent-details-v1 td {
+    color: #0f172a;
+  }
+  #match-recent-details-v1 .result-W {
+    color: #047857;
+    font-weight: 800;
+  }
+  #match-recent-details-v1 .result-D {
+    color: #475569;
+    font-weight: 800;
+  }
+  #match-recent-details-v1 .result-L {
+    color: #b91c1c;
+    font-weight: 800;
+  }
+  #match-recent-details-v1 .details-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #475569;
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    #match-recent-details-v1 {
+      margin: 0 14px 22px;
+      padding: 18px;
+    }
+    #match-recent-details-v1 .panel-head {
+      flex-direction: column;
+    }
+    #match-recent-details-v1 .details-grid {
+      grid-template-columns: 1fr;
+    }
+    #match-recent-details-v1 table {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<script id="match-recent-details-v1-script">
+(function () {
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    text = String(text || "").replace(/^\uFEFF/, "");
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cell);
+        cell = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (cell !== "" || row.length) {
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        }
+        if (ch === "\r" && next === "\n") i++;
+      } else {
+        cell += ch;
+      }
+    }
+
+    if (cell !== "" || row.length) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(x => String(x || "").trim());
+    return rows
+      .filter(r => r.some(x => String(x || "").trim() !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(r[idx] || "").trim());
+        return obj;
+      });
+  }
+
+  function safe(v, fallback) {
+    const s = String(v || "").trim();
+    return s || fallback || "-";
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function resultText(v) {
+    if (v === "W") return "胜";
+    if (v === "D") return "平";
+    if (v === "L") return "负";
+    return safe(v);
+  }
+
+  function detailCard(teamName, rows) {
+    const trs = rows.map(r => `
+      <tr>
+        <td>${safe(r.date)}</td>
+        <td>${safe(r.opponent_name)}</td>
+        <td>${safe(r.team_score, "0")}-${safe(r.opponent_score, "0")}</td>
+        <td class="result-${safe(r.result)}">${resultText(r.result)}</td>
+      </tr>
+    `).join("");
+
+    return `
+      <div class="details-card">
+        <h4>${safe(teamName)}</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>对手</th>
+              <th>比分</th>
+              <th>结果</th>
+            </tr>
+          </thead>
+          <tbody>${trs || `<tr><td colspan="4">暂无近5场明细</td></tr>`}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function buildSection(match, details) {
+    const codeA = String(match.team_a_code || "").trim().toUpperCase();
+    const codeB = String(match.team_b_code || "").trim().toUpperCase();
+
+    const rowsA = details
+      .filter(r => String(r.team_code || "").trim().toUpperCase() === codeA)
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+      .slice(0, 5);
+
+    const rowsB = details
+      .filter(r => String(r.team_code || "").trim().toUpperCase() === codeB)
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+      .slice(0, 5);
+
+    const section = document.createElement("section");
+    section.id = "match-recent-details-v1";
+    section.className = "data-panel";
+
+    section.innerHTML = `
+      <div class="panel-head">
+        <div>
+          <h3>两队近5场比赛明细</h3>
+          <p>只展示双方最近完成的国家队比赛：日期、对手、比分和结果，让球迷自行判断近期状态。</p>
+        </div>
+        <span class="mini-label">LAST 5 MATCHES</span>
+      </div>
+
+      <div class="details-grid">
+        ${detailCard(match.team_a, rowsA)}
+        ${detailCard(match.team_b, rowsB)}
+      </div>
+
+      <div class="details-note">
+        <strong>数据说明：</strong>该模块来自 data/team_recent_matches.csv，只展示客观比赛明细，不做 AI 胜负预测。
+      </div>
+    `;
+
+    return section;
+  }
+
+  async function renderRecentDetails() {
+    try {
+      if (document.getElementById("match-recent-details-v1"),
+        document.getElementById("travel-pressure-card")) return;
+
+      const matchId = getMatchId();
+
+      const matchesText = await fetch("data/matches.csv?v=" + Date.now()).then(res => res.text());
+      const detailText = await fetch("data/team_recent_matches.csv?v=" + Date.now()).then(res => res.text());
+
+      const matches = parseCSV(matchesText);
+      const details = parseCSV(detailText);
+
+      const match = matches.find(r => String(r.match_id || "").trim() === String(matchId).trim());
+      if (!match) return;
+
+      const section = buildSection(match, details);
+
+      const form = document.getElementById("match-recent-form-compare-v1");
+      if (form && form.parentNode) {
+        form.parentNode.insertBefore(section, form.nextSibling);
+        return;
+      }
+
+      const schedule = document.getElementById("match-schedule-pressure-compare-v1");
+      if (schedule && schedule.parentNode) {
+        schedule.parentNode.insertBefore(section, schedule.nextSibling);
+        return;
+      }
+
+      document.querySelector("main")?.appendChild(section);
+    } catch (err) {
+      console.warn("两队近5场明细模块渲染失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", renderRecentDetails);
+})();
+</script>
+
+<script id="bookmaker-summary-fallback-480">
+(function () {
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    if (!lines.length) return [];
+    const headers = lines.shift().split(",").map(h => h.replace(/^"|"$/g, "").trim());
+    return lines.filter(Boolean).map(line => {
+      const cells = line.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0).map(v => v.replace(/^"|"$/g, "").replace(/""/g, '"').trim());
+      const row = {};
+      headers.forEach((h, i) => row[h] = cells[i] || "");
+      return row;
+    });
+  }
+
+  function avg(values) {
+    const nums = values.map(Number).filter(Number.isFinite);
+    return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : null;
+  }
+
+  async function renderBookmakerSummaryFallback480() {
+    const box = document.getElementById("bookmaker-market-summary");
+    if (!box) return;
+
+    const currentText = (box.innerText || "").trim();
+    if (currentText && !(currentText.includes("等待多博彩公司数据汇总") || currentText.includes("正在读取当前比赛多博彩公司汇总"))) return;
+
+    const matchId = new URLSearchParams(location.search).get("id") || "1";
+
+    try {
+      const res = await fetch("data/odds.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("odds.csv " + res.status);
+
+      const rows = parseCSV(await res.text()).filter(r => String(r.match_id || "").trim() === String(matchId));
+      if (!rows.length) return;
+
+      const bookmakers = Array.from(new Set(rows.map(r => r.bookmaker).filter(Boolean)));
+      const sharp = rows.filter(r => String(r.bookmaker_type || "").toLowerCase() === "sharp").length;
+      const soft = rows.filter(r => String(r.bookmaker_type || "").toLowerCase() === "soft").length;
+      const unknown = rows.length - sharp - soft;
+
+      const avgA = avg(rows.map(r => r.team_a_odds));
+      const avgD = avg(rows.map(r => r.draw_odds));
+      const avgB = avg(rows.map(r => r.team_b_odds));
+
+      const aValues = rows.map(r => Number(r.team_a_odds)).filter(Number.isFinite);
+      const minA = Math.min.apply(null, aValues);
+      const maxA = Math.max.apply(null, aValues);
+
+      box.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px;">
+          <div style="padding:14px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.72);">
+            <div style="font-size:12px;color:var(--muted);font-weight:800;">赔率记录</div>
+            <strong style="font-size:22px;color:#0f172a;">${rows.length} 条</strong>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.72);">
+            <div style="font-size:12px;color:var(--muted);font-weight:800;">博彩公司</div>
+            <strong style="font-size:22px;color:#0f172a;">${bookmakers.length} 家</strong>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.72);">
+            <div style="font-size:12px;color:var(--muted);font-weight:800;">Sharp / Soft</div>
+            <strong style="font-size:18px;color:#0f172a;">${sharp} / ${soft}</strong>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.72);">
+            <div style="font-size:12px;color:var(--muted);font-weight:800;">Unknown</div>
+            <strong style="font-size:18px;color:#0f172a;">${unknown}</strong>
+          </div>
+        </div>
+        <p><strong>多博彩公司市场摘要：</strong>当前 match_id=${matchId} 已接入 ${rows.length} 条赔率记录，去重覆盖 ${bookmakers.length} 家博彩公司。</p>
+        <p><strong>平均赔率：</strong>Mexico ${avgA ? avgA.toFixed(2) : "暂无"} / 平局 ${avgD ? avgD.toFixed(2) : "暂无"} / South Africa ${avgB ? avgB.toFixed(2) : "暂无"}。</p>
+        <p><strong>赔率区间：</strong>Mexico 方向当前区间约 ${Number.isFinite(minA) ? minA.toFixed(2) : "暂无"} - ${Number.isFinite(maxA) ? maxA.toFixed(2) : "暂无"}。当前为本地 CSV 样例闭环验证，不是实时自动刷新。</p>
+      `;
+    } catch (err) {
+      console.warn("bookmaker summary fallback 480 failed:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(renderBookmakerSummaryFallback480, 800);
+    setTimeout(renderBookmakerSummaryFallback480, 1800);
+    setTimeout(renderBookmakerSummaryFallback480, 3200);
+  });
+})();
+</script>
+<script id="bookmaker-table-fallback-487">
+(function () {
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    if (!lines.length) return [];
+    const headers = lines.shift().split(",").map(h => h.replace(/^"|"$/g, "").trim());
+    return lines.filter(Boolean).map(line => {
+      const cells = line.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0).map(v => v.replace(/^"|"$/g, "").replace(/""/g, '"').trim());
+      const row = {};
+      headers.forEach((h, i) => row[h] = cells[i] || "");
+      return row;
+    });
+  }
+
+  function safe(v) {
+    return v == null || v === "" ? "-" : String(v);
+  }
+
+  async function renderBookmakerTableFallback487() {
+    const box = document.getElementById("bookmaker-compare-table");
+    if (!box) return;
+
+    const text = (box.innerText || "").trim();
+    if (text && !text.includes("正在读取当前比赛多博彩公司赔率") && !text.includes("等待多博彩公司赔率数据")) return;
+
+    const matchId = new URLSearchParams(location.search).get("id") || "1";
+
+    try {
+      const res = await fetch("data/odds.csv?v=" + Date.now());
+      if (!res.ok) throw new Error("odds.csv " + res.status);
+
+      const rows = parseCSV(await res.text()).filter(r => String(r.match_id || "").trim() === String(matchId));
+      if (!rows.length) return;
+
+      const coreRows = rows.slice(0, 12);
+
+      box.innerHTML = `
+        <div style="margin-bottom:10px;color:#64748b;font-size:13px;font-weight:800;">
+          当前展示前 ${coreRows.length} 条赔率记录；完整样本 ${rows.length} 条，用于下方市场摘要与 Sharp / Soft 分析。
+        </div>
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">博彩公司</th>
+              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">Mexico</th>
+              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">平局</th>
+              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">South Africa</th>
+              <th style="text-align:left; padding:10px; border-bottom:1px solid var(--border);">类型 / 来源</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${coreRows.map(r => `
+              <tr>
+                <td style="padding:10px; border-bottom:1px solid var(--border); font-weight:800;">${safe(r.bookmaker)}</td>
+                <td style="padding:10px; border-bottom:1px solid var(--border);">${safe(r.team_a_odds)}</td>
+                <td style="padding:10px; border-bottom:1px solid var(--border);">${safe(r.draw_odds)}</td>
+                <td style="padding:10px; border-bottom:1px solid var(--border);">${safe(r.team_b_odds)}</td>
+                <td style="padding:10px; border-bottom:1px solid var(--border); color:#64748b;">${safe(r.bookmaker_type)} · ${safe(r.source)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    } catch (err) {
+      console.warn("bookmaker table fallback 487 failed:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(renderBookmakerTableFallback487, 900);
+    setTimeout(renderBookmakerTableFallback487, 2000);
+    setTimeout(renderBookmakerTableFallback487, 3400);
+  });
+})();
+</script>
+
+<script id="match-lower-team-cn-patch-558L">
+(function () {
+  const cnMap = {
+    MEX:"墨西哥", RSA:"南非", KOR:"韩国", CZE:"捷克", CAN:"加拿大", BIH:"波黑", QAT:"卡塔尔", SUI:"瑞士",
+    BRA:"巴西", MAR:"摩洛哥", HAI:"海地", SCO:"苏格兰", AUS:"澳大利亚", TUR:"土耳其", NED:"荷兰", JPN:"日本",
+    TUN:"突尼斯", SWE:"瑞典", FRA:"法国", SEN:"塞内加尔", NOR:"挪威", IRQ:"伊拉克", POR:"葡萄牙", COL:"哥伦比亚",
+    UZB:"乌兹别克斯坦", COD:"刚果民主共和国", GER:"德国", CUW:"库拉索", CIV:"科特迪瓦", ECU:"厄瓜多尔",
+    ARG:"阿根廷", AUT:"奥地利", ALG:"阿尔及利亚", JOR:"约旦", USA:"美国", PAR:"巴拉圭", BEL:"比利时", EGY:"埃及",
+    ESP:"西班牙", CPV:"佛得角", KSA:"沙特阿拉伯", URU:"乌拉圭", ENG:"英格兰", CRO:"克罗地亚", PAN:"巴拿马", GHA:"加纳"
+  };
+
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], cell = "", inQuotes = false;
+    text = String(text || "").replace(/^\uFEFF/, "");
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i], next = text[i + 1];
+      if (ch === '"' && inQuotes && next === '"') { cell += '"'; i++; continue; }
+      if (ch === '"') { inQuotes = !inQuotes; continue; }
+      if (ch === "," && !inQuotes) { row.push(cell); cell = ""; continue; }
+      if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (ch === "\r" && next === "\n") i++;
+        row.push(cell); cell = "";
+        if (row.some(v => String(v).trim() !== "")) rows.push(row);
+        row = [];
+        continue;
+      }
+      cell += ch;
+    }
+    row.push(cell);
+    if (row.some(v => String(v).trim() !== "")) rows.push(row);
+
+    const headers = (rows.shift() || []).map(h => String(h || "").trim());
+    return rows.map(r => {
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = String(r[i] || "").trim());
+      return obj;
+    });
+  }
+
+  function pick(row, keys, fallback = "") {
+    for (const k of keys) {
+      if (row && row[k] !== undefined && String(row[k]).trim() !== "") return String(row[k]).trim();
+    }
+    return fallback;
+  }
+
+  function getMatchId() {
+    return new URLSearchParams(window.location.search).get("id") || "1";
+  }
+
+  function replaceExactText(root, from, to) {
+    if (!root || !from || !to || from === to) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      if (String(node.nodeValue || "").trim() === from) {
+        node.nodeValue = node.nodeValue.replace(from, to);
+      }
+    });
+  }
+
+  async function patchLowerTeamNames() {
+    try {
+      const matchId = getMatchId();
+      const [matchesText, teamsText] = await Promise.all([
+        fetch("data/matches.csv?v=" + Date.now()).then(r => r.text()),
+        fetch("data/teams.csv?v=" + Date.now()).then(r => r.text()).catch(() => "")
+      ]);
+
+      const matches = parseCSV(matchesText);
+      const teams = parseCSV(teamsText);
+      const match = matches.find(m => String(pick(m, ["match_id","id"])) === String(matchId));
+      if (!match) return;
+
+      const codeA = pick(match, ["team_a_code","team_a","teamA"]).toUpperCase();
+      const codeB = pick(match, ["team_b_code","team_b","teamB"]).toUpperCase();
+
+      const teamMap = {};
+      teams.forEach(t => {
+        const code = pick(t, ["team_id","code","team_code"]).toUpperCase();
+        if (code) teamMap[code] = t;
+      });
+
+      const oldA = pick(match, ["team_a","team_a_name","teamA"], codeA);
+      const oldB = pick(match, ["team_b","team_b_name","teamB"], codeB);
+      const newA = cnMap[codeA] || pick(teamMap[codeA], ["name_cn","team_name_cn","zh_name"], oldA);
+      const newB = cnMap[codeB] || pick(teamMap[codeB], ["name_cn","team_name_cn","zh_name"], oldB);
+
+      const targets = [
+        document.getElementById("match-strength-compare-v1"),
+        document.getElementById("match-schedule-pressure-compare-v1"),
+        document.getElementById("match-recent-form-compare-v1"),
+        document.getElementById("match-recent-details-v1"),
+        document.getElementById("travel-pressure-card"),
+        document.querySelector("[id*=lineup]"),
+        document.querySelector("[class*=lineup]"),
+        document.querySelector("[id*=Lineup]"),
+        document.querySelector("[class*=Lineup]")
+      ].filter(Boolean);
+
+      targets.forEach(root => {
+        replaceExactText(root, oldA, newA);
+        replaceExactText(root, oldB, newB);
+      });
+    } catch (err) {
+      console.warn("下方模块中文队名补丁失败：", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(patchLowerTeamNames, 900);
+    setTimeout(patchLowerTeamNames, 1800);
+    setTimeout(patchLowerTeamNames, 3000);
+  });
+})();
+</script>
+
 </body>
 </html>
 <style id="match-product-cleanup-v1">
@@ -3200,6 +5730,42 @@ const values = [
     display: none !important;
   }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
